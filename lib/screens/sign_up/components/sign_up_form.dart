@@ -21,6 +21,7 @@ class _SignUpFormState extends State<SignUpForm> {
   final _formKey = GlobalKey<FormState>();
 
   String fullName;
+  String username="";
   String email;
   String phone;
   String password;
@@ -39,6 +40,7 @@ class _SignUpFormState extends State<SignUpForm> {
     var url = ip + "/api/register.php";
     var response = await http.post(url, body: {
       'fullname': fullName,
+      'username': username,
       'email': email,
       'phone': phone,
       'password': password,
