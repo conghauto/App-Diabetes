@@ -1,4 +1,5 @@
 import 'package:diabetesapp/components/account_text.dart';
+import 'package:diabetesapp/components/sign_in_google.dart';
 import 'package:diabetesapp/components/socal_card.dart';
 import 'package:diabetesapp/screens/sign_up/components/sign_up_form.dart';
 import 'package:flutter/material.dart';
@@ -35,10 +36,7 @@ class Body extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    SocalCard(
-                      icon: "assets/icons/google-icon.svg",
-                      press: () {},
-                    ),
+                    SignInGoogle(),
                     SocalCard(
                       icon: "assets/icons/facebook-2.svg",
                       press: () {},

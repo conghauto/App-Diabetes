@@ -1,4 +1,5 @@
 import 'package:diabetesapp/components/no_account_text.dart';
+import 'package:diabetesapp/components/sign_in_google.dart';
 import 'package:diabetesapp/components/socal_card.dart';
 import 'package:diabetesapp/screens/home/home_screen.dart';
 import 'package:diabetesapp/screens/sign_in/components/sign_in_form.dart';
@@ -83,12 +84,7 @@ class _BodyState extends State<Body> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    SocalCard(
-                      icon: "assets/icons/google-icon.svg",
-                      press: () {
-
-                      },
-                    ),
+                    SignInGoogle(),
                     SocalCard(
                       icon: "assets/icons/facebook-2.svg",
                       press: () {
