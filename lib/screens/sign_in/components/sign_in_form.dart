@@ -53,7 +53,7 @@ class _SignInFormState extends State<SignInForm> {
           textColor: Colors.white,
           fontSize: 16.0
       );
-      Navigator.pushNamed(context,HomeScreen.routeName);
+      Navigator.pushReplacementNamed(context,HomeScreen.routeName);
     }else{
       Fluttertoast.showToast(
           msg: "Email hoặc mật khẩu chưa chính xác",
@@ -95,7 +95,7 @@ class _SignInFormState extends State<SignInForm> {
             children: [
               Spacer(),
               GestureDetector(
-                onTap: () => Navigator.pushNamed(context, ForgetPassword.routeName),
+                onTap: () => Navigator.pushReplacementNamed(context, ForgetPassword.routeName),
                 child: Text(
                   "Quên mật khẩu",
                   style: TextStyle(
