@@ -74,7 +74,7 @@ class _SignInGoogleState extends State<SignInGoogle> {
           textColor: Colors.white,
           fontSize: 16.0
       );
-      Navigator.pushNamed(context,HomeScreen.routeName);
+      Navigator.pushReplacementNamed(context, HomeScreen.routeName);
     }else{
       Fluttertoast.showToast(
           msg: "Email đã tồn tại",

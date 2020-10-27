@@ -1,16 +1,24 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class GlucoseScreen extends StatefulWidget {
+class GlucoseScreen extends StatefulWidget{
+  static String routeName = "/chart_screen";
   @override
-  _GlucoseScreenState createState() => _GlucoseScreenState();
+  _GlucoseScreenStateful createState() {
+    return _GlucoseScreenStateful();
+  }
 }
+class _GlucoseScreenStateful extends State<GlucoseScreen>{
 
-class _GlucoseScreenState extends State<GlucoseScreen> {
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-      body: new Center(
-        child: new Text("Glucose Screen"),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Glucose"),
+        automaticallyImplyLeading: false,
+      ),
+      body: Center(
+        child: Text('Glucose'),
       ),
     );
   }

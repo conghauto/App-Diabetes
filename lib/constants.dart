@@ -30,7 +30,7 @@ const String kEmailNullError = "Bạn chưa nhập địa chỉ email";
 const String kInvalidEmailError = "Email không hợp lệ";
 const String kPassNullError = "Bạn chưa nhập mật khẩu";
 const String kShortPassError = "Mật khẩu phải có ít 8 ký tự";
-const String kMatchPassError = "Passwords don't match";
+const String kMatchPassErdefaultSizeror = "Passwords don't match";
 const String kNamelNullError = "Please Enter your name";
 const String kPhoneNumberNullError = "Bạn chưa nhập số điện thoại";
 const String kAddressNullError = "Please Enter your address";
@@ -38,7 +38,7 @@ const String kFullNameNullError = "Bạn chưa nhập họ tên";
 const String kShortFullName = "Họ tên không hợp lệ";
 const String kShortPhoneNumberNullError = "Số điện thoại không hợp lệ";
 
-const String ip = "http://192.168.1.3:8080";
+const String ip = "http://192.168.1.4:8080";
 
 final otpInputDecoration = InputDecoration(
   contentPadding:

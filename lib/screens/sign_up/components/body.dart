@@ -1,4 +1,5 @@
 import 'package:diabetesapp/components/account_text.dart';
+import 'package:diabetesapp/components/sign_in_facebook.dart';
 import 'package:diabetesapp/components/sign_in_google.dart';
 import 'package:diabetesapp/components/socal_card.dart';
 import 'package:diabetesapp/screens/sign_up/components/sign_up_form.dart';
@@ -37,10 +38,7 @@ class Body extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     SignInGoogle(),
-                    SocalCard(
-                      icon: "assets/icons/facebook-2.svg",
-                      press: () {},
-                    ),
+                    SignInFacebook(),
                   ],
                 ),
                 SizedBox(height: getProportionateScreenHeight(10)),

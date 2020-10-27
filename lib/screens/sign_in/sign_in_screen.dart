@@ -9,6 +9,7 @@ class SignInScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text("Đăng nhập"),
+        automaticallyImplyLeading: false,
       ),
       body: Body(),
     );
