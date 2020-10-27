@@ -1,9 +1,12 @@
+import 'package:diabetesapp/components/bottom_nav_bar.dart';
 import 'package:diabetesapp/components/sign_in_google.dart';
 import 'package:diabetesapp/routes.dart';
+import 'package:diabetesapp/screens/glucose/glucose_screen.dart';
 import 'package:diabetesapp/screens/splash/splash_screen.dart';
 import 'package:diabetesapp/theme.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 import 'dart:io' show Platform;
 
@@ -30,7 +33,7 @@ Future<void> main() async {
     ),
   );
 
-  runApp(MyApp());
+  initializeDateFormatting().then((_) => runApp(MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -41,7 +44,8 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
 
       theme: theme(),
-      initialRoute: SplashScreen.routeName,
+//      initialRoute: SplashScreen.routeName,
+      home: BottomNavBar(),
       routes: routes,
     );
   }

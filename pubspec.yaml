@@ -36,6 +36,10 @@ dependencies:
   fluttertoast: ^7.1.1
   flutter_svg: ^0.19.1
   flutter_facebook_login: ^3.0.0
+  table_calendar: ^2.3.0
+  intl: ^0.16.1
+  shared_preferences: ^0.5.12+2
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
