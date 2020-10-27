@@ -4,11 +4,11 @@ import 'package:diabetesapp/size_config.dart';
 //const kPrimaryColor = Color(0xFFFF7643);
 const kPrimaryColor = Color(0xFF271ca1);
 const kPrimaryLightColor = Color(0xFFFFECDF);
-const kPrimaryGradientColor = LinearGradient(
-  begin: Alignment.topLeft,
-  end: Alignment.bottomRight,
-  colors: [Color(0xFFFFA53E), Color(0xFFFF7643)],
-);
+//const kPrimaryGradientColor = LinearGradient(
+//  begin: Alignment.topLeft,
+//  end: Alignment.bottomRight,
+//  colors: [Color(0xFFFFA53E), Color(0xFFFF7643)],
+//);
 const kSecondaryColor = Color(0xFF979797);
 const kTextColor = Color(0xFF757575);
 
@@ -30,7 +30,7 @@ const String kEmailNullError = "Bạn chưa nhập địa chỉ email";
 const String kInvalidEmailError = "Email không hợp lệ";
 const String kPassNullError = "Bạn chưa nhập mật khẩu";
 const String kShortPassError = "Mật khẩu phải có ít 8 ký tự";
-const String kMatchPassErdefaultSizeror = "Passwords don't match";
+const String kMatchPassError = "Passwords don't match";
 const String kNamelNullError = "Please Enter your name";
 const String kPhoneNumberNullError = "Bạn chưa nhập số điện thoại";
 const String kAddressNullError = "Please Enter your address";

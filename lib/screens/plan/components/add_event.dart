@@ -6,17 +6,17 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 
-class AddEventPage extends StatefulWidget {
+class AddEventScreen extends StatefulWidget {
   static String routeName = "/add_event";
   final EventModel note;
 
-  const AddEventPage({Key key, this.note}) : super(key: key);
+  const AddEventScreen({Key key, this.note}) : super(key: key);
 
   @override
-  _AddEventPageState createState() => _AddEventPageState();
+  _AddEventScreenState createState() => _AddEventScreenState();
 }
 
-class _AddEventPageState extends State<AddEventPage> {
+class _AddEventScreenState extends State<AddEventScreen> {
   TextStyle style = TextStyle(fontSize: 20.0);
   TextEditingController _title;
   TextEditingController _description;

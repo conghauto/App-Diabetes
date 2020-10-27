@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:diabetesapp/components/custom_surffix_icon.dart';
 import 'package:diabetesapp/components/form_error.dart';
-import 'package:diabetesapp/screens/glucose/glucose_screen.dart';
 import 'package:diabetesapp/screens/home/home_screen.dart';
 import 'package:diabetesapp/size_config.dart';
 import 'package:diabetesapp/widgets/ProgressDialog.dart';
@@ -60,7 +59,7 @@ class _SignUpFormState extends State<SignUpForm> {
           fontSize: 16.0
       );
     }else{
-      Navigator.pushNamed(context,HomeScreen.routeName);
+      Navigator.pushNamed(context, HomeScreen.routeName);
       Fluttertoast.showToast(
           msg: "Đăng ký thành công",
           toastLength: Toast.LENGTH_SHORT,

@@ -1,7 +1,7 @@
-import 'package:diabetesapp/components/bottom_nav_bar.dart';
 import 'package:diabetesapp/components/sign_in_google.dart';
 import 'package:diabetesapp/routes.dart';
-import 'package:diabetesapp/screens/glucose/glucose_screen.dart';
+import 'package:diabetesapp/screens/home/home_screen.dart';
+import 'package:diabetesapp/screens/plan/plan_screen.dart';
 import 'package:diabetesapp/screens/splash/splash_screen.dart';
 import 'package:diabetesapp/theme.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -44,8 +44,8 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
 
       theme: theme(),
-//      initialRoute: SplashScreen.routeName,
-      home: BottomNavBar(),
+
+      initialRoute: HomeScreen.routeName,
       routes: routes,
     );
   }

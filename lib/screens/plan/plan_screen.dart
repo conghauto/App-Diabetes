@@ -12,6 +12,7 @@ import 'package:http/http.dart' as http;
 import 'package:diabetesapp/models/event.dart';
 
 class PlanScreen extends StatefulWidget {
+  static String routeName = "/plan_screen";
   @override
   _PlanScreenState createState() => _PlanScreenState();
 }
@@ -19,7 +20,6 @@ class PlanScreen extends StatefulWidget {
 class _PlanScreenState extends State<PlanScreen> {
   CalendarController _calendarController;
   Map<DateTime, List<dynamic>> _events;
-  TextEditingController _eventController;
   List<dynamic> _selectedEvents;
   SharedPreferences prefs;
 
@@ -28,7 +28,6 @@ class _PlanScreenState extends State<PlanScreen> {
     // TODO: implement initState
     super.initState();
     _calendarController = CalendarController();
-    _eventController = new TextEditingController();
     _events = {};
     _selectedEvents = [];
 //    initPrefs();
@@ -223,7 +222,7 @@ class _PlanScreenState extends State<PlanScreen> {
         padding: const EdgeInsets.fromLTRB(0,0,0,64),
         child: FloatingActionButton(
           child: Icon(Icons.add),
-          onPressed: () => Navigator.pushNamed(context, AddEventPage.routeName),
+          onPressed: () => Navigator.pushNamed(context, AddEventScreen.routeName),
         ),
      ),
     );
