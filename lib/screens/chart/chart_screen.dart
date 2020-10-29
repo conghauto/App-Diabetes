@@ -16,6 +16,8 @@ class _ChartScreenStateful extends State<ChartScreen>{
       appBar: AppBar(
         title: Text("Biểu đồ"),
         automaticallyImplyLeading: false,
+        centerTitle: true,
+        backgroundColor: Colors.lightBlueAccent,
       ),
       body: Center(
         child: Text('Chart'),

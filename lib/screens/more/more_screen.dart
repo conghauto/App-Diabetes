@@ -1,5 +1,9 @@
+import 'package:diabetesapp/screens/more/components/body.dart';
+import 'package:diabetesapp/screens/more/components/daily_steps_page.dart';
+import 'package:diabetesapp/size_config.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class MoreScreen extends StatefulWidget{
   static String routeName = "/more_screen";
@@ -14,12 +18,12 @@ class _MoreScreenStateful extends State<MoreScreen>{
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Chức năng"),
+        centerTitle: true,
+        title: Text("Profile"),
         automaticallyImplyLeading: false,
+        backgroundColor: Colors.lightBlueAccent,
       ),
-      body: Center(
-        child: Text('More Screen'),
-      ),
+      body: Body(),
     );
   }
 }

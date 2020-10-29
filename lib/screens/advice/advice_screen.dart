@@ -16,6 +16,8 @@ class _AdviceScreenStateful extends State<AdviceScreen>{
       appBar: AppBar(
         title: Text("Khuyến nghị"),
         automaticallyImplyLeading: false,
+        centerTitle: true,
+        backgroundColor: Colors.lightBlueAccent,
       ),
       body: Center(
         child: Text('Advice'),

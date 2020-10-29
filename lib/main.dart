@@ -4,7 +4,8 @@ import 'package:diabetesapp/screens/splash/splash_screen.dart';
 import 'package:diabetesapp/theme.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-
+import 'package:hive/hive.dart';
+import 'package:path_provider/path_provider.dart' as path_provider;
 import 'dart:io' show Platform;
 
 import 'screens/splash/splash_screen.dart';
@@ -29,7 +30,9 @@ Future<void> main() async {
       databaseURL: 'https://diabetes-7aca8.firebaseio.com',
     ),
   );
-
+  final appDocumentDirectory = await path_provider.getApplicationDocumentsDirectory();
+  await Hive.init(appDocumentDirectory.path);
+  await Hive.openBox<int>('steps');
   runApp(MyApp());
 }
 

@@ -88,6 +88,7 @@ class _SignInFacebookState extends State<SignInFacebook>{
           textColor: Colors.white,
           fontSize: 16.0
       );
+      Navigator.pushReplacementNamed(context, HomeScreen.routeName);
     }
   }
   _logout(){

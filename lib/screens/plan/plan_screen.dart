@@ -16,6 +16,8 @@ class _PlanScreenStateful extends State<PlanScreen>{
       appBar: AppBar(
         title: Text("Lập lịch"),
         automaticallyImplyLeading: false,
+        centerTitle: true,
+        backgroundColor: Colors.lightBlueAccent,
       ),
       body: Center(
         child: Text('Plan'),

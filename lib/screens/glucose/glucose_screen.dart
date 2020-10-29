@@ -16,6 +16,8 @@ class _GlucoseScreenStateful extends State<GlucoseScreen>{
       appBar: AppBar(
         title: Text("Glucose"),
         automaticallyImplyLeading: false,
+        centerTitle: true,
+        backgroundColor: Colors.lightBlueAccent,
       ),
       body: Center(
         child: Text('Glucose'),
