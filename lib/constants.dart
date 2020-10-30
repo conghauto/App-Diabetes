@@ -4,11 +4,11 @@ import 'package:diabetesapp/size_config.dart';
 //const kPrimaryColor = Color(0xFFFF7643);
 const kPrimaryColor = Color(0xFF271ca1);
 const kPrimaryLightColor = Color(0xFFFFECDF);
-const kPrimaryGradientColor = LinearGradient(
-  begin: Alignment.topLeft,
-  end: Alignment.bottomRight,
-  colors: [Color(0xFFFFA53E), Color(0xFFFF7643)],
-);
+//const kPrimaryGradientColor = LinearGradient(
+//  begin: Alignment.topLeft,
+//  end: Alignment.bottomRight,
+//  colors: [Color(0xFFFFA53E), Color(0xFFFF7643)],
+//);
 const kSecondaryColor = Color(0xFF979797);
 const kTextColor = Color(0xFF757575);
 const kTextLigntColor = Color(0xFF7286A5);
@@ -38,7 +38,7 @@ const String kFullNameNullError = "Bạn chưa nhập họ tên";
 const String kShortFullName = "Họ tên không hợp lệ";
 const String kShortPhoneNumberNullError = "Số điện thoại không hợp lệ";
 
-const String ip = "http://192.168.1.4:8080";
+const String ip = "http://192.168.1.5:8080";
 
 final otpInputDecoration = InputDecoration(
   contentPadding:
