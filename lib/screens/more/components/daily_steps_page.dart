@@ -30,11 +30,16 @@ class _DailyStepsPageState extends State<DailyStepsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: carbonBlack,
+      backgroundColor: Colors.white,
       appBar: AppBar(
+        backgroundColor: Colors.lightBlueAccent,
         title: Text(
-          "Daily Steps Tracker",
-          style: GoogleFonts.darkerGrotesque(fontSize: 40),
+          "Đi bộ vì sức khỏe",
+          style: GoogleFonts.darkerGrotesque(
+            fontSize: 30,
+            color: Colors.white
+          ),
+
         ),
         centerTitle: true,
         //backgroundColor: Colors.transparent,
