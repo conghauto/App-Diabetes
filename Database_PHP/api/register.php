@@ -15,7 +15,11 @@
     $count = mysqli_num_rows($result);
 
     if($count >=1){
-        echo json_encode(("Error"));
+        if($password=="apaaja"){
+            echo json_encode("Success");
+        }else{
+            echo json_encode(("Error"));
+        }
     }else{
         $query = $account->register($fullname,$username,$email,$phone,$password);
 

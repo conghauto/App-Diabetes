@@ -11,8 +11,8 @@ class EventModel{
   factory EventModel.fromJson(Map<String, dynamic> json) {
     return EventModel(
       id: json['id'],
-      title: json['title'],
-      description: json['description'],
+      title: json['title'].toString(),
+      description: json['description'].toString(),
       eventStartDate: DateTime.parse(json['eventStartDate'].toString()),
       eventEndDate: DateTime.parse(json['eventEndDate'].toString()),
     );

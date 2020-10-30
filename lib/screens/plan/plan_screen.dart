@@ -4,12 +4,14 @@ import 'package:diabetesapp/constants.dart';
 import 'package:diabetesapp/screens/plan/components/add_event.dart';
 import 'package:diabetesapp/screens/plan/components/view_event.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:diabetesapp/models/event.dart';
+import 'package:diabetesapp/extensions/format_datetime.dart';
 
 class PlanScreen extends StatefulWidget {
   static String routeName = "/plan_screen";
@@ -22,6 +24,9 @@ class _PlanScreenState extends State<PlanScreen> {
   Map<DateTime, List<dynamic>> _events;
   List<dynamic> _selectedEvents;
   SharedPreferences prefs;
+  bool processing;
+  DateTime _dateSelected;
+  int i=1;
 
   @override
   void initState() {
@@ -30,34 +35,11 @@ class _PlanScreenState extends State<PlanScreen> {
     _calendarController = CalendarController();
     _events = {};
     _selectedEvents = [];
-//    initPrefs();
+    processing = true;
   }
 
-//  initPrefs() async {
-//    prefs = await SharedPreferences.getInstance();
-//    setState(() {
-//      _events = Map<DateTime, List<dynamic>>.from(decodeMap(json.decode(prefs.getString("events")?? "{}")));
-//    });
-//  }
-
-//  Map<String, dynamic> encodeMap(Map<DateTime,dynamic> map){
-//    Map<String,dynamic> newMap = {};
-//    map.forEach((key, value) {
-//      newMap[key.toString()] = map[key];
-//    });
-//    return newMap;
-//  }
-//
-//  Map<DateTime, dynamic> decodeMap(Map<String,dynamic> map){
-//    Map<DateTime,dynamic> newMap = {};
-//    map.forEach((key, value) {
-//      newMap[DateTime.parse(key)] = map[key];
-//    });
-//    return newMap;
-//  }
-
-  Map<DateTime, List<dynamic>> _groupEvents(List<EventModel> allEvents) {
-    Map<DateTime, List<dynamic>> data = {};
+  Map<DateTime, List<EventModel>> _groupEvents(List<EventModel> allEvents) {
+    Map<DateTime, List<EventModel>> data = {};
     allEvents.forEach((event) {
       DateTime date = DateTime(
           event.eventStartDate.year, event.eventStartDate.month, event.eventStartDate.day, 12);
@@ -65,6 +47,18 @@ class _PlanScreenState extends State<PlanScreen> {
       data[date].add(event);
     });
     return data;
+  }
+
+  List<EventModel> _loadEventOfDate( Map<DateTime, List<EventModel>> data,DateTime date){
+    List<EventModel> events=[];
+    data.forEach((key, _list) {
+      if(key==date){
+        _list.forEach((element) {
+          events.add(element);
+        });
+      }
+    });
+    return events;
   }
 
   final String uri = ip + "/api/getNotes.php";
@@ -88,143 +82,178 @@ class _PlanScreenState extends State<PlanScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-     body: FutureBuilder<List<EventModel>>(
-         future: fetchEvents(),
-         builder: (context, snapshot) {
-           if (snapshot.hasData) {
-             List<EventModel> allEvents = snapshot.data;
-             if (allEvents.isNotEmpty) {
-               _events = _groupEvents(allEvents);
-             } else {
-               _events = {};
-               _selectedEvents = [];
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(8.0,32.0,8.0,24.0),
+      child: new Scaffold(
+       body: FutureBuilder<List<EventModel>>(
+           future: fetchEvents(),
+           builder: (context, snapshot) {
+             if (snapshot.hasData) {
+               List<EventModel> allEvents = snapshot.data;
+               if (allEvents.isNotEmpty) {
+                 _events = _groupEvents(allEvents);
+                 if(processing) {
+                   _dateSelected = convertDateTimeInCurrent();
+                 }
+                 _selectedEvents = _loadEventOfDate(_events, _dateSelected);
+               } else {
+                 _events = {};
+                 _selectedEvents = [];
+               }
              }
-           }
-           return SingleChildScrollView(
-             child: Column(
-               crossAxisAlignment: CrossAxisAlignment.start,
-               children: <Widget>[
-                 TableCalendar(
-                   events: _events,
-                   initialCalendarFormat: CalendarFormat.month,
-                   locale: 'vi - Vietnamese',
-                   headerVisible: true,
-                   calendarStyle: CalendarStyle(
-                     canEventMarkersOverflow: true,
-                     todayColor: Colors.orange,
-                     selectedColor: Colors.red[800],
-                     todayStyle: TextStyle(
-                       fontWeight: FontWeight.bold,
-                       color: Colors.white,
-                     ),
-//                  holidayStyle: TextStyle().copyWith(color: Colors.red[800]),
-                   ),
-                   headerStyle: HeaderStyle(
-                       centerHeaderTitle: true,
-                       formatButtonDecoration: BoxDecoration(
-                         color: Colors.orange,
-                         borderRadius: BorderRadius.circular(20.0),
-                       ),
-                       formatButtonTextStyle: TextStyle(
-                         color: Colors.white,
-                       ),
-                       formatButtonShowsNext: false,
-                       formatButtonVisible: false,
-                       titleTextBuilder: (date, locale) =>
-                           DateFormat.yMMMM(locale).format(date)
-                               .toString()
-                               .toUpperCase(),
-                       titleTextStyle: TextStyle(
-                           fontSize: 15, fontWeight: FontWeight.bold)
-                   ),
-                   startingDayOfWeek: StartingDayOfWeek.monday,
-                   onDaySelected: (day, events, holidays) {
-                     setState(() {
-                       _selectedEvents = events;
-                     });
-                   },
-
-                   builders: CalendarBuilders(
-                     selectedDayBuilder: (context, date, events) =>
-                         Container(
-                           margin: const EdgeInsets.all(4.0),
-                           alignment: Alignment.center,
-                           decoration: BoxDecoration(
-                             color: Colors.red[400],
-
-                             borderRadius: BorderRadius.circular(10.0),
-                           ),
-                           child: Text(date.day.toString(), style: TextStyle(
-                               color: Colors.white),),
+             return SingleChildScrollView(
+               child: Column(
+                 crossAxisAlignment: CrossAxisAlignment.start,
+                 children: <Widget>[
+                   Padding(
+                     padding: const EdgeInsets.fromLTRB(0,0,0,32.0),
+                     child: TableCalendar(
+                       events: _events,
+                       initialCalendarFormat: CalendarFormat.month,
+                       locale: 'vi - Vietnamese',
+                       headerVisible: true,
+                       calendarStyle: CalendarStyle(
+                         canEventMarkersOverflow: true,
+                         todayColor: Colors.orange,
+                         selectedColor: Colors.red[800],
+                         todayStyle: TextStyle(
+                           fontWeight: FontWeight.bold,
+                           color: Colors.white,
                          ),
-                     todayDayBuilder: (context, date, events) =>
-                         Container(
-                           margin: const EdgeInsets.all(4.0),
-                           alignment: Alignment.center,
-                           decoration: BoxDecoration(
+                       ),
+                       headerStyle: HeaderStyle(
+                           centerHeaderTitle: true,
+                           formatButtonDecoration: BoxDecoration(
                              color: Colors.orange,
-                             borderRadius: BorderRadius.circular(10.0),
+                             borderRadius: BorderRadius.circular(20.0),
                            ),
-                           child: Text(date.day.toString(), style: TextStyle(
-                               color: Colors.white),),
-                         ),
-                     markersBuilder: (context, date, events, holidays) {
-                       final children = <Widget>[];
-
-                       if (events.isNotEmpty) {
-                         children.add(
-                           Positioned(
-                             right: 1,
-                             bottom: 1,
-                             child: _buildEventsMarker(date, events),
+                           formatButtonTextStyle: TextStyle(
+                             color: Colors.white,
                            ),
-                         );
-                       }
+                           formatButtonShowsNext: false,
+                           formatButtonVisible: false,
+                           titleTextBuilder: (date, locale) =>
+                               DateFormat.yMMMM(locale).format(date)
+                                   .toString()
+                                   .toUpperCase(),
+                           titleTextStyle: TextStyle(
+                               fontSize: 15, fontWeight: FontWeight.bold)
+                       ),
+                       startingDayOfWeek: StartingDayOfWeek.monday,
+                       onDaySelected: (day, events, holidays) {
+                         setState(() {
+                           processing=false;
+                           _selectedEvents = events;
+                           _dateSelected = DateTime(day.year, day.month, day.day, 12);
+                         });
+                       },
 
-                       if (holidays.isNotEmpty) {
-                         children.add(
-                           Positioned(
-                             right: -2,
-                             top: -2,
-                             child: _buildHolidaysMarker(),
-                           ),
-                         );
-                       }
+                       builders: CalendarBuilders(
+                         selectedDayBuilder: (context, date, events) =>
+                             Container(
+                               margin: const EdgeInsets.all(4.0),
+                               alignment: Alignment.center,
+                               decoration: BoxDecoration(
+                                 color: Colors.red[400],
 
-                       return children;
-                     },
-                   ),
-                   calendarController: _calendarController,),
-                 ..._selectedEvents.map((event) =>
-                     Card(
-                         child: ListTile(
-                           title: Text(event.title, style: TextStyle(),),
-                           onTap: () {
-                             Navigator.push(
-                                 context,
-                                 MaterialPageRoute(
-                                     builder: (_) =>
-                                         EventDetailsPage(
-                                           event: event,
-                                         )
-                                 )
+                                 borderRadius: BorderRadius.circular(10.0),
+                               ),
+                               child: Text(date.day.toString(), style: TextStyle(
+                                   color: Colors.white),),
+                             ),
+                         todayDayBuilder: (context, date, events) =>
+                             Container(
+                               margin: const EdgeInsets.all(4.0),
+                               alignment: Alignment.center,
+                               decoration: BoxDecoration(
+                                 color: Colors.orange,
+                                 borderRadius: BorderRadius.circular(10.0),
+                               ),
+                               child: Text(date.day.toString(), style: TextStyle(
+                                   color: Colors.white),),
+                             ),
+                         markersBuilder: (context, date, events, holidays) {
+                           final children = <Widget>[];
+
+                           if (events.isNotEmpty) {
+                             children.add(
+                               Positioned(
+                                 right: 1,
+                                 bottom: 1,
+                                 child: _buildEventsMarker(date, events),
+                               ),
                              );
-                           },
-                         )
-                     )
-                 ),
-               ],
-             ),
-           );
-         }),
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.fromLTRB(0,0,0,64),
-        child: FloatingActionButton(
-          child: Icon(Icons.add),
-          onPressed: () => Navigator.pushNamed(context, AddEventScreen.routeName),
-        ),
-     ),
+                           }
+                           return children;
+                         },
+                       ),
+                       calendarController: _calendarController,),
+                   ),
+                   ..._selectedEvents.map((event) =>
+                       Card(
+                           color: Colors.red[50],
+                           child: Padding(
+                             padding: const EdgeInsets.all(8.0),
+                             child: ListTile(
+                               title: Text(event.title, style: TextStyle(
+                                 fontWeight: FontWeight.bold, fontSize: 20,)
+                               ),
+                               subtitle: new Row(children: <Widget>[
+                                 new Padding(padding: EdgeInsets.fromLTRB(5, 20, 0, 0)),
+                                 Container(
+                                   height: 10.0,
+                                   width: 10.0,
+                                   color: Colors.green,
+                                   child: Container(
+                                       decoration: BoxDecoration(
+                                           color: Colors.green,
+                                           borderRadius: BorderRadius.all(Radius.circular(30.0))),
+                                   ),
+                                 ),
+                                 new Padding(padding: EdgeInsets.fromLTRB(10, 0, 0, 0)),
+                                 new Text("${FormatDateTime.formatDay(event.eventStartDate.day)} th ${event.eventStartDate.month}, ${event.eventStartDate.year} | ${FormatDateTime.formatHour(event.eventStartDate.hour)}:${FormatDateTime.formatMinute(event.eventStartDate.minute)}"),
+                               ]),
+                               trailing: IconButton(
+                                 icon: const Icon(Icons.more_vert_outlined),
+                                 tooltip: 'Xóa',
+                                 onPressed: (){
+                                   setState(() {
+                                     _showMyDialog(event.id);
+                                   });
+                                 },
+                               ),
+                               onTap: () async {
+                                 await Navigator.push(
+                                     context,
+                                     MaterialPageRoute(
+                                         builder: (_) =>
+                                             AddEventScreen(
+                                               note: event,
+                                             )
+                                     )
+                                 );
+                                 setState(() {
+                                   i++;
+                                 });
+                               },
+                             ),
+                           )
+                       )
+                   ),
+                 ],
+               ),
+             );
+           }),
+        floatingActionButton:FloatingActionButton(
+            child: Icon(Icons.add),
+            onPressed: () async {
+              await Navigator.of(context).push(MaterialPageRoute(builder: (context) => AddEventScreen()));
+              setState(() {
+                i=2;
+              });
+            },
+          ),
+      ),
     );
   }
 
@@ -253,40 +282,68 @@ class _PlanScreenState extends State<PlanScreen> {
     );
   }
 
-  Widget _buildHolidaysMarker() {
-    return Icon(
-      Icons.add_box,
-      size: 20.0,
-      color: Colors.blueGrey[800],
+  deleteItem(String id) async{
+    var url = ip +"/api/deleteNote.php";
+
+    final response = await http.post(url, body: {
+      "id": id.toString(),
+    });
+
+    var data = json.decode(response.body);
+    print(data);
+    if(data!="Success"){
+      Fluttertoast.showToast(
+          msg: "Đã xáy ra lỗi",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0
+      );
+    }
+    setState(() {
+      i++;
+    });
+    Navigator.of(context).pop();
+//    Navigator.pushNamed(context, PlanScreen.routeName);
+  }
+
+  Future<void> _showMyDialog(String id) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        Widget cancelButton = FlatButton(
+          child: Text("Hủy bỏ"),
+          onPressed:  () {
+            Navigator.of(context).pop();
+          },
+        );
+        Widget continueButton = FlatButton(
+          child: Text("Tiếp tục"),
+          onPressed:  () {
+            deleteItem(id);
+          },
+        );
+
+        return AlertDialog(
+          title: Text("Thông báo"),
+          content: Text("Bạn có muốn xóa mục đã chọn?"),
+          actions: [
+            cancelButton,
+            continueButton,
+          ],
+        );
+      },
     );
   }
 
-//  _showAddDialog() {
-//    showDialog(
-//        context: context,
-//        builder: (context) => AlertDialog(
-//          content: TextField(
-//            controller: _eventController,
-//          ),
-//          actions: <Widget>[
-//            FlatButton(
-//              child: Text("Save"),
-//              onPressed: (){
-//                if(_eventController.text.isEmpty) return;
-//                setState(() {
-//                  if(_events[_calendarController.selectedDay]!=null){
-//                    _events[_calendarController.selectedDay].add(_eventController.text);
-//                  }else{
-//                    _events[_calendarController.selectedDay] = [_eventController.text];
-//                  }
-//                  prefs.setString("events",json.encode(encodeMap(_events)));
-//                  _eventController.clear();
-//                  Navigator.pop(context);
-//                });
-//              },
-//            ),
-//          ],
-//        )
-//    );
-//  }
+  static DateTime convertDateTimeInCurrent(){
+    DateTime d1 = DateTime.now();
+    DateTime d2 = DateTime(
+        d1.year, d1.month, d1.day, 12);
+
+    return d2;
+  }
 }
