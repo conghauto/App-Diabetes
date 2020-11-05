@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:diabetesapp/constants.dart';
 import 'package:diabetesapp/screens/plan/components/add_event.dart';
-import 'package:diabetesapp/screens/plan/components/view_event.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
@@ -253,7 +252,7 @@ class _PlanScreenState extends State<PlanScreen> {
               });
             },
           ),
-        centerTitle: true,
+        //centerTitle: true,
         backgroundColor: Colors.lightBlueAccent,
       ),
     );

@@ -38,7 +38,7 @@ const String kFullNameNullError = "Bạn chưa nhập họ tên";
 const String kShortFullName = "Họ tên không hợp lệ";
 const String kShortPhoneNumberNullError = "Số điện thoại không hợp lệ";
 
-const String ip = "http://192.168.1.5:8080";
+const String ip = "http://192.168.1.4:8080";
 
 final otpInputDecoration = InputDecoration(
   contentPadding:
