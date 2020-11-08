@@ -1,4 +1,5 @@
 import 'package:diabetesapp/screens/more/components/daily_steps_page.dart';
+import 'package:diabetesapp/screens/more/components/update_infor_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../../../size_config.dart';
@@ -18,9 +19,11 @@ class Body extends StatelessWidget {
           ),
           SizedBox(height: SizeConfig.defaultSize * 2), //20
           MenuItem(
-            iconSrc: "assets/icons/User.svg",
+            iconSrc: "assets/icons/user.svg",
             title: "Thông tin tài khoản",
-            press: () {},
+            press: () {
+              Navigator.pushNamed(context, EditProfilePage.routeName);
+            },
           ),
           MenuItem(
             iconSrc: "assets/icons/runner.svg",
