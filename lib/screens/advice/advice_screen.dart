@@ -14,10 +14,6 @@ class _AdviceScreenStateful extends State<AdviceScreen>{
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Khuyến nghị"),
-        automaticallyImplyLeading: false,
     return MaterialApp(
 //      theme: ThemeData(
 //        primaryColor: Colors.blue,
@@ -59,7 +55,7 @@ class _AdviceScreenStateful extends State<AdviceScreen>{
                         boxShadow: [BoxShadow(blurRadius: 10,color: Colors.black,offset: Offset(1,3))]// make rounded corner of border
                     ),
                     child: Text("Chế độ dinh dưỡng", style: TextStyle(fontWeight: FontWeight.bold,
-                      fontSize: 17)),
+                        fontSize: 17)),
                   ),
                   Expanded(
                     child: FoodRecommendScreen(),
@@ -70,9 +66,6 @@ class _AdviceScreenStateful extends State<AdviceScreen>{
             ],
           ),
         ),
-      ),
-      body: Center(
-        child: Text('Advice'),
       ),
     );
   }

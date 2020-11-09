@@ -18,18 +18,15 @@ class _GlucoseScreenStateful extends State<GlucoseScreen>{
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Glucose"),
-        automaticallyImplyLeading: false,
       body: SafeArea (
         child: Column(
           children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 0.0),
-            child: new Container(
-              height: 230,
-              color: Colors.white,
-              child: new Stack(
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 0.0),
+              child: new Container(
+                height: 230,
+                color: Colors.white,
+                child: new Stack(
                   children: <Widget>[
                     Container(
                       height: 200,
@@ -39,18 +36,18 @@ class _GlucoseScreenStateful extends State<GlucoseScreen>{
                         child: Row(
                           children: <Widget>[
                             new Expanded(
-                                child: Padding(
-                                  padding: const EdgeInsets.only(left: 5),
-                                  child: new Container(
-                                    height: 200.0,
-                                    decoration: new BoxDecoration(
-                                        borderRadius: new BorderRadius.circular(5.0),
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 5),
+                                child: new Container(
+                                  height: 200.0,
+                                  decoration: new BoxDecoration(
+                                    borderRadius: new BorderRadius.circular(5.0),
                                     color: kPrimaryColor,
-                                        ),
-                                    child: new Column(
-                                      mainAxisAlignment: MainAxisAlignment.start,
-                                      children: <Widget>[
-                                        Row(
+                                  ),
+                                  child: new Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: <Widget>[
+                                      Row(
                                           children: <Widget>[
                                             new Icon(
                                               Icons.opacity,
@@ -59,40 +56,40 @@ class _GlucoseScreenStateful extends State<GlucoseScreen>{
                                             Padding(
                                               padding: const EdgeInsets.only(left:5),
                                               child: new Text("BG", style: new TextStyle(color: Colors.white,
-                                                      fontSize: 12, fontWeight: FontWeight.bold)
+                                                  fontSize: 12, fontWeight: FontWeight.bold)
                                               ),
                                             )
                                           ]
-                                        ),
-                                        SizedBox(height: 15.0),
-                                        Row(
-                                            children: <Widget>[
-                                              new Text("avg  -",
-                                                  style: new TextStyle(color: Colors.blueGrey,
-                                                      fontSize: 12))
-                                            ]
-                                        ),
-                                        SizedBox(height: 5.0),
-                                        Row(
-                                            children: <Widget>[
-                                              new Text("max -",
-                                                  style: new TextStyle(color: Colors.blueGrey,
-                                                      fontSize: 12))
-                                            ]
-                                        ),
-                                        SizedBox(height: 5.0),
-                                        Row(
-                                            children: <Widget>[
-                                              new Text("min  -",
-                                                  style: new TextStyle(color: Colors.blueGrey,
-                                                      fontSize: 12))
-                                            ]
-                                        )
-                                      ],
-                                    ),
+                                      ),
+                                      SizedBox(height: 15.0),
+                                      Row(
+                                          children: <Widget>[
+                                            new Text("avg  -",
+                                                style: new TextStyle(color: Colors.blueGrey,
+                                                    fontSize: 12))
+                                          ]
+                                      ),
+                                      SizedBox(height: 5.0),
+                                      Row(
+                                          children: <Widget>[
+                                            new Text("max -",
+                                                style: new TextStyle(color: Colors.blueGrey,
+                                                    fontSize: 12))
+                                          ]
+                                      ),
+                                      SizedBox(height: 5.0),
+                                      Row(
+                                          children: <Widget>[
+                                            new Text("min  -",
+                                                style: new TextStyle(color: Colors.blueGrey,
+                                                    fontSize: 12))
+                                          ]
+                                      )
+                                    ],
                                   ),
                                 ),
                               ),
+                            ),
                             new Expanded(
                               child: Padding(
                                 padding: const EdgeInsets.only(left: 5),
@@ -110,8 +107,8 @@ class _GlucoseScreenStateful extends State<GlucoseScreen>{
                                             SvgPicture.asset("assets/icons/pill.svg"),
                                             Padding(
                                               padding: const EdgeInsets.only(left:5, top:2),
-                                              child: new Text("Thu?c",style: new TextStyle(color: Colors.white,
-                                                      fontSize: 12, fontWeight: FontWeight.bold)
+                                              child: new Text("Thuốc",style: new TextStyle(color: Colors.white,
+                                                  fontSize: 12, fontWeight: FontWeight.bold)
                                               ),
                                             )
                                           ]
@@ -157,7 +154,7 @@ class _GlucoseScreenStateful extends State<GlucoseScreen>{
                                             ),
                                             Padding(
                                               padding: const EdgeInsets.only(left:5),
-                                              child: new Text("Th?c an",
+                                              child: new Text("Thức ăn",
                                                   style: new TextStyle(color: Colors.white,
                                                       fontSize: 12, fontWeight: FontWeight.bold)
                                               ),
@@ -204,9 +201,9 @@ class _GlucoseScreenStateful extends State<GlucoseScreen>{
                                               color: Colors.greenAccent,
                                             ),
                                             Expanded(
-                                                child: Text("Ho?t d?ng",
-                                                style: new TextStyle(color: Colors.white,
-                                                    fontSize: 12, fontWeight: FontWeight.bold)
+                                                child: Text("Hoạt động",
+                                                    style: new TextStyle(color: Colors.white,
+                                                        fontSize: 12, fontWeight: FontWeight.bold)
                                                 )
                                             )
                                           ]
@@ -214,15 +211,15 @@ class _GlucoseScreenStateful extends State<GlucoseScreen>{
                                       SizedBox(height: 15.0),
                                       Row(
                                           children: <Widget>[
-                                            new Text("s? bu?c   -",
+                                            new Text("số bước   -",
                                                 style: new TextStyle(color: Colors.blueGrey,
-                                                fontSize: 12))
+                                                    fontSize: 12))
                                           ]
                                       ),
                                       SizedBox(height: 5.0),
                                       Row(
                                           children: <Widget>[
-                                            new Text("th?i gian  -",
+                                            new Text("thời gian  -",
                                                 style: new TextStyle(color: Colors.blueGrey, fontSize: 12)
                                             )
                                           ]
@@ -237,37 +234,34 @@ class _GlucoseScreenStateful extends State<GlucoseScreen>{
                       ),
                     ),
                     Positioned(
-                          top: 170,
-                          left: (SizeConfig.screenWidth/2-60),
-                          child: Center(
-                            child: FlatButton(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(18.0),
-                              ),
-                              color: Colors.blue,
-                              textColor: Colors.white,
-                              padding: EdgeInsets.fromLTRB(40.0,5.0, 40.0, 7.0),
-                              splashColor: Colors.blueAccent,
-                              onPressed: () {
-                                Navigator.pushNamed(context, AddLogSceen.routeName);
-                              },
-                              child: Text(
-                                "Th�m",
-                                style: TextStyle(fontSize: 18.0),
-                              ),
-                            ),
+                      top: 170,
+                      left: (SizeConfig.screenWidth/2-60),
+                      child: Center(
+                        child: FlatButton(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18.0),
+                          ),
+                          color: Colors.blue,
+                          textColor: Colors.white,
+                          padding: EdgeInsets.fromLTRB(40.0,5.0, 40.0, 7.0),
+                          splashColor: Colors.blueAccent,
+                          onPressed: () {
+                            Navigator.pushNamed(context, AddLogSceen.routeName);
+                          },
+                          child: Text(
+                            "Thêm",
+                            style: TextStyle(fontSize: 18.0),
                           ),
                         ),
-                ],
-            ),
+                      ),
+                    ),
+                  ],
+                ),
 
-          ),
+              ),
+            ),
+          ],
         ),
-      ],
-    ),
-      ),
-      body: Center(
-        child: Text('Glucose'),
       ),
     );
   }
