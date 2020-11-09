@@ -1,5 +1,6 @@
 import 'package:diabetesapp/components/sign_in_google.dart';
 import 'package:diabetesapp/screens/forgot_password/forgot_password.dart';
+import 'package:diabetesapp/screens/glucose/add_log_screen.dart';
 import 'package:diabetesapp/screens/home/home_screen.dart';
 import 'package:diabetesapp/screens/more/components/update_infor_screen.dart';
 import 'package:diabetesapp/screens/plan/components/add_event.dart';
@@ -21,6 +22,7 @@ final Map<String, WidgetBuilder> routes= {
   SignInGoogle.routeName: (context) => SignInGoogle(),
   AddEventScreen.routeName: (context) => AddEventScreen(),
   PlanScreen.routeName: (context) => PlanScreen(),
+  AddLogSceen.routeName: (context) => AddLogSceen(),
   DailyStepsPage.routeName: (context) => DailyStepsPage(),
   MoreScreen.routeName: (context) => MoreScreen(),
   EditProfilePage.routeName: (context) => EditProfilePage(),
