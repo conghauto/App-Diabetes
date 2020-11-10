@@ -7,6 +7,7 @@ import 'package:diabetesapp/screens/sign_in/sign_in_screen.dart';
 import 'package:diabetesapp/screens/splash/splash_screen.dart';
 import 'package:diabetesapp/size_config.dart';
 import 'package:diabetesapp/theme.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
@@ -18,6 +19,7 @@ import 'screens/splash/splash_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   // final FirebaseApp app = await Firebase.initializeApp(
   //   name: 'db2',
   //   options: Platform.isIOS || Platform.isMacOS

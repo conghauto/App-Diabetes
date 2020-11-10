@@ -1,7 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:diabetesapp/components/form_error.dart';
 import 'package:diabetesapp/models/account.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
@@ -16,17 +18,33 @@ class EditProfilePage extends StatefulWidget {
 
 class _EditProfilePageState extends State<EditProfilePage> {
   AccountModel _account;
+  String _imageURL;
+  String _avatar;
   TextEditingController _username;
   TextEditingController _email;
   TextEditingController _phone;
   TextEditingController _fullName;
   PickedFile _imageFile;
+  final List<String> errors = [];
+  final _formKey = GlobalKey<FormState>();
   final ImagePicker _imagePicker = new ImagePicker();
   @override
   void initState() {
     fetchEvents();
   }
+  void addError({String error}){
+    if(!errors.contains(error))
+      setState(() {
+        errors.add((error));
+      });
+  }
 
+  void removeError({String error}){
+    if (errors.contains(error))
+      setState(() {
+        errors.remove(error);
+      });
+  }
   void fetchEvents() async {
     String url = ip + "/api/getAccount.php";
     var response = await http.post(url, body: {
@@ -40,6 +58,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
         _fullName  = TextEditingController(text: inforAccount.fullname);
         _email  = TextEditingController(text: inforAccount.email);
         _phone  = TextEditingController(text: inforAccount.phone);
+        _avatar = inforAccount.avatar;
       });
     } else {
       throw Exception('Failed to load data.');
@@ -53,6 +72,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
       "username": _username.text,
       "email": _email.text,
       "phone": _phone.text,
+      "avatar": _avatar
     });
 
     var data = json.decode(response.body);
@@ -103,8 +123,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   children: <Widget>[
                     CircleAvatar(
                       radius: 80,
-                      backgroundImage: _imageFile == null ? AssetImage("assets/images/s1.png") : FileImage(
-                          File(_imageFile.path)),
+                      backgroundImage: _avatar == null || _avatar == "null" ? AssetImage("assets/images/s1.png") : NetworkImage(
+                          _avatar),
                     ),
                     Positioned(
                         bottom: 0,
@@ -139,59 +159,83 @@ class _EditProfilePageState extends State<EditProfilePage> {
               SizedBox(
                 height: 35,
               ),
-              buildTextField("Full Name", _fullName),
-              buildTextField("E-mail", _email),
-              buildTextField("Username", _username),
-              buildTextField("Phone", _phone),
-              SizedBox(
-                height: 35,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              Form(key: _formKey, child: Column(
                 children: [
-                  OutlineButton(
-                    padding: EdgeInsets.symmetric(horizontal: 50),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20)),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: Text("CANCEL",
-                        style: TextStyle(
-                            fontSize: 14,
-                            letterSpacing: 2.2,
-                            color: Colors.black)),
+                  buildFullNameField(),
+                  buildEmailField(),
+                  buildUsernameField(),
+                  buildPhoneField(),
+                  FormError(errors: errors),
+                  SizedBox(
+                    height: 35,
                   ),
-                  RaisedButton(
-                    onPressed: () {
-                      updateInfor();
-                    },
-                    color: Colors.green,
-                    padding: EdgeInsets.symmetric(horizontal: 50),
-                    elevation: 2,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20)),
-                    child: Text(
-                      "SAVE",
-                      style: TextStyle(
-                          fontSize: 14,
-                          letterSpacing: 2.2,
-                          color: Colors.white),
-                    ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      OutlineButton(
+                        padding: EdgeInsets.symmetric(horizontal: 50),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20)),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: Text("CANCEL",
+                            style: TextStyle(
+                                fontSize: 14,
+                                letterSpacing: 2.2,
+                                color: Colors.black)),
+                      ),
+                      RaisedButton(
+                        onPressed: () async {
+                          if (_formKey.currentState.validate()) {
+                            _formKey.currentState.save();
+                            updateInfor();
+                          }
+                        },
+                        color: Colors.green,
+                        padding: EdgeInsets.symmetric(horizontal: 50),
+                        elevation: 2,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20)),
+                        child: Text(
+                          "SAVE",
+                          style: TextStyle(
+                              fontSize: 14,
+                              letterSpacing: 2.2,
+                              color: Colors.white),
+                        ),
+                      )
+                    ],
                   )
                 ],
               )
+              ),
             ],
           ),
         ),
       ),
     );
   }
+  void uploadImage() async {
+    String id = "3";
+    final FirebaseStorage _storage = FirebaseStorage.instanceFor(bucket: "gs://diabetes-app-1e8a7.appspot.com");
+    var file = File(_imageFile.path);
+    if (_imageFile != null) {
+      var snapshot = await _storage.ref()
+          .child('avartar/image'+ DateTime.now().toString())
+          .putFile(file);
+      var url = await snapshot.ref.getDownloadURL();
+      setState(() {
+        _avatar = url.toString();
+      });
+    }
+  }
   void takePhoto(ImageSource source) async{
     final pickedFile = await _imagePicker.getImage( source: source);
     setState(() {
       _imageFile = pickedFile;
     });
+    uploadImage();
   }
   Widget bottomSheet(){
     return Container(
@@ -235,15 +279,147 @@ class _EditProfilePageState extends State<EditProfilePage> {
       ),
     );
   }
-  Widget buildTextField(
-      String labelText, TextEditingController text) {
+  Widget buildFullNameField()
+ {
     return Padding(
       padding: const EdgeInsets.only(bottom: 35.0),
       child: TextFormField(
-        controller: text,
+        keyboardType: TextInputType.text,
+        controller: _fullName,
+        onSaved: (newValue) => _fullName.text = newValue,
+        onChanged: (value) {
+          if (value.isNotEmpty || value == null){
+            removeError(error: kFullNameNullError);
+          }else if (value.length >= 5){
+            addError(error: kInvalidEmailError);
+          }
+          return null;
+        },
+        validator: (value){
+          if (value.isEmpty){
+            addError(error: kFullNameNullError);
+            return "";
+          }else if (value.length < 5){
+            addError(error: kShortFullName);
+            return "";
+          }
+          return null;
+        },
         decoration: InputDecoration(
             contentPadding: EdgeInsets.only(bottom: 3, left: 15),
-            labelText: labelText,
+            labelText: "Full Name",
+            floatingLabelBehavior: FloatingLabelBehavior.always,
+            hintStyle: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
+            )),
+      ),
+    );
+  }
+  Widget buildEmailField()
+ {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 35.0),
+      child: TextFormField(
+        keyboardType: TextInputType.emailAddress,
+        onSaved: (newValue) => _email.text = newValue,
+        onChanged: (value) {
+          if (value.isNotEmpty || value == null){
+            removeError(error: kEmailNullError);
+          }else if (emailValidatorRegExp.hasMatch(value)){
+            addError(error: kInvalidEmailError);
+          }
+          return null;
+        },
+        validator: (value){
+          if (value.isEmpty){
+            addError(error: kEmailNullError);
+            return "";
+          }else if (!emailValidatorRegExp.hasMatch(value)){
+            addError(error: kInvalidEmailError);
+            return "";
+          }
+          return null;
+        },
+        controller: _email,
+        decoration: InputDecoration(
+            contentPadding: EdgeInsets.only(bottom: 3, left: 15),
+            labelText: "E-mail",
+            floatingLabelBehavior: FloatingLabelBehavior.always,
+            hintStyle: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
+            )),
+      ),
+    );
+  }
+  Widget buildPhoneField() {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 35.0),
+      child: TextFormField(
+        keyboardType: TextInputType.phone,
+        onSaved: (newValue) => _phone.text = newValue,
+        onChanged: (value) {
+          if (value.isNotEmpty || value == null){
+            removeError(error: kPhoneNumberNullError);
+          }else if (value.length >= 11){
+            addError(error: kShortPhoneNumberNullError);
+          }
+          return null;
+        },
+        validator: (value){
+          if (value.isEmpty || value == null){
+            addError(error: kPhoneNumberNullError);
+            return "";
+          }else if (value.length<10||value.length>=13){
+            addError(error: kShortPhoneNumberNullError);
+            return "";
+          }
+          return null;
+        },
+        controller: _phone,
+        decoration: InputDecoration(
+            contentPadding: EdgeInsets.only(bottom: 3, left: 15),
+            labelText: "Phone",
+            floatingLabelBehavior: FloatingLabelBehavior.always,
+            hintStyle: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
+            )),
+      ),
+    );
+  }
+  Widget buildUsernameField() {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 35.0),
+      child: TextFormField(
+        keyboardType: TextInputType.text,
+        onSaved: (newValue) => _username.text = newValue,
+        onChanged: (value) {
+          if (value.isNotEmpty || value == null ){
+            removeError(error: kUsernameNullError);
+          }else if (value.length >= 5){
+            addError(error: kShortUsername);
+          }
+          return null;
+        },
+        validator: (value){
+          if (value.isEmpty || value == null){
+            addError(error: kFullNameNullError);
+            return "";
+          }else if (value.length < 5){
+            addError(error: kShortFullName);
+            return "";
+          }
+          return null;
+        },
+        controller: _username,
+        decoration: InputDecoration(
+            contentPadding: EdgeInsets.only(bottom: 3, left: 15),
+            labelText: "Username",
             floatingLabelBehavior: FloatingLabelBehavior.always,
             hintStyle: TextStyle(
               fontSize: 18,
