@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:diabetesapp/constants.dart';
 import 'package:diabetesapp/screens/plan/components/add_event.dart';
+import 'package:diabetesapp/screens/plan/components/view_event.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
@@ -84,176 +85,174 @@ class _PlanScreenState extends State<PlanScreen> {
     return Padding(
       padding: const EdgeInsets.fromLTRB(8.0,32.0,8.0,24.0),
       child: new Scaffold(
-       body: FutureBuilder<List<EventModel>>(
-           future: fetchEvents(),
-           builder: (context, snapshot) {
-             if (snapshot.hasData) {
-               List<EventModel> allEvents = snapshot.data;
-               if (allEvents.isNotEmpty) {
-                 _events = _groupEvents(allEvents);
-                 if(processing) {
-                   _dateSelected = convertDateTimeInCurrent();
-                 }
-                 _selectedEvents = _loadEventOfDate(_events, _dateSelected);
-               } else {
-                 _events = {};
-                 _selectedEvents = [];
-               }
-             }
-             return SingleChildScrollView(
-               child: Column(
-                 crossAxisAlignment: CrossAxisAlignment.start,
-                 children: <Widget>[
-                   Padding(
-                     padding: const EdgeInsets.fromLTRB(0,0,0,32.0),
-                     child: TableCalendar(
-                       events: _events,
-                       initialCalendarFormat: CalendarFormat.month,
-                       locale: 'vi - Vietnamese',
-                       headerVisible: true,
-                       calendarStyle: CalendarStyle(
-                         canEventMarkersOverflow: true,
-                         todayColor: Colors.orange,
-                         selectedColor: Colors.red[800],
-                         todayStyle: TextStyle(
-                           fontWeight: FontWeight.bold,
-                           color: Colors.white,
-                         ),
-                       ),
-                       headerStyle: HeaderStyle(
-                           centerHeaderTitle: true,
-                           formatButtonDecoration: BoxDecoration(
-                             color: Colors.orange,
-                             borderRadius: BorderRadius.circular(20.0),
-                           ),
-                           formatButtonTextStyle: TextStyle(
-                             color: Colors.white,
-                           ),
-                           formatButtonShowsNext: false,
-                           formatButtonVisible: false,
-                           titleTextBuilder: (date, locale) =>
-                               DateFormat.yMMMM(locale).format(date)
-                                   .toString()
-                                   .toUpperCase(),
-                           titleTextStyle: TextStyle(
-                               fontSize: 15, fontWeight: FontWeight.bold)
-                       ),
-                       startingDayOfWeek: StartingDayOfWeek.monday,
-                       onDaySelected: (day, events, holidays) {
-                         setState(() {
-                           processing=false;
-                           _selectedEvents = events;
-                           _dateSelected = DateTime(day.year, day.month, day.day, 12);
-                         });
-                       },
+        body: FutureBuilder<List<EventModel>>(
+            future: fetchEvents(),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                List<EventModel> allEvents = snapshot.data;
+                if (allEvents.isNotEmpty) {
+                  _events = _groupEvents(allEvents);
+                  if(processing) {
+                    _dateSelected = convertDateTimeInCurrent();
+                  }
+                  _selectedEvents = _loadEventOfDate(_events, _dateSelected);
+                } else {
+                  _events = {};
+                  _selectedEvents = [];
+                }
+              }
+              return SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0,0,0,32.0),
+                      child: TableCalendar(
+                        events: _events,
+                        initialCalendarFormat: CalendarFormat.month,
+                        locale: 'vi - Vietnamese',
+                        headerVisible: true,
+                        calendarStyle: CalendarStyle(
+                          canEventMarkersOverflow: true,
+                          todayColor: Colors.orange,
+                          selectedColor: Colors.red[800],
+                          todayStyle: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                        headerStyle: HeaderStyle(
+                            centerHeaderTitle: true,
+                            formatButtonDecoration: BoxDecoration(
+                              color: Colors.orange,
+                              borderRadius: BorderRadius.circular(20.0),
+                            ),
+                            formatButtonTextStyle: TextStyle(
+                              color: Colors.white,
+                            ),
+                            formatButtonShowsNext: false,
+                            formatButtonVisible: false,
+                            titleTextBuilder: (date, locale) =>
+                                DateFormat.yMMMM(locale).format(date)
+                                    .toString()
+                                    .toUpperCase(),
+                            titleTextStyle: TextStyle(
+                                fontSize: 15, fontWeight: FontWeight.bold)
+                        ),
+                        startingDayOfWeek: StartingDayOfWeek.monday,
+                        onDaySelected: (day, events, holidays) {
+                          setState(() {
+                            processing=false;
+                            _selectedEvents = events;
+                            _dateSelected = DateTime(day.year, day.month, day.day, 12);
+                          });
+                        },
 
-                       builders: CalendarBuilders(
-                         selectedDayBuilder: (context, date, events) =>
-                             Container(
-                               margin: const EdgeInsets.all(4.0),
-                               alignment: Alignment.center,
-                               decoration: BoxDecoration(
-                                 color: Colors.red[400],
+                        builders: CalendarBuilders(
+                          selectedDayBuilder: (context, date, events) =>
+                              Container(
+                                margin: const EdgeInsets.all(4.0),
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  color: Colors.red[400],
 
-                                 borderRadius: BorderRadius.circular(10.0),
-                               ),
-                               child: Text(date.day.toString(), style: TextStyle(
-                                   color: Colors.white),),
-                             ),
-                         todayDayBuilder: (context, date, events) =>
-                             Container(
-                               margin: const EdgeInsets.all(4.0),
-                               alignment: Alignment.center,
-                               decoration: BoxDecoration(
-                                 color: Colors.orange,
-                                 borderRadius: BorderRadius.circular(10.0),
-                               ),
-                               child: Text(date.day.toString(), style: TextStyle(
-                                   color: Colors.white),),
-                             ),
-                         markersBuilder: (context, date, events, holidays) {
-                           final children = <Widget>[];
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                                child: Text(date.day.toString(), style: TextStyle(
+                                    color: Colors.white),),
+                              ),
+                          todayDayBuilder: (context, date, events) =>
+                              Container(
+                                margin: const EdgeInsets.all(4.0),
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  color: Colors.orange,
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                                child: Text(date.day.toString(), style: TextStyle(
+                                    color: Colors.white),),
+                              ),
+                          markersBuilder: (context, date, events, holidays) {
+                            final children = <Widget>[];
 
-                           if (events.isNotEmpty) {
-                             children.add(
-                               Positioned(
-                                 right: 1,
-                                 bottom: 1,
-                                 child: _buildEventsMarker(date, events),
-                               ),
-                             );
-                           }
-                           return children;
-                         },
-                       ),
-                       calendarController: _calendarController,),
-                   ),
-                   ..._selectedEvents.map((event) =>
-                       Card(
-                           color: Colors.red[50],
-                           child: Padding(
-                             padding: const EdgeInsets.all(8.0),
-                             child: ListTile(
-                               title: Text(event.title, style: TextStyle(
-                                 fontWeight: FontWeight.bold, fontSize: 20,)
-                               ),
-                               subtitle: new Row(children: <Widget>[
-                                 new Padding(padding: EdgeInsets.fromLTRB(5, 20, 0, 0)),
-                                 Container(
-                                   height: 10.0,
-                                   width: 10.0,
-                                   color: Colors.green,
-                                   child: Container(
-                                       decoration: BoxDecoration(
-                                           color: Colors.green,
-                                           borderRadius: BorderRadius.all(Radius.circular(30.0))),
-                                   ),
-                                 ),
-                                 new Padding(padding: EdgeInsets.fromLTRB(10, 0, 0, 0)),
-                                 new Text("${FormatDateTime.formatDay(event.eventStartDate.day)} th ${event.eventStartDate.month}, ${event.eventStartDate.year} | ${FormatDateTime.formatHour(event.eventStartDate.hour)}:${FormatDateTime.formatMinute(event.eventStartDate.minute)}"),
-                               ]),
-                               trailing: IconButton(
-                                 icon: const Icon(Icons.more_vert_outlined),
-                                 tooltip: 'Xóa',
-                                 onPressed: (){
-                                   setState(() {
-                                     _showMyDialog(event.id);
-                                   });
-                                 },
-                               ),
-                               onTap: () async {
-                                 await Navigator.push(
-                                     context,
-                                     MaterialPageRoute(
-                                         builder: (_) =>
-                                             AddEventScreen(
-                                               note: event,
-                                             )
-                                     )
-                                 );
-                                 setState(() {
-                                   i++;
-                                 });
-                               },
-                             ),
-                           )
-                       )
-                   ),
-                 ],
-               ),
-             );
-           }),
+                            if (events.isNotEmpty) {
+                              children.add(
+                                Positioned(
+                                  right: 1,
+                                  bottom: 1,
+                                  child: _buildEventsMarker(date, events),
+                                ),
+                              );
+                            }
+                            return children;
+                          },
+                        ),
+                        calendarController: _calendarController,),
+                    ),
+                    ..._selectedEvents.map((event) =>
+                        Card(
+                            color: Colors.red[50],
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: ListTile(
+                                title: Text(event.title, style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 20,)
+                                ),
+                                subtitle: new Row(children: <Widget>[
+                                  new Padding(padding: EdgeInsets.fromLTRB(5, 20, 0, 0)),
+                                  Container(
+                                    height: 10.0,
+                                    width: 10.0,
+                                    color: Colors.green,
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                          color: Colors.green,
+                                          borderRadius: BorderRadius.all(Radius.circular(30.0))),
+                                    ),
+                                  ),
+                                  new Padding(padding: EdgeInsets.fromLTRB(10, 0, 0, 0)),
+                                  new Text("${FormatDateTime.formatDay(event.eventStartDate.day)} th ${event.eventStartDate.month}, ${event.eventStartDate.year} | ${FormatDateTime.formatHour(event.eventStartDate.hour)}:${FormatDateTime.formatMinute(event.eventStartDate.minute)}"),
+                                ]),
+                                trailing: IconButton(
+                                  icon: const Icon(Icons.more_vert_outlined),
+                                  tooltip: 'Xóa',
+                                  onPressed: (){
+                                    setState(() {
+                                      _showMyDialog(event.id);
+                                    });
+                                  },
+                                ),
+                                onTap: () async {
+                                  await Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (_) =>
+                                              AddEventScreen(
+                                                note: event,
+                                              )
+                                      )
+                                  );
+                                  setState(() {
+                                    i++;
+                                  });
+                                },
+                              ),
+                            )
+                        )
+                    ),
+                  ],
+                ),
+              );
+            }),
         floatingActionButton:FloatingActionButton(
-            child: Icon(Icons.add),
-            onPressed: () async {
-              await Navigator.of(context).push(MaterialPageRoute(builder: (context) => AddEventScreen()));
-              setState(() {
-                i=2;
-              });
-            },
-          ),
-        //centerTitle: true,
-        backgroundColor: Colors.lightBlueAccent,
+          child: Icon(Icons.add),
+          onPressed: () async {
+            await Navigator.of(context).push(MaterialPageRoute(builder: (context) => AddEventScreen()));
+            setState(() {
+              i=2;
+            });
+          },
+        ),
       ),
     );
   }
