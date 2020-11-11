@@ -257,7 +257,6 @@ class _GlucoseScreenStateful extends State<GlucoseScreen>{
                     ),
                   ],
                 ),
-
               ),
             ),
           ],
