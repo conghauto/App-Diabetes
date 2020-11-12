@@ -1,3 +1,4 @@
+import 'package:diabetesapp/constants.dart';
 import 'package:diabetesapp/screens/sign_in/components/body.dart';
 import 'package:flutter/material.dart';
 
@@ -8,7 +9,8 @@ class SignInScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Đăng nhập"),
+//        title: Text("Đăng nhập"),
+      backgroundColor: kPrimaryColor,
         automaticallyImplyLeading: false,
       ),
       body: Body(),

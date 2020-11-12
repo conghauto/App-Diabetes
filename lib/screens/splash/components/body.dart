@@ -14,16 +14,16 @@ class _BodyState extends State<Body> {
   int currentPage = 0;
   List<Map<String, String>> splashData=[
     {
-      "text": "",
+      "text": "Hãy bảo vệ sức khỏe của chính bạn",
       "image": "assets/images/s1.png"
     },
     {
       "text":
-      "We help people conect with store \naround United State of America",
+      "Theo dõi sức khỏe \ntheo cách của riêng bạn",
       "image": "assets/images/s2.png"
     },
     {
-      "text": "We show the easy way to shop. \nJust stay at home with us",
+      "text": "Chúng tôi giúp bạn chăm sóc. \n Sức khỏe của bản thân",
       "image": "assets/images/s3.png"
     },
   ];

@@ -9,7 +9,7 @@
             $encryptedPw = md5($password);
             $date=date("Y-m-d");
 
-            $result=mysqli_query($this->con, "INSERT INTO users VALUES ('','$fullname','$username','$email','$phone','$encryptedPw','$date')");
+            $result=mysqli_query($this->con, "INSERT INTO users VALUES ('','$fullname','$username','$email','$phone','$encryptedPw','$date','')");
             return $result;
         }
 

@@ -17,9 +17,9 @@ class SplashContent extends StatelessWidget {
       children: <Widget>[
         Spacer(),
         Text(
-          "TOKOTO",
+          "HEAGUL",
           style: TextStyle(
-            fontSize: getProportionateScreenWidth(36),
+            fontSize: getProportionateScreenWidth(30),
             color: kPrimaryColor,
             fontWeight: FontWeight.bold,
           ),
@@ -28,7 +28,7 @@ class SplashContent extends StatelessWidget {
           text,
           textAlign: TextAlign.center,
         ),
-        Spacer(flex: 2),
+        Spacer(flex: 1),
         Image.asset(
           image,
           height: getProportionateScreenHeight(265),

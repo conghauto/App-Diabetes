@@ -27,6 +27,8 @@ const defaultDuration = Duration(milliseconds: 250);
 final RegExp emailValidatorRegExp =
 RegExp(r"^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
 const String kEmailNullError = "Bạn chưa nhập địa chỉ email";
+const String kHeightNullError = "Bạn chưa nhập chiều cao";
+const String kWeightNullError = "Bạn chưa nhập cân nặng";
 const String kInvalidEmailError = "Email không hợp lệ";
 const String kPassNullError = "Bạn chưa nhập mật khẩu";
 const String kShortPassError = "Mật khẩu phải có ít 8 ký tự";

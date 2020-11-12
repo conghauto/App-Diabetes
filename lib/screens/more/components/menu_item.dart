@@ -31,7 +31,8 @@ class MenuItem extends StatelessWidget {
                 title,
                 style: TextStyle(
                   fontSize: defaultSize * 2, //16
-                  color: kTextLigntColor,
+                  color: Colors.black,
+                  fontFamily: 'Roboto',
                 ),
               ),
               Spacer(),

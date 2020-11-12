@@ -20,7 +20,7 @@ class AddEventScreen extends StatefulWidget {
 }
 
 class _AddEventScreenState extends State<AddEventScreen> {
-  TextStyle style = TextStyle(fontFamily: 'Montserrat',fontSize: 20.0);
+  TextStyle style = TextStyle(fontFamily: 'Roboto',fontSize: 20.0);
   TextEditingController _title;
   TextEditingController _description;
   DateTime _eventStartDate;

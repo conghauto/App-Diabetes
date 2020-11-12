@@ -17,12 +17,12 @@ class _MoreScreenStateful extends State<MoreScreen>{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text("Profile"),
-        automaticallyImplyLeading: false,
-        backgroundColor: Colors.lightBlueAccent,
-      ),
+//      appBar: AppBar(
+//        centerTitle: true,
+//        title: Text("Profile"),
+//        automaticallyImplyLeading: false,
+//        backgroundColor: Colors.lightBlueAccent,
+//      ),
       body: Body(),
     );
   }
