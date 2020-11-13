@@ -131,11 +131,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
               Center(
                 child: Stack(
                   children: <Widget>[
-                    CircleAvatar(
-                      radius: 80,
-                      backgroundImage: _avatar == null || _avatar == "null" ? AssetImage("assets/images/s1.png") : NetworkImage(
-                          _avatar),
-                    ),
+                    avatarImage,
                     Positioned(
                         bottom: 0,
                         right: 0,
@@ -437,6 +433,17 @@ class _EditProfilePageState extends State<EditProfilePage> {
               color: Colors.black,
             )),
       ),
+    );
+  }
+
+  Widget get avatarImage {
+    return _avatar.toString().split(",").contains("assets")?
+    CircleAvatar(
+      radius: 80,
+      backgroundImage: AssetImage("assets/images/s1.png")):
+    CircleAvatar(
+      radius: 80,
+      backgroundImage:NetworkImage(_avatar),
     );
   }
 }

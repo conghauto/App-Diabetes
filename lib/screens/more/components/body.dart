@@ -44,12 +44,12 @@ class _BodyState extends State<Body> {
       setState(() {
         _username  = inforAccount.username;
         _email  = inforAccount.email;
-//        _avatar = inforAccount.avatar;
-//        _avatar = "assets/images/s1.png";
+        _avatar = inforAccount.avatar;
+        _avatar = "assets/images/s1.png";
 
-//        if(_avatar == null||_avatar == ""){
-//          _avatar = "assets/images/s1.png";
-//        }
+        if(_avatar == null||_avatar == ""){
+          _avatar = "assets/images/s1.png";
+        }
       });
     } else {
       throw Exception('Failed to load data.');

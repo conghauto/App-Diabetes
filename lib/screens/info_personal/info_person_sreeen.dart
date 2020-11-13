@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:diabetesapp/components/custom_surffix_icon.dart';
 import 'package:diabetesapp/components/form_error.dart';
 import 'package:diabetesapp/constants.dart';
+import 'package:diabetesapp/models/account.dart';
 import 'package:diabetesapp/screens/home/home_screen.dart';
 import 'package:diabetesapp/size_config.dart';
 import 'package:diabetesapp/widgets/ProgressDialog.dart';
@@ -10,6 +11,7 @@ import 'package:diabetesapp/widgets/default_button.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
 class InfoPersonScreen extends StatefulWidget {
@@ -22,12 +24,40 @@ class _InfoPersonScreenState extends State<InfoPersonScreen> {
   final _formKey = GlobalKey<FormState>();
   int _gender = 1;
   int _type = 2;
+  String _idUser = "";
 
   String height;
   String weight;
 
   final List<String> errors = [];
   DateTime selectedDate = DateTime(1950,1,1);
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    fetchIDUser();
+  }
+
+  void fetchIDUser() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var email = prefs.getString('email');
+
+    String url = ip + "/api/getAccount.php";
+    var response = await http.post(url, body: {
+      'email': email.toString(),
+    });
+
+    if (response.statusCode == 200) {
+      final items = json.decode(response.body).cast<Map<String, dynamic>>();
+      AccountModel inforAccount = AccountModel.fromJson(items[0]);
+      setState(() {
+        _idUser  = inforAccount.id;
+      });
+    } else {
+      throw Exception('Failed to load data.');
+    }
+  }
 
   void setValueGender(int value) {
     setState(() {
@@ -49,7 +79,7 @@ class _InfoPersonScreenState extends State<InfoPersonScreen> {
       'height': height,
       'weight': weight,
       'typeDiabete': _type.toString(),
-      'userID': "14"
+      'userID': _idUser,
     });
 
     Navigator.pop(context);
