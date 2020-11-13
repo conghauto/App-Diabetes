@@ -27,7 +27,7 @@ class _HomeScreenStateful extends State<HomeScreen> {
   }
   @override
   Widget build(BuildContext context) {
-    SizeConfig().init(context);
+//    SizeConfig().init(context);
     return Scaffold(
       body: PageView(
        controller: _pageController,

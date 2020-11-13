@@ -27,10 +27,10 @@ class Body extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                Text(
-                  "Hoàn thành thông tin \n hoặc sử dụng mạng xã hội đăng ký",
-                  textAlign: TextAlign.center,
-                ),
+//                Text(
+//                  "Hoàn thành thông tin \n hoặc sử dụng mạng xã hội đăng ký",
+//                  textAlign: TextAlign.center,
+//                ),
                 SizedBox(height: SizeConfig.screenHeight * 0.08),
                 SignUpForm(),
                 SizedBox(height: SizeConfig.screenHeight * 0.05),

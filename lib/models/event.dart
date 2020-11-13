@@ -17,30 +17,4 @@ class EventModel{
       eventEndDate: DateTime.parse(json['eventEndDate'].toString()),
     );
   }
-//  factory EventModel.fromMap(Map data) {
-//    return EventModel(
-//      title: data['title'],
-//      description: data['description'],
-//      eventStartDate: data['event_srart_date'],
-//      eventEndDate: data['event_end_date'],
-//    );
-//  }
-//
-//  factory EventModel.fromDS(Map<String,dynamic> data) {
-//    return EventModel(
-//      title: data['title'],
-//      description: data['description'],
-//      eventStartDate: data['event_srart_date'],
-//      eventEndDate: data['event_end_date'],
-//    );
-//  }
-//
-//  Map<String,dynamic> toMap() {
-//    return {
-//      "title":title,
-//      "description": description,
-//      "event_start_date":eventStartDate,
-//      "event_end_date":eventEndDate,
-//    };
-//  }
 }

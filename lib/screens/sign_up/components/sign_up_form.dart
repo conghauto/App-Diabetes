@@ -3,11 +3,13 @@ import 'dart:convert';
 import 'package:diabetesapp/components/custom_surffix_icon.dart';
 import 'package:diabetesapp/components/form_error.dart';
 import 'package:diabetesapp/screens/home/home_screen.dart';
+import 'package:diabetesapp/screens/info_personal/info_person_sreeen.dart';
 import 'package:diabetesapp/size_config.dart';
 import 'package:diabetesapp/widgets/ProgressDialog.dart';
 import 'package:diabetesapp/widgets/default_button.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
 import '../../../constants.dart';
@@ -59,7 +61,11 @@ class _SignUpFormState extends State<SignUpForm> {
           fontSize: 16.0
       );
     }else{
-      Navigator.pushNamed(context, HomeScreen.routeName);
+      // Lưu trạng thái đăng nhập
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setString('email',email);
+
+      Navigator.pushNamed(context, InfoPersonScreen.routeName);
       Fluttertoast.showToast(
           msg: "Đăng ký thành công",
           toastLength: Toast.LENGTH_SHORT,

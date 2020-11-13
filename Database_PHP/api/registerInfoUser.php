@@ -1,0 +1,22 @@
+<?php
+    header("Content-type: application/json; charset=utf-8");
+    include("config.php");
+    include("PersonalInfo.php");
+
+    $info = new PersonalInfo($con);
+
+    $birthday = $_POST['birthday'];
+    $gender = $_POST['gender'];
+    $height = $_POST['height'];
+    $weight = $_POST['weight'];
+    $typeDiabete = $_POST['typeDiabete'];
+    $userID= $_POST['userID'];
+
+    $query = $info->registerInfoUser($birthday,$gender,$height,$weight,$typeDiabete,$userID);
+
+    if($query){
+        echo json_encode("Success");
+    }else{
+        echo json_encode("Fail");
+    }
+?>

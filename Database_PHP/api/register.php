@@ -16,7 +16,7 @@
 
     if($count >=1){
         if($password=="apaaja"){
-            echo json_encode("Success");
+            echo json_encode("Exist");
         }else{
             echo json_encode(("Error"));
         }

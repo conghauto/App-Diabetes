@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../../constants.dart';
 
 class EditProfilePage extends StatefulWidget {
@@ -24,14 +25,18 @@ class _EditProfilePageState extends State<EditProfilePage> {
   TextEditingController _email;
   TextEditingController _phone;
   TextEditingController _fullName;
+
   PickedFile _imageFile;
   final List<String> errors = [];
   final _formKey = GlobalKey<FormState>();
   final ImagePicker _imagePicker = new ImagePicker();
+  String _userID="";
+
   @override
   void initState() {
-    fetchEvents();
+    fetchUser();
   }
+
   void addError({String error}){
     if(!errors.contains(error))
       setState(() {
@@ -45,15 +50,20 @@ class _EditProfilePageState extends State<EditProfilePage> {
         errors.remove(error);
       });
   }
-  void fetchEvents() async {
+  void fetchUser() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var email = prefs.getString('email');
+
     String url = ip + "/api/getAccount.php";
     var response = await http.post(url, body: {
-      'id': '3',
+      'email': email.toString(),
     });
+
     if (response.statusCode == 200) {
       final items = json.decode(response.body).cast<Map<String, dynamic>>();
       AccountModel inforAccount = AccountModel.fromJson(items[0]);
       setState(() {
+        _userID = inforAccount.id;
         _username  = TextEditingController(text: inforAccount.username);
         _fullName  = TextEditingController(text: inforAccount.fullname);
         _email  = TextEditingController(text: inforAccount.email);
@@ -67,7 +77,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
   void updateInfor() async {
     var url = ip + "/api/updateAccount.php";
     final response = await http.post(url, body: {
-      "id": "3",
+      "id": _userID,
       "fullname": _fullName.text,
       "username": _username.text,
       "email": _email.text,
@@ -89,7 +99,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
       );
     } else {
       Fluttertoast.showToast(
-          msg: "Update thông tin thành công",
+          msg: "Cập nhật thông tin thành công",
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.CENTER,
           timeInSecForIosWeb: 1,
@@ -121,11 +131,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
               Center(
                 child: Stack(
                   children: <Widget>[
-                    CircleAvatar(
-                      radius: 80,
-                      backgroundImage: _avatar == null || _avatar == "null" ? AssetImage("assets/images/s1.png") : NetworkImage(
-                          _avatar),
-                    ),
+                    avatarImage,
                     Positioned(
                         bottom: 0,
                         right: 0,
@@ -427,6 +433,17 @@ class _EditProfilePageState extends State<EditProfilePage> {
               color: Colors.black,
             )),
       ),
+    );
+  }
+
+  Widget get avatarImage {
+    return _avatar.toString().split(",").contains("assets")?
+    CircleAvatar(
+      radius: 80,
+      backgroundImage: AssetImage("assets/images/s1.png")):
+    CircleAvatar(
+      radius: 80,
+      backgroundImage:NetworkImage(_avatar),
     );
   }
 }

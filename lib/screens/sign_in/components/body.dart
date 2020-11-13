@@ -25,17 +25,17 @@ class _BodyState extends State<Body> {
               children: [
                 SizedBox(height: SizeConfig.screenHeight * 0.04),
                 Text(
-                  "Welcome Back",
+                  "Đăng Nhập",
                   style: TextStyle(
                     color: Colors.black,
                     fontSize: getProportionateScreenWidth(28),
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                Text(
-                  "Đăng nhập bằng email và mật khẩu  \nhoặc sử dụng mạng xã hội",
-                  textAlign: TextAlign.center,
-                ),
+//                Text(
+//                  "Đăng nhập bằng email và mật khẩu  \nhoặc sử dụng mạng xã hội",
+//                  textAlign: TextAlign.center,
+//                ),
                 SizedBox(height: SizeConfig.screenHeight * 0.08),
                 SignInForm(),
                 SizedBox(height: SizeConfig.screenHeight * 0.05),

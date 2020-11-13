@@ -1,11 +1,14 @@
 import 'dart:convert';
 
+import 'package:diabetesapp/screens/info_personal/info_person_sreeen.dart';
+import 'package:diabetesapp/widgets/ProgressDialog.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
 import '../constants.dart';
@@ -14,18 +17,26 @@ import '../size_config.dart';
 
 class SignInGoogle extends StatefulWidget {
   static String routeName = "/sign_in_google";
+  static final GoogleSignIn googleSignIn = GoogleSignIn();
+  static bool isLoggedIn = false;
+
   @override
   _SignInGoogleState createState() => _SignInGoogleState();
 }
 
 class _SignInGoogleState extends State<SignInGoogle> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  final GoogleSignIn googleSignIn = GoogleSignIn();
 
   Future<void> _handleSignIn() async {
     await Firebase.initializeApp();
 
-    final GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) => ProgressDialog(status: 'Đang xử lý'),
+    );
+
+    final GoogleSignInAccount googleSignInAccount = await SignInGoogle.googleSignIn.signIn();
     final GoogleSignInAuthentication googleSignInAuthentication = await googleSignInAccount.authentication;
 
     final AuthCredential credential = GoogleAuthProvider.credential(
@@ -43,7 +54,13 @@ class _SignInGoogleState extends State<SignInGoogle> {
       final User currentUser = _auth.currentUser;
       assert(user.uid == currentUser.uid);
 
-      print('signInWithGoogle succeeded: $user');
+//      print('signInWithGoogle succeeded: $user');
+
+      // Lưu trạng thái đăng nhập
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setString('email', user.email);
+
+      SignInGoogle.isLoggedIn=true;
 
       var phone=user.phoneNumber==null?"":user.phoneNumber;
       saveInfoUser(user.displayName,user.email,phone);
@@ -65,6 +82,8 @@ class _SignInGoogleState extends State<SignInGoogle> {
     var data = json.decode(response.body);
 
     if(data=="Success"){
+      Navigator.pushNamed(context, InfoPersonScreen.routeName);
+    }else if(data=="Exist"){
       Fluttertoast.showToast(
           msg: "Đăng nhập thành công",
           timeInSecForIosWeb: 1,
@@ -74,8 +93,9 @@ class _SignInGoogleState extends State<SignInGoogle> {
           textColor: Colors.white,
           fontSize: 16.0
       );
-      Navigator.pushReplacementNamed(context, HomeScreen.routeName);
-    }else{
+      Navigator.pushNamed(context, HomeScreen.routeName);
+    }
+    else {
       Fluttertoast.showToast(
           msg: "Email đã tồn tại",
           timeInSecForIosWeb: 1,
@@ -105,5 +125,11 @@ class _SignInGoogleState extends State<SignInGoogle> {
         child: SvgPicture.asset("assets/icons/google-icon.svg"),
       ),
     );
+  }
+}
+
+Future<void> googleLogout(){
+  if(SignInGoogle.isLoggedIn) {
+    SignInGoogle.googleSignIn.signOut();
   }
 }

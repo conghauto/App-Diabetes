@@ -10,6 +10,7 @@ import 'package:diabetesapp/widgets/default_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
 import '../../../constants.dart';
@@ -25,14 +26,12 @@ class _SignInFormState extends State<SignInForm> {
   String password;
   final List<String> errors = [];
 
-  void login()async {
-
-    // show please wait dialog
+  void login() async{
 
     showDialog(
       barrierDismissible: false,
       context: context,
-      builder: (BuildContext context) => ProgressDialog(status: 'Bạn đang đăng nhập',),
+      builder: (BuildContext context) => ProgressDialog(status: 'Bạn đang đăng nhập'),
     );
 
     var url = ip + "/api/login.php";
@@ -43,7 +42,12 @@ class _SignInFormState extends State<SignInForm> {
 
     Navigator.pop(context);
     var data = json.decode(response.body);
+
     if(data=="Success"){
+      // Lưu trạng thái đăng nhập
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setString('email', email);
+
       Fluttertoast.showToast(
           msg: "Đăng nhập thành công",
           timeInSecForIosWeb: 1,
@@ -53,7 +57,7 @@ class _SignInFormState extends State<SignInForm> {
           textColor: Colors.white,
           fontSize: 16.0
       );
-      Navigator.pushReplacementNamed(context,HomeScreen.routeName);
+      Navigator.pushNamed(context, HomeScreen.routeName);
     }else{
       Fluttertoast.showToast(
           msg: "Email hoặc mật khẩu chưa chính xác",
