@@ -4,13 +4,13 @@ import '../../../constants.dart';
 import '../../../size_config.dart';
 
 class Info extends StatelessWidget {
-  const Info({
+  final String name, email, image;
+  Info({
     Key key,
     this.name,
     this.email,
     this.image,
   }) : super(key: key);
-  final String name, email, image;
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +42,7 @@ class Info extends StatelessWidget {
                     ),
                     image: DecorationImage(
                       fit: BoxFit.cover,
-                      image: AssetImage(image),
+                      image: (image == null || image == "null" || image == "") ? AssetImage("assets/images/s1.png") : NetworkImage(image),
                     ),
                   ),
                 ),

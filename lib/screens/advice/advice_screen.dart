@@ -15,16 +15,22 @@ class _AdviceScreenStateful extends State<AdviceScreen>{
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-//      theme: ThemeData(
-//        primaryColor: Colors.blue,
-//      ),
       home: DefaultTabController(
         length: 2,
         child: Scaffold(
           appBar: AppBar(
-            backgroundColor: Colors.blue[100],
+            title: Center(
+              child: Text(
+                "Khuyến nghị cho người dùng",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white
+              ),
+              ),
+            ),
+            backgroundColor: Colors.lightBlue,
             bottom: TabBar(
-              unselectedLabelColor: Colors.redAccent,
+              unselectedLabelColor: Colors.black,
               indicator: BoxDecoration(
 //                borderRadius: BorderRadius.circular(50),
                 color: Colors.redAccent,

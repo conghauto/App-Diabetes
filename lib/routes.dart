@@ -1,4 +1,5 @@
 import 'package:diabetesapp/components/sign_in_google.dart';
+import 'package:diabetesapp/screens/chart/report_screen.dart';
 import 'package:diabetesapp/screens/forgot_password/forgot_password.dart';
 import 'package:diabetesapp/screens/glucose/add_log_screen.dart';
 import 'package:diabetesapp/screens/home/home_screen.dart';
@@ -28,4 +29,5 @@ final Map<String, WidgetBuilder> routes= {
   MoreScreen.routeName: (context) => MoreScreen(),
   EditProfilePage.routeName: (context) => EditProfilePage(),
   InfoPersonScreen.routeName: (context) => InfoPersonScreen(),
+  ReportScreen.routeName: (context) => ReportScreen()
 };

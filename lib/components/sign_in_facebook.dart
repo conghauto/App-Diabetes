@@ -29,18 +29,17 @@ class _SignInFacebookState extends State<SignInFacebook>{
     SignInFacebook.facebookLogin.loginBehavior = FacebookLoginBehavior.webViewOnly;
     final result = await SignInFacebook.facebookLogin.logIn(['email']);
 
-    showDialog(
-      barrierDismissible: false,
-      context: context,
-      builder: (BuildContext context) => ProgressDialog(status: 'Đang xử lý'),
-    );
+    // showDialog(
+    //   barrierDismissible: false,
+    //   context: context,
+    //   builder: (BuildContext context) => ProgressDialog(status: 'Đang xử lý'),
+    // );
 
     switch (result.status) {
       case FacebookLoginStatus.loggedIn:
         final token = result.accessToken.token;
         final graphResponse = await http.get('https://graph.facebook.com/v2.12/me?fields=name,picture,email&access_token=${token}');
         final profile = JSON.jsonDecode(graphResponse.body);
-        print(profile['email']);
 
         // Lưu trạng thái đăng nhập
         SharedPreferences prefs = await SharedPreferences.getInstance();

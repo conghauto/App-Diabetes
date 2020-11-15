@@ -21,12 +21,12 @@ class Body extends StatefulWidget {
 }
 
 class _BodyState extends State<Body> {
-  String _avatar;
-  String _username;
-  String _email;
+  String _avatar = "";
+  String _username = "";
+  String _email = "";
 
-  void initState() {
-    fetchUser();
+  void initState()  {
+     fetchUser();
   }
 
   void fetchUser() async {
@@ -41,19 +41,17 @@ class _BodyState extends State<Body> {
     if (response.statusCode == 200) {
       final items = json.decode(response.body).cast<Map<String, dynamic>>();
       AccountModel inforAccount = AccountModel.fromJson(items[0]);
-      setState(() {
-        _username  = inforAccount.username;
-        _email  = inforAccount.email;
-        _avatar = inforAccount.avatar;
-        _avatar = "assets/images/s1.png";
-
-        if(_avatar == null||_avatar == ""){
-          _avatar = "assets/images/s1.png";
-        }
-      });
+      await setInfor(inforAccount);
     } else {
       throw Exception('Failed to load data.');
     }
+  }
+  void setInfor(AccountModel inforAccount){
+    setState(() {
+      _username  = inforAccount.username;
+      _email  = inforAccount.email;
+      _avatar = inforAccount.avatar;
+    });
   }
   @override
   Widget build(BuildContext context) {
