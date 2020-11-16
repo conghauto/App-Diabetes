@@ -1,10 +1,11 @@
 <?php
     header("Content-type: application/json; charset=utf-8");
     include("config.php");
-    include("Glycemic.php");
+    // include("Glycemic.php");
 
-    $userID = $_POST['userID'];
+    $userID = $_GET['userID'];
     $query="SELECT *FROM glycemics WHERE userID='".$userID."'";
+    // $query="SELECT *FROM glycemics";
     
     $data= mysqli_query($con,$query);
 
@@ -17,9 +18,20 @@
             $row['tags'],
             $row['note'],
             $row['measureTime'],
-            $row['userID'],
-        ));
+            $row['userID'])
+        );
     }
 
     echo json_encode($result);
+
+    class Glycemic{
+        public function Glycemic($id,$indexG,$tags,$note,$measureTime,$userID){
+            $this->id=$id;
+            $this->indexG=$indexG;
+            $this->tags=$tags;
+            $this->note=$note;
+            $this->measureTime=$measureTime;
+            $this->userID=$userID;
+        }
+    }
 ?>

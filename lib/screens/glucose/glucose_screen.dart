@@ -1,9 +1,14 @@
+import 'dart:convert';
+
 import 'package:diabetesapp/constants.dart';
+import 'package:diabetesapp/models/glycemic.dart';
 import 'package:diabetesapp/screens/glucose/add_log_screen.dart';
 import 'package:diabetesapp/size_config.dart';
+import 'package:diabetesapp/user_current.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:http/http.dart' as http;
 
 class GlucoseScreen extends StatefulWidget{
   static String routeName = "/chart_screen";
@@ -13,15 +18,51 @@ class GlucoseScreen extends StatefulWidget{
   }
 }
 class _GlucoseScreenStateful extends State<GlucoseScreen>{
-  final europeanCountries = ['Albania', 'Andorra', 'Armenia', 'Austria',
-    'Azerbaijan', 'Belarus', 'Belgium', 'Bosnia and Herzegovina', 'Bulgaria',
-    'Croatia', 'Cyprus', 'Czech Republic', 'Denmark', 'Estonia', 'Finland',
-    'France', 'Georgia', 'Germany', 'Greece', 'Hungary', 'Iceland', 'Ireland',
-    'Italy', 'Kazakhstan', 'Kosovo', 'Latvia', 'Liechtenstein', 'Lithuania',
-    'Luxembourg', 'Macedonia', 'Malta', 'Moldova', 'Monaco', 'Montenegro',
-    'Netherlands', 'Norway', 'Poland', 'Portugal', 'Romania', 'Russia',
-    'San Marino', 'Serbia', 'Slovakia', 'Slovenia', 'Spain', 'Sweden',
-    'Switzerland', 'Turkey', 'Ukraine', 'United Kingdom', 'Vatican City'];
+
+  String userID = "17";
+  List<GlycemicModel> listOfGlycemics =new List<GlycemicModel>();
+
+  @override
+  void initState() {
+    if(userID==null||userID=="") {
+      UserCurrent.getUserID().then((String s) =>
+          setState(() {
+            userID = s;
+          }));
+    }
+
+    fetchGlycemics();
+  }
+
+  Future<void> fetchGlycemics() async {
+    String url = ip + "/api/getGlycemics.php?userID="+userID;
+    var response = await http.get(url);
+
+    if (response.statusCode == 200) {
+      final items = json.decode(response.body).cast<Map<String, dynamic>>();
+
+      List<GlycemicModel> list = items.map<GlycemicModel>((json) {
+        return GlycemicModel.fromJson(json);
+      }).toList();
+
+      setState(() {
+        listOfGlycemics=list;
+      });
+    }
+    else {
+      throw Exception('Failed to load data.');
+    }
+  }
+
+//  final europeanCountries = ['Albania', 'Andorra', 'Armenia', 'Austria',
+//    'Azerbaijan', 'Belarus', 'Belgium', 'Bosnia and Herzegovina', 'Bulgaria',
+//    'Croatia', 'Cyprus', 'Czech Republic', 'Denmark', 'Estonia', 'Finland',
+//    'France', 'Georgia', 'Germany', 'Greece', 'Hungary', 'Iceland', 'Ireland',
+//    'Italy', 'Kazakhstan', 'Kosovo', 'Latvia', 'Liechtenstein', 'Lithuania',
+//    'Luxembourg', 'Macedonia', 'Malta', 'Moldova', 'Monaco', 'Montenegro',
+//    'Netherlands', 'Norway', 'Poland', 'Portugal', 'Romania', 'Russia',
+//    'San Marino', 'Serbia', 'Slovakia', 'Slovenia', 'Spain', 'Sweden',
+//    'Switzerland', 'Turkey', 'Ukraine', 'United Kingdom', 'Vatican City'];
 
   @override
   Widget build(BuildContext context) {
@@ -295,14 +336,14 @@ class _GlucoseScreenStateful extends State<GlucoseScreen>{
             SizedBox(height:10.0),
             new Expanded(child:
             ListView.builder(
-                itemCount: europeanCountries.length,
+                itemCount: listOfGlycemics.length,
                 itemBuilder: (context, index) {
               return Card(
                   color: Colors.red[50],
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: ListTile(
-                      title: Text(europeanCountries[index], style: TextStyle(
+                      title: Text(listOfGlycemics[index].indexG.toString(), style: TextStyle(
                         fontWeight: FontWeight.bold, fontSize: 20,)
                       ),
                       subtitle: new Row(children: <Widget>[
