@@ -28,7 +28,6 @@ class BloodGlucosoLogState extends State<BloodGlucosoLog>{
   TextEditingController indexG;
   String userID="";
   TextEditingController note;
-  final List<String> errors = [];
   bool isValid=false;
 
   @override
@@ -49,17 +48,11 @@ class BloodGlucosoLogState extends State<BloodGlucosoLog>{
   void addGlycemic()async{
 
     // show please wait dialog
-
 //    showDialog(
 //      barrierDismissible: false,
 //      context: context,
 //      builder: (BuildContext context) => ProgressDialog(status: 'Đang xử lý',),
 //    );
-//    setState(() {
-//      if(indexG.text!=""||indexG.text!=null){
-//        isValid = true;
-//      }
-//    });
 
     var url = ip + "/api/addGlycemic.php";
     var response = await http.post(url, body: {
@@ -94,19 +87,6 @@ class BloodGlucosoLogState extends State<BloodGlucosoLog>{
     }
   }
 
-  void addError({String error}){
-    if(!errors.contains(error))
-      setState(() {
-        errors.add((error));
-      });
-  }
-
-  void removeError({String error}){
-    if (errors.contains(error))
-      setState(() {
-        errors.remove(error);
-      });
-  }
 
   List<String> reportList = [
     "Trước bữa sáng",

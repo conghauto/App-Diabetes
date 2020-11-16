@@ -1,14 +1,5 @@
 <?php
     class Glycemic{
-        public function __construct1($id,$indexG,$tags,$note,$measureTime,$userID){
-            $this->id=$id;
-            $this->indexG=$indexG;
-            $this->tags=$tags;
-            $this->note=$note;
-            $this->measureTime=$measureTime;
-            $this->userID=$userID;
-        }
-
         public function __construct($con)
         {
             $this->con=$con;
