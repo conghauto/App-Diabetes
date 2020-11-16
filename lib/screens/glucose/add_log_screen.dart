@@ -13,6 +13,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class AddLogSceen extends StatefulWidget {
   static String routeName = "/add_log_screen";
+  static DateTime time;
   @override
   _AddLogSceenState createState() => _AddLogSceenState();
 }
@@ -20,11 +21,13 @@ class AddLogSceen extends StatefulWidget {
 class _AddLogSceenState extends State<AddLogSceen> with TickerProviderStateMixin{
   Color colorVal = Colors.lightBlue;
   TabController _controller;
-  DateTime _time = DateTime.now();
+  final key = new GlobalKey<BloodGlucosoLogState>();
+
   @override
   void initState() {
     super.initState();
     _controller = new TabController(length: 5, vsync: this);
+    AddLogSceen.time = DateTime.now();
     _controller.addListener(() {
       setState(() {
       colorVal = Colors.lightBlue;});
@@ -52,7 +55,10 @@ class _AddLogSceenState extends State<AddLogSceen> with TickerProviderStateMixin
                   icon: const Icon(Icons.save_outlined),
                   tooltip: 'Lưu',
                   onPressed: () {
-
+                    if(key.currentState.isValid) {
+                      key.currentState.addGlycemic();
+                      Navigator.pop(context);
+                    }
                   },
                 ),
               ],
@@ -64,7 +70,7 @@ class _AddLogSceenState extends State<AddLogSceen> with TickerProviderStateMixin
                   child: new ListTile(
                     leading: const Icon(Icons.timer),
                     title: new TextField(
-                      decoration: InputDecoration(hintText: "${FormatDateTime.convertDayOfWeek(_time.weekday)}, ${FormatDateTime.formatDay(_time.day)} th ${_time.month}, ${_time.year}  ${FormatDateTime.formatHour(_time.hour)}:${FormatDateTime.formatMinute(_time.minute)}", enabled: false),
+                      decoration: InputDecoration(hintText: "${FormatDateTime.convertDayOfWeek(AddLogSceen.time.weekday)}, ${FormatDateTime.formatDay(AddLogSceen.time.day)} th ${AddLogSceen.time.month}, ${AddLogSceen.time.year}  ${FormatDateTime.formatHour(AddLogSceen.time.hour)}:${FormatDateTime.formatMinute(AddLogSceen.time.minute)}", enabled: false),
                     ),
                     trailing: IconButton(
                       icon: const Icon(Icons.edit),
@@ -75,7 +81,7 @@ class _AddLogSceenState extends State<AddLogSceen> with TickerProviderStateMixin
                         }, currentTime: DateTime.now(), locale: LocaleType.vi);
                         if(picked != null) {
                           setState(() {
-                            _time = picked;
+                            AddLogSceen.time = picked;
                           });
                         }
                       },
@@ -133,7 +139,7 @@ class _AddLogSceenState extends State<AddLogSceen> with TickerProviderStateMixin
                   child: new TabBarView(
                     controller: _controller,
                     children: <Widget>[
-                      BloodGlucosoLog(),
+                      BloodGlucosoLog(key:key),
                       MedicineLog(),
                       WeightLog(),
                       CarbsLog(),

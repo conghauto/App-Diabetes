@@ -1,12 +1,12 @@
 <?php
     class Note{
-        public function Note($id,$title,$description,$eventStartDate,$eventEndDate){
-            $this->id=$id;
-            $this->title=$title;
-            $this->description=$description;
-            $this->eventStartDate=$eventStartDate;
-            $this->eventEndDate=$eventEndDate;
-        }
+        // public function __construct($id,$title,$description,$eventStartDate,$eventEndDate){
+        //     $this->id=$id;
+        //     $this->title=$title;
+        //     $this->description=$description;
+        //     $this->eventStartDate=$eventStartDate;
+        //     $this->eventEndDate=$eventEndDate;
+        // }
 
         public function __construct($con)
         {
@@ -24,4 +24,19 @@
         //     return $result;
         // }
     }
+
+    // class Note{
+    //     function Note($id,$title,$description,$eventStartDate,$eventEndDate){
+    //         $this->id=$id;
+    //         $this->title=$title;
+    //         $this->description=$description;
+    //         $this->eventStartDate=$eventStartDate;
+    //         $this->eventEndDate=$eventEndDate;
+    //     }
+
+    //     public function __construct($con)
+    //     {
+    //         $this->con=$con;
+    //     }
+    // }
 ?>

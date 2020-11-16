@@ -24,7 +24,12 @@ class _MultiSelectChipState extends State<MultiSelectChip> {
         padding: const EdgeInsets.all(2.0),
         child: ChoiceChip(
           avatar: Icon(FontAwesomeIcons.tags),
-          label: Text(item),
+          label: Text(item,style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontFamily: 'Roboto',
+            fontSize: 14,
+            color: Colors.blue[900],
+          ),),
           selected: selectedChoices.contains(item),
           onSelected: (selected) {
             setState(() {

@@ -13,6 +13,15 @@ class GlucoseScreen extends StatefulWidget{
   }
 }
 class _GlucoseScreenStateful extends State<GlucoseScreen>{
+  final europeanCountries = ['Albania', 'Andorra', 'Armenia', 'Austria',
+    'Azerbaijan', 'Belarus', 'Belgium', 'Bosnia and Herzegovina', 'Bulgaria',
+    'Croatia', 'Cyprus', 'Czech Republic', 'Denmark', 'Estonia', 'Finland',
+    'France', 'Georgia', 'Germany', 'Greece', 'Hungary', 'Iceland', 'Ireland',
+    'Italy', 'Kazakhstan', 'Kosovo', 'Latvia', 'Liechtenstein', 'Lithuania',
+    'Luxembourg', 'Macedonia', 'Malta', 'Moldova', 'Monaco', 'Montenegro',
+    'Netherlands', 'Norway', 'Poland', 'Portugal', 'Romania', 'Russia',
+    'San Marino', 'Serbia', 'Slovakia', 'Slovenia', 'Spain', 'Sweden',
+    'Switzerland', 'Turkey', 'Ukraine', 'United Kingdom', 'Vatican City'];
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +33,7 @@ class _GlucoseScreenStateful extends State<GlucoseScreen>{
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 0.0),
               child: new Container(
-                height: 230,
+                height: 220,
                 color: Colors.white,
                 child: new Stack(
                   children: <Widget>[
@@ -104,16 +113,19 @@ class _GlucoseScreenStateful extends State<GlucoseScreen>{
                                     children: <Widget>[
                                       Row(
                                           children: <Widget>[
-                                            SvgPicture.asset("assets/icons/pill.svg"),
                                             Padding(
-                                              padding: const EdgeInsets.only(left:5, top:2),
+                                              padding: const EdgeInsets.only(top:5.0),
+                                              child: new SvgPicture.asset("assets/icons/pill.svg"),
+                                            ),
+                                            Padding(
+                                              padding: const EdgeInsets.only(left:5, top:7),
                                               child: new Text("Thuốc",style: new TextStyle(color: Colors.white,
                                                   fontSize: 12, fontWeight: FontWeight.bold)
                                               ),
                                             )
                                           ]
                                       ),
-                                      SizedBox(height: 15.0),
+                                      SizedBox(height: 20.0),
                                       Row(
                                           children: <Widget>[
                                             new Text("bol -",
@@ -259,9 +271,97 @@ class _GlucoseScreenStateful extends State<GlucoseScreen>{
                 ),
               ),
             ),
+            Row(
+               mainAxisAlignment: MainAxisAlignment.end,
+               children: [
+                 FlatButton(
+                   onPressed: () => {},
+                   color: Colors.white,
+                   padding: EdgeInsets.all(10.0),
+                   child: Row(
+                     children: [
+                       Text("Hiển thị", style: TextStyle(
+                         fontFamily: 'Roboto',
+                         fontSize: 15,
+                         color: Colors.black,
+                        ),
+                       ),
+                       Icon(Icons.arrow_drop_down),
+                     ],
+                   ),
+                 )
+               ],
+            ),
+            SizedBox(height:10.0),
+            new Expanded(child:
+            ListView.builder(
+                itemCount: europeanCountries.length,
+                itemBuilder: (context, index) {
+              return Card(
+                  color: Colors.red[50],
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ListTile(
+                      title: Text(europeanCountries[index], style: TextStyle(
+                        fontWeight: FontWeight.bold, fontSize: 20,)
+                      ),
+                      subtitle: new Row(children: <Widget>[
+                        new Padding(padding: EdgeInsets.fromLTRB(5, 20, 0, 0)),
+                        Container(
+                          height: 10.0,
+                          width: 10.0,
+                          color: Colors.green,
+                          child: Container(
+                            decoration: BoxDecoration(
+                                color: Colors.green,
+                                borderRadius: BorderRadius.all(Radius.circular(30.0))),
+                          ),
+                        ),
+                        new Padding(padding: EdgeInsets.fromLTRB(10, 0, 0, 0)),
+//                        new Text("${FormatDateTime.formatDay(event.eventStartDate.day)} th ${event.eventStartDate.month}, ${event.eventStartDate.year} | ${FormatDateTime.formatHour(event.eventStartDate.hour)}:${FormatDateTime.formatMinute(event.eventStartDate.minute)}"),
+                      ]),
+                      trailing: IconButton(
+                        icon: const Icon(Icons.more_vert_outlined),
+                        tooltip: 'Xóa',
+                        onPressed: (){
+
+                        },
+                      ),
+                      onTap: () async {
+
+                      },
+                    ),
+                  )
+              );
+            }))
           ],
         ),
       ),
     );
   }
+
+  Widget itemsListDisplay(BuildContext context){
+    final europeanCountries = ['Albania', 'Andorra', 'Armenia', 'Austria',
+      'Azerbaijan', 'Belarus', 'Belgium', 'Bosnia and Herzegovina', 'Bulgaria',
+      'Croatia', 'Cyprus', 'Czech Republic', 'Denmark', 'Estonia', 'Finland',
+      'France', 'Georgia', 'Germany', 'Greece', 'Hungary', 'Iceland', 'Ireland',
+      'Italy', 'Kazakhstan', 'Kosovo', 'Latvia', 'Liechtenstein', 'Lithuania',
+      'Luxembourg', 'Macedonia', 'Malta', 'Moldova', 'Monaco', 'Montenegro',
+      'Netherlands', 'Norway', 'Poland', 'Portugal', 'Romania', 'Russia',
+      'San Marino', 'Serbia', 'Slovakia', 'Slovenia', 'Spain', 'Sweden',
+      'Switzerland', 'Turkey', 'Ukraine', 'United Kingdom', 'Vatican City'];
+
+    return ListView.builder(
+      itemCount: europeanCountries.length,
+      itemBuilder: (context, index) {
+        return Card(
+          child: ListTile(
+            title: Text(europeanCountries[index]),
+          ),
+        );
+      },
+    );
+  }
 }
+
+

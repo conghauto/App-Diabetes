@@ -7,6 +7,7 @@ import 'package:diabetesapp/screens/sign_in/sign_in_screen.dart';
 import 'package:diabetesapp/screens/splash/splash_screen.dart';
 import 'package:diabetesapp/size_config.dart';
 import 'package:diabetesapp/theme.dart';
+import 'package:diabetesapp/user_current.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -44,6 +45,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    UserCurrent().init(context);
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(fontFamily: 'Roboto'),

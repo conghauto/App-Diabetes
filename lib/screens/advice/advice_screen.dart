@@ -1,4 +1,6 @@
 import 'package:diabetesapp/screens/advice/food_recommend_screen.dart';
+import 'package:diabetesapp/screens/advice/recommend_screens/activity_screen.dart';
+import 'package:diabetesapp/screens/advice/recommend_screens/food_screen.dart';
 import 'package:diabetesapp/size_config.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -11,26 +13,40 @@ class AdviceScreen extends StatefulWidget{
   }
 }
 class _AdviceScreenStateful extends State<AdviceScreen>{
+class _AdviceScreenStateful extends State<AdviceScreen>with SingleTickerProviderStateMixin {
 
+  TabController _controller;
+  String myTitle = "My Parent Title";
+
+  String updateChildTitle;
+
+  @override
+  void initState() {
+    _controller = TabController(
+      length: 2,
+      vsync: this,
+    );
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+//      theme: ThemeData(
+//        primaryColor: Colors.blue,
+//      ),
       home: DefaultTabController(
         length: 2,
         child: Scaffold(
           appBar: AppBar(
-            title: Center(
-              child: Text(
-                "Khuyến nghị cho người dùng",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white
-              ),
-              ),
-            ),
-            backgroundColor: Colors.lightBlue,
+            backgroundColor: Colors.blue[100],
             bottom: TabBar(
-              unselectedLabelColor: Colors.black,
+              unselectedLabelColor: Colors.redAccent,
               indicator: BoxDecoration(
 //                borderRadius: BorderRadius.circular(50),
                 color: Colors.redAccent,
@@ -41,8 +57,44 @@ class _AdviceScreenStateful extends State<AdviceScreen>{
                 Tab(text: "Hoạt động", icon: Icon(Icons.directions_run)),
               ],
             ),
+    return Column(
+      children: [
+        SizedBox(height: 25),
+        TabBar(
+          unselectedLabelColor: Colors.blueAccent,
+          indicator: BoxDecoration(
+           borderRadius: BorderRadius.circular(50),
+           color: Colors.redAccent,
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
           ),
           body: TabBarView(
+          controller: _controller,
+          tabs: [
+            Tab(text: "Thức ăn", icon: Icon(Icons.local_dining_outlined)),
+            Tab(text: "Hoạt động", icon: Icon(Icons.directions_run)),
+          ],
+        ),
+        Expanded(
+          child: TabBarView(
+            controller: _controller,
             children: [
               Column(
                 children: <Widget>[
@@ -69,10 +121,14 @@ class _AdviceScreenStateful extends State<AdviceScreen>{
                 ],
               ),
               Icon(Icons.apps),
+              FoodScreen(),
+              ActivityScreen(),
             ],
           ),
         ),
       ),
+        )
+      ],
     );
   }
 }
