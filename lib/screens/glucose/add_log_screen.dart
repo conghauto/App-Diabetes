@@ -21,7 +21,8 @@ class AddLogSceen extends StatefulWidget {
 class _AddLogSceenState extends State<AddLogSceen> with TickerProviderStateMixin{
   Color colorVal = Colors.lightBlue;
   TabController _controller;
-  final key = new GlobalKey<BloodGlucosoLogState>();
+  GlobalKey<BloodGlucosoLogState> key = new GlobalKey<BloodGlucosoLogState>();
+  GlobalKey<WeightLogState> keyWeight = new GlobalKey<WeightLogState>();
 
   @override
   void initState() {
@@ -57,6 +58,10 @@ class _AddLogSceenState extends State<AddLogSceen> with TickerProviderStateMixin
                   onPressed: () {
                     if(key.currentState.isValid) {
                       key.currentState.addGlycemic();
+                      Navigator.pop(context);
+                    }
+                    if (keyWeight.currentState.isValid){
+                      keyWeight.currentState.addWeight();
                       Navigator.pop(context);
                     }
                   },
@@ -141,7 +146,7 @@ class _AddLogSceenState extends State<AddLogSceen> with TickerProviderStateMixin
                     children: <Widget>[
                       BloodGlucosoLog(key:key),
                       MedicineLog(),
-                      WeightLog(),
+                      WeightLog(key: keyWeight),
                       CarbsLog(),
                       ExerciseLog()
                     ],

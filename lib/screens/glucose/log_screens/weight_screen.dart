@@ -1,21 +1,99 @@
+import 'dart:convert';
+
 import 'package:diabetesapp/components/multi_choice_chip.dart';
 import 'package:diabetesapp/screens/glucose/log_screens/add_tab_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:http/http.dart' as http;
+import '../../../constants.dart';
+import '../../../user_current.dart';
+import '../add_log_screen.dart';
 class WeightLog extends StatefulWidget{
-
+  WeightLog({ Key key }) : super(key: key);
   @override
-  _WeightLogState createState() {
-    return _WeightLogState();
+  WeightLogState createState() {
+    return WeightLogState();
   }
 }
-class _WeightLogState extends State<WeightLog>{
+class WeightLogState extends State<WeightLog>{
+  TextEditingController weight;
+  String userID="";
+  TextEditingController note;
+  final List<String> errors = [];
+  bool isValid=false;
+
+  @override
+  void initState(){
+    super.initState();
+    note = TextEditingController(text:"");
+    weight = TextEditingController(text:"");
+    isValid = false;
+
+    if(userID==null||userID=="") {
+      UserCurrent.getUserID().then((String s) =>
+          setState(() {
+            userID = s;
+          }));
+    }
+  }
+
+  void addWeight()async{
+    var url = ip + "/api/addWeight.php";
+    var response = await http.post(url, body: {
+      'weight': weight.text,
+      'tags': selectedReportList.length==0?"":selectedReportList.toString(),
+      'note': note.text,
+      'measureTime': AddLogSceen.time.toString(),
+      'userID': userID,
+    });
+
+    var data = json.decode(response.body);
+    if(data=="Error"){
+      Fluttertoast.showToast(
+          msg: "Đã xảy ra lỗi",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0
+      );
+    }else{
+      Fluttertoast.showToast(
+          msg: "Thêm thành công",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.green,
+          textColor: Colors.white,
+          fontSize: 16.0
+      );
+    }
+  }
+
+  void addError({String error}){
+    if(!errors.contains(error))
+      setState(() {
+        errors.add((error));
+      });
+  }
+
+  void removeError({String error}){
+    if (errors.contains(error))
+      setState(() {
+        errors.remove(error);
+      });
+  }
+
   List<String> reportList = [
-    "Not relevant",
-    "Illegal",
-    "Spam",
-    "Offensive",
-    "Uncivil"
+    "Khi thức giấc",
+    "Trước khi ngủ",
+    "Tập thể dục",
+    "Mệt mỏi",
+    "Nghỉ ngơi",
+    "Ở nhà",
+    "Làm việc"
   ];
   List<String> selectedReportList = List();
   @override
@@ -35,6 +113,15 @@ class _WeightLogState extends State<WeightLog>{
               ),
             ),
             title: TextField(
+              keyboardType: TextInputType.number,
+              controller: weight,
+              onChanged: (value){
+                if(value.isEmpty){
+                  isValid = false;
+                }else{
+                  isValid = true;
+                }
+              },
               textAlign: TextAlign.right,
               decoration: InputDecoration.collapsed(
                   hintText: "Nhập cân nặng"
@@ -46,25 +133,25 @@ class _WeightLogState extends State<WeightLog>{
             height: 5,
             color: Colors.black,
           ),
-          ListTile(
-            leading: Text(
-              "Mỡ cơ thể",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            title: TextField(
-              textAlign: TextAlign.right,
-              decoration: InputDecoration.collapsed(
-                  hintText: "Nhập chỉ số mỡ"
-              ),
-            ),
-            trailing: Text("%"),
-          ),
-          Divider(
-            height: 5,
-            color: Colors.black,
-          ),
+          // ListTile(
+          //   leading: Text(
+          //     "Mỡ cơ thể",
+          //     style: TextStyle(
+          //       fontWeight: FontWeight.bold,
+          //     ),
+          //   ),
+          //   title: TextField(
+          //     textAlign: TextAlign.right,
+          //     decoration: InputDecoration.collapsed(
+          //         hintText: "Nhập chỉ số mỡ"
+          //     ),
+          //   ),
+          //   trailing: Text("%"),
+          // ),
+          // Divider(
+          //   height: 5,
+          //   color: Colors.black,
+          // ),
           ListTile(
             leading: Text(
               "Tags",
@@ -99,6 +186,7 @@ class _WeightLogState extends State<WeightLog>{
               ),
             ),
             title: TextField(
+              controller: note,
               textAlign: TextAlign.right,
               decoration: InputDecoration.collapsed(
                 hintText: "Nhập ghi chú",
