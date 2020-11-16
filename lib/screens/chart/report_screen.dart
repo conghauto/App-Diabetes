@@ -14,24 +14,23 @@ class _ReportScreenState extends State<ReportScreen>{
   String _email = "quoctoan0629@gmail.com";
   DateTime _eventStartDate = DateTime.now();
   DateTime _eventEndDate = DateTime.now();
-  List _cities =
-  ["Cluj-Napoca", "Bucuresti", "Timisoara", "Brasov", "Constanta"];
+  List _types = ["Đường huyết", "Insulin", "Carbs"];
 
   List<DropdownMenuItem<String>> _dropDownMenuItems;
-  String _currentCity;
+  String _currentType;
   @override
   void initState() {
     _dropDownMenuItems = getDropDownMenuItems();
-    _currentCity = _dropDownMenuItems[0].value;
+    _currentType = _dropDownMenuItems[0].value;
     super.initState();
   }
 
   List<DropdownMenuItem<String>> getDropDownMenuItems() {
     List<DropdownMenuItem<String>> items = new List();
-    for (String city in _cities) {
+    for (String type in _types) {
       items.add(new DropdownMenuItem(
-          value: city,
-          child: new Text(city)
+          value: type,
+          child: new Text(type)
       ));
     }
     return items;
@@ -124,12 +123,61 @@ class _ReportScreenState extends State<ReportScreen>{
                   width: 20,
                 ),
                 DropdownButton(
-                  value: _currentCity,
+                  value: _currentType,
                   items: _dropDownMenuItems,
                   onChanged: changedDropDownItem,
                 )
               ],
             ),
+            Container(
+              color: Colors.white,
+              padding: EdgeInsets.all(10),
+              child: DataTable(
+                columns: const <DataColumn>[
+                  DataColumn(
+                    label: Text(
+                      'Name',
+                      style: TextStyle(fontStyle: FontStyle.italic),
+                    ),
+                  ),
+                  DataColumn(
+                    label: Text(
+                      'Age',
+                      style: TextStyle(fontStyle: FontStyle.italic),
+                    ),
+                  ),
+                  DataColumn(
+                    label: Text(
+                      'Role',
+                      style: TextStyle(fontStyle: FontStyle.italic),
+                    ),
+                  ),
+                ],
+                rows: const <DataRow>[
+                  DataRow(
+                    cells: <DataCell>[
+                      DataCell(Text('Ravi')),
+                      DataCell(Text('19')),
+                      DataCell(Text('Student')),
+                    ],
+                  ),
+                  DataRow(
+                    cells: <DataCell>[
+                      DataCell(Text('Jane')),
+                      DataCell(Text('43')),
+                      DataCell(Text('Professor')),
+                    ],
+                  ),
+                  DataRow(
+                    cells: <DataCell>[
+                      DataCell(Text('William')),
+                      DataCell(Text('27')),
+                      DataCell(Text('Professor')),
+                    ],
+                  ),
+                ],
+              )
+            )
             
           ],
         ),
@@ -139,7 +187,7 @@ class _ReportScreenState extends State<ReportScreen>{
 
   void changedDropDownItem(String selectedCity) {
     setState(() {
-      _currentCity = selectedCity;
+      _currentType = selectedCity;
     });
   }
 }
