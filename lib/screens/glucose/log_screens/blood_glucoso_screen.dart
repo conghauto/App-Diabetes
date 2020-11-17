@@ -21,7 +21,7 @@ class BloodGlucosoLog extends StatefulWidget {
   @override
   BloodGlucosoLogState createState() => BloodGlucosoLogState();
 }
-class BloodGlucosoLogState extends State<BloodGlucosoLog>{
+class BloodGlucosoLogState extends State<BloodGlucosoLog>with AutomaticKeepAliveClientMixin {
 
 //  final _formKey = GlobalKey<FormState>();
 
@@ -35,7 +35,9 @@ class BloodGlucosoLogState extends State<BloodGlucosoLog>{
     super.initState();
     note = TextEditingController(text:"");
     indexG = TextEditingController(text:"");
-    isValid = false;
+    setState(() {
+      isValid= false;
+    });
 
     if(userID==null||userID=="") {
       UserCurrent.getUserID().then((String s) =>
@@ -125,11 +127,13 @@ class BloodGlucosoLogState extends State<BloodGlucosoLog>{
                     title: TextField(
                       controller: indexG,
                       onChanged: (value){
-                          if(value.isEmpty){
-                            isValid = false;
-                          }else{
-                            isValid = true;
-                          }
+                          setState(() {
+                            if(value.isEmpty){
+                              isValid = false;
+                            }else{
+                              isValid = true;
+                            }
+                          });
                       },
                       textAlign: TextAlign.right,
                       decoration: InputDecoration.collapsed(
@@ -337,4 +341,8 @@ class BloodGlucosoLogState extends State<BloodGlucosoLog>{
       }
     );
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }

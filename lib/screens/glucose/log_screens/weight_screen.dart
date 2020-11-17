@@ -1,10 +1,12 @@
 import 'dart:convert';
 
+import 'package:diabetesapp/components/choice_chip_widget.dart';
 import 'package:diabetesapp/components/multi_choice_chip.dart';
 import 'package:diabetesapp/screens/glucose/log_screens/add_tab_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart' as http;
 import '../../../constants.dart';
 import '../../../user_current.dart';
@@ -16,7 +18,7 @@ class WeightLog extends StatefulWidget{
     return WeightLogState();
   }
 }
-class WeightLogState extends State<WeightLog>{
+class WeightLogState extends State<WeightLog>with AutomaticKeepAliveClientMixin {
   TextEditingController weight;
   String userID="";
   TextEditingController note;
@@ -28,7 +30,10 @@ class WeightLogState extends State<WeightLog>{
     super.initState();
     note = TextEditingController(text:"");
     weight = TextEditingController(text:"");
-    isValid = false;
+    setState(() {
+      isValid = false;
+    });
+
 
     if(userID==null||userID=="") {
       UserCurrent.getUserID().then((String s) =>
@@ -116,11 +121,13 @@ class WeightLogState extends State<WeightLog>{
               keyboardType: TextInputType.number,
               controller: weight,
               onChanged: (value){
-                if(value.isEmpty){
-                  isValid = false;
-                }else{
-                  isValid = true;
-                }
+                setState(() {
+                  if(value.isEmpty){
+                    isValid = false;
+                  }else{
+                    isValid = true;
+                  }
+                });
               },
               textAlign: TextAlign.right,
               decoration: InputDecoration.collapsed(
@@ -152,6 +159,25 @@ class WeightLogState extends State<WeightLog>{
           //   height: 5,
           //   color: Colors.black,
           // ),
+          (selectedReportList.length > 0) ?
+          Container(
+              child: Wrap(
+                spacing: 5.0,
+                runSpacing: 5.0,
+                children: <Widget>[
+                  choiceChipWidget(reportList: selectedReportList),
+                  InputChip(
+                      backgroundColor: Colors.lightBlueAccent,
+                      avatar: CircleAvatar(child: Icon(FontAwesomeIcons.pen)),
+                      label: Text("Sửa", style: TextStyle(color: Colors.white),),
+                      onSelected: (_) async {
+                        await showDialogFunc(context);
+                      }
+                  )
+                ],
+              )
+          )
+              :
           ListTile(
             leading: Text(
               "Tags",
@@ -235,15 +261,15 @@ class WeightLogState extends State<WeightLog>{
                         ),
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                        child: Text(
-                          'Thêm tags để tạo log',
-                          style: TextStyle(color: Colors.black, fontSize: 18.0),
-                        ),
-                      ),
-                    ),
+//                    Padding(
+//                      padding: const EdgeInsets.all(8.0),
+//                      child: Container(
+//                        child: Text(
+//                          'Thêm tags để tạo log',
+//                          style: TextStyle(color: Colors.black, fontSize: 18.0),
+//                        ),
+//                      ),
+//                    ),
                     Container(
                         child: Wrap(
                           spacing: 5.0,
@@ -304,4 +330,8 @@ class WeightLogState extends State<WeightLog>{
         }
     );
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }

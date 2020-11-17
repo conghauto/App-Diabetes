@@ -14,6 +14,9 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 class AddLogSceen extends StatefulWidget {
   static String routeName = "/add_log_screen";
   static DateTime time;
+//
+//  GlobalKey<AppKeysState> key = GlobalKey<AppKeysState>();
+
   @override
   _AddLogSceenState createState() => _AddLogSceenState();
 }
@@ -21,8 +24,7 @@ class AddLogSceen extends StatefulWidget {
 class _AddLogSceenState extends State<AddLogSceen> with TickerProviderStateMixin{
   Color colorVal = Colors.lightBlue;
   TabController _controller;
-  GlobalKey<BloodGlucosoLogState> key = new GlobalKey<BloodGlucosoLogState>();
-  GlobalKey<WeightLogState> keyWeight = new GlobalKey<WeightLogState>();
+//  GlobalKey<AppKeysState> key = new GlobalKey<AppKeysState>();
 
   @override
   void initState() {
@@ -56,14 +58,22 @@ class _AddLogSceenState extends State<AddLogSceen> with TickerProviderStateMixin
                   icon: const Icon(Icons.save_outlined),
                   tooltip: 'Lưu',
                   onPressed: () {
-                    if(key.currentState.isValid) {
-                      key.currentState.addGlycemic();
-                      Navigator.pop(context);
-                    }
-                    if (keyWeight.currentState.isValid){
-                      keyWeight.currentState.addWeight();
-                      Navigator.pop(context);
-                    }
+                    setState(() {
+                      if(GlobalKeys.key1.currentState!=null){
+                        if(GlobalKeys.key1.currentState.isValid){
+                          GlobalKeys.key1.currentState.addGlycemic();
+//                          Navigator.pop(context);
+                        }
+                      }
+                      if(GlobalKeys.key2.currentState!=null){
+                          if(GlobalKeys.key2.currentState.isValid)
+                          {
+                            GlobalKeys.key2.currentState.addWeight();
+                            Navigator.pop(context);
+                          }
+                      }
+
+                    });
                   },
                 ),
               ],
@@ -144,9 +154,9 @@ class _AddLogSceenState extends State<AddLogSceen> with TickerProviderStateMixin
                   child: new TabBarView(
                     controller: _controller,
                     children: <Widget>[
-                      BloodGlucosoLog(key:key),
+                      BloodGlucosoLog(key:GlobalKeys.key1),
                       MedicineLog(),
-                      WeightLog(key: keyWeight),
+                      WeightLog(key:GlobalKeys.key2),
                       CarbsLog(),
                       ExerciseLog()
                     ],
@@ -159,3 +169,13 @@ class _AddLogSceenState extends State<AddLogSceen> with TickerProviderStateMixin
     );
   }
 }
+
+class GlobalKeys {
+  static GlobalKey<BloodGlucosoLogState> key1 = GlobalKey<BloodGlucosoLogState>();
+  static GlobalKey<WeightLogState> key2 = GlobalKey<WeightLogState>();
+}
+
+
+
+
+
