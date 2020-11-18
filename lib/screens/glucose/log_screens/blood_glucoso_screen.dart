@@ -89,7 +89,6 @@ class BloodGlucosoLogState extends State<BloodGlucosoLog> with AutomaticKeepAliv
     }
   }
 
-
   List<String> reportList = [
     "Trước bữa sáng",
     "Sau bữa sáng",
@@ -135,6 +134,7 @@ class BloodGlucosoLogState extends State<BloodGlucosoLog> with AutomaticKeepAliv
                             }
                           });
                       },
+                      keyboardType: TextInputType.numberWithOptions(),
                       textAlign: TextAlign.right,
                       keyboardType: TextInputType.number,
                       decoration: InputDecoration.collapsed(
@@ -142,7 +142,8 @@ class BloodGlucosoLogState extends State<BloodGlucosoLog> with AutomaticKeepAliv
                       ),
                     ),
                     trailing: Text("mg/dL",
-                    style: TextStyle(fontWeight: FontWeight.bold),),
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
                   ),
                   Divider(
                     height: 5,
@@ -185,7 +186,7 @@ class BloodGlucosoLogState extends State<BloodGlucosoLog> with AutomaticKeepAliv
                       ),
                     ),
                     trailing: IconButton(
-                      icon: Icon(Icons.add, color: Colors.black),
+                      icon: Icon(Icons.add_circle, color: Colors.blue),
                       tooltip: "Thêm mới",
                       onPressed: () async {
                         await showDialogFunc(context);
@@ -264,18 +265,6 @@ class BloodGlucosoLogState extends State<BloodGlucosoLog> with AutomaticKeepAliv
                       ),
                     ),
                   ),
-//                  Padding(
-//                    padding: const EdgeInsets.all(8.0),
-//                    child: Container(
-//                      child: Text(
-//                        'Thêm tags để tạo log',
-//                        style: TextStyle(
-//                            color: Colors.black,
-//                            fontFamily: 'Roboto',
-//                            fontSize: 18.0),
-//                      ),
-//                    ),
-//                  ),
                   SizedBox(height:15),
                   Container(
                       child: Wrap(

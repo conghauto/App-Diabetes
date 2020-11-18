@@ -37,6 +37,13 @@ class _AddLogSceenState extends State<AddLogSceen> with TickerProviderStateMixin
       colorVal = Colors.lightBlue;});
     });
   }
+
+//
+//  @override
+//  void dispose() {
+//
+//  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -76,7 +83,15 @@ class _AddLogSceenState extends State<AddLogSceen> with TickerProviderStateMixin
                             //Navigator.pop(context);
                           }
                       }
-                      if(GlobalKeys.keyCarbs.currentState!=null){
+                      if(GlobalKeys.key3.currentState!=null){
+                        if(GlobalKeys.key3.currentState.isValidTime&&
+                            GlobalKeys.key3.currentState.isValidType)
+                        {
+                          GlobalKeys.key3.currentState.addActivity();
+                          Navigator.pop(context);
+                        }
+                      }
+					if(GlobalKeys.keyCarbs.currentState!=null){
                         if(GlobalKeys.keyCarbs.currentState.isValid)
                         {
                           GlobalKeys.keyCarbs.currentState.addCarb();
@@ -90,7 +105,6 @@ class _AddLogSceenState extends State<AddLogSceen> with TickerProviderStateMixin
                           Navigator.pop(context);
                         }
                       }
-
 
                     });
                   },
@@ -177,7 +191,7 @@ class _AddLogSceenState extends State<AddLogSceen> with TickerProviderStateMixin
                       MedicineLog(key: GlobalKeys.keyMedicine),
                       WeightLog(key:GlobalKeys.key2),
                       CarbsLog(key: GlobalKeys.keyCarbs),
-                      ExerciseLog(key: GlobalKeys.keyExcercise)
+                      ExerciseLog(key:GlobalKeys.key3)
                     ],
                   ),
                 ),
@@ -192,7 +206,7 @@ class _AddLogSceenState extends State<AddLogSceen> with TickerProviderStateMixin
 class GlobalKeys {
   static GlobalKey<BloodGlucosoLogState> key1 = GlobalKey<BloodGlucosoLogState>();
   static GlobalKey<WeightLogState> key2 = GlobalKey<WeightLogState>();
-  static GlobalKey<MedicineLogState> keyMedicine = GlobalKey<MedicineLogState>();
+  static GlobalKey<ExerciseLogState> key3 = GlobalKey<ExerciseLogState>();
   static GlobalKey<ExerciseLogState> keyExcercise = GlobalKey<ExerciseLogState>();
   static GlobalKey<CarbsLogState> keyCarbs = GlobalKey<CarbsLogState>();
 }

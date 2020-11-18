@@ -16,7 +16,7 @@
 
         public function insertWeight($weight,$tags,$note,$measureTime,$userID){
 
-            $result=mysqli_query($this->con, "INSERT INTO weight VALUES ('','$userID','$tags','$note','$weight','$measureTime')");
+            $result=mysqli_query($this->con, "INSERT INTO weights VALUES ('','$userID','$tags','$note','$weight','$measureTime')");
             return $result;
         }
     }
