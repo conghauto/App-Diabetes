@@ -18,7 +18,7 @@ class WeightLog extends StatefulWidget{
     return WeightLogState();
   }
 }
-class WeightLogState extends State<WeightLog>with AutomaticKeepAliveClientMixin {
+class WeightLogState extends State<WeightLog> with AutomaticKeepAliveClientMixin {
   TextEditingController weight;
   String userID="";
   TextEditingController note;
@@ -66,7 +66,7 @@ class WeightLogState extends State<WeightLog>with AutomaticKeepAliveClientMixin 
       );
     }else{
       Fluttertoast.showToast(
-          msg: "Thêm thành công",
+          msg: "Thêm cân nặng thành công",
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.CENTER,
           timeInSecForIosWeb: 1,
@@ -75,20 +75,6 @@ class WeightLogState extends State<WeightLog>with AutomaticKeepAliveClientMixin 
           fontSize: 16.0
       );
     }
-  }
-
-  void addError({String error}){
-    if(!errors.contains(error))
-      setState(() {
-        errors.add((error));
-      });
-  }
-
-  void removeError({String error}){
-    if (errors.contains(error))
-      setState(() {
-        errors.remove(error);
-      });
   }
 
   List<String> reportList = [
@@ -213,7 +199,8 @@ class WeightLogState extends State<WeightLog>with AutomaticKeepAliveClientMixin 
             ),
             title: TextField(
               controller: note,
-              textAlign: TextAlign.right,
+              textAlign: TextAlign.left,
+              maxLines: 3,
               decoration: InputDecoration.collapsed(
                 hintText: "Nhập ghi chú",
               ),

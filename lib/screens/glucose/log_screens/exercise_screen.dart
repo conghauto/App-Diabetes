@@ -4,13 +4,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ExerciseLog extends StatefulWidget{
-
+  ExerciseLog({ Key key }) : super(key: key);
   @override
-  _ExerciseLogState createState() {
-    return _ExerciseLogState();
+  ExerciseLogState createState() {
+    return ExerciseLogState();
   }
 }
-class _ExerciseLogState extends State<ExerciseLog>{
+class ExerciseLogState extends State<ExerciseLog> with AutomaticKeepAliveClientMixin{
   List<String> reportList = [
     "Not relevant",
     "Illegal",
@@ -223,4 +223,8 @@ class _ExerciseLogState extends State<ExerciseLog>{
         }
     );
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }

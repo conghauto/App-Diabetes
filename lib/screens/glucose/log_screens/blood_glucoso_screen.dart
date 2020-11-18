@@ -21,7 +21,7 @@ class BloodGlucosoLog extends StatefulWidget {
   @override
   BloodGlucosoLogState createState() => BloodGlucosoLogState();
 }
-class BloodGlucosoLogState extends State<BloodGlucosoLog>with AutomaticKeepAliveClientMixin {
+class BloodGlucosoLogState extends State<BloodGlucosoLog> with AutomaticKeepAliveClientMixin {
 
 //  final _formKey = GlobalKey<FormState>();
 
@@ -78,7 +78,7 @@ class BloodGlucosoLogState extends State<BloodGlucosoLog>with AutomaticKeepAlive
       );
     }else{
       Fluttertoast.showToast(
-          msg: "Thêm thành công",
+          msg: "Thêm đường huyết thành công",
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.CENTER,
           timeInSecForIosWeb: 1,
@@ -136,6 +136,7 @@ class BloodGlucosoLogState extends State<BloodGlucosoLog>with AutomaticKeepAlive
                           });
                       },
                       textAlign: TextAlign.right,
+                      keyboardType: TextInputType.number,
                       decoration: InputDecoration.collapsed(
                           hintText: "Nhập chỉ số đường huyết"
                       ),

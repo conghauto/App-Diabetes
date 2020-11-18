@@ -1,21 +1,110 @@
+import 'dart:convert';
+
+import 'package:diabetesapp/components/choice_chip_widget.dart';
 import 'package:diabetesapp/components/multi_choice_chip.dart';
 import 'package:diabetesapp/screens/glucose/log_screens/add_tab_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:http/http.dart' as http;
+import 'package:fluttertoast/fluttertoast.dart';
+import '../../../constants.dart';
+import '../../../user_current.dart';
+import '../add_log_screen.dart';
 class CarbsLog extends StatefulWidget{
-
+  CarbsLog({ Key key }) : super(key: key);
   @override
-  _CarbsLogState createState() {
-    return _CarbsLogState();
+  CarbsLogState createState() {
+    return CarbsLogState();
   }
 }
-class _CarbsLogState extends State<CarbsLog>{
+class CarbsLogState extends State<CarbsLog> with AutomaticKeepAliveClientMixin{
+  TextEditingController carb;
+  TextEditingController fat;
+  TextEditingController protein;
+  TextEditingController calo;
+  String userID="";
+  TextEditingController note;
+  final List<String> errors = [];
+  bool isValid=false;
+
+  @override
+  void initState(){
+    super.initState();
+    note = TextEditingController(text:"");
+    calo = TextEditingController(text:"");
+    carb = TextEditingController(text:"");
+    fat = TextEditingController(text:"");
+    protein = TextEditingController(text:"");
+    setState(() {
+      isValid = false;
+    });
+
+    if(userID==null||userID=="") {
+      UserCurrent.getUserID().then((String s) =>
+          setState(() {
+            userID = s;
+          }));
+    }
+  }
+
+  void checkCondition(){
+    if (carb.text.length <= 0 || calo.text.length <= 0 || fat.text.length <= 0 || protein.text.length <= 0) {
+      setState(() {
+        isValid = false;
+      });
+    } else {
+      setState(() {
+        isValid = true;
+      });
+    }
+  }
+  void addCarb()async{
+    var url = ip + "/api/addCarb.php";
+    var response = await http.post(url, body: {
+      'carb': carb.text,
+      'fat': fat.text,
+      'protein': protein.text,
+      'calo': calo.text,
+      'tags': selectedReportList.length==0?"":selectedReportList.toString(),
+      'note': note.text,
+      'measureTime': AddLogSceen.time.toString(),
+      'userID': userID,
+    });
+
+    var data = json.decode(response.body);
+    if(data=="Error"){
+      Fluttertoast.showToast(
+          msg: "Đã xảy ra lỗi",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0
+      );
+    }else{
+      Fluttertoast.showToast(
+          msg: "Thêm Carbs thành công",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.green,
+          textColor: Colors.white,
+          fontSize: 16.0
+      );
+    }
+  }
+
   List<String> reportList = [
-    "Not relevant",
-    "Illegal",
-    "Spam",
-    "Offensive",
-    "Uncivil"
+    "Trước bữa sáng",
+    "Sau bữa sáng",
+    "Trước bữa trưa",
+    "Sau bữa trưa",
+    "Trước bữa tối",
+    "Sau bữa tối",
+    "Trước khi ngủ",
+    "Sau khi ngủ"
   ];
   List<String> selectedReportList = List();
   @override
@@ -35,7 +124,12 @@ class _CarbsLogState extends State<CarbsLog>{
               ),
             ),
             title: TextField(
+              controller: carb,
+              onChanged: (value){
+                checkCondition();
+              },
               textAlign: TextAlign.right,
+              keyboardType: TextInputType.number,
               decoration: InputDecoration.collapsed(
                   hintText: "Nhập chỉ số Carbs"
               ),
@@ -54,7 +148,12 @@ class _CarbsLogState extends State<CarbsLog>{
               ),
             ),
             title: TextField(
+              controller: fat,
+              onChanged: (value){
+                checkCondition();
+              },
               textAlign: TextAlign.right,
+              keyboardType: TextInputType.number,
               decoration: InputDecoration.collapsed(
                   hintText: "Nhập chỉ số chất béo"
               ),
@@ -73,7 +172,12 @@ class _CarbsLogState extends State<CarbsLog>{
               ),
             ),
             title: TextField(
+              controller: protein,
+              onChanged: (value){
+                checkCondition();
+              },
               textAlign: TextAlign.right,
+              keyboardType: TextInputType.number,
               decoration: InputDecoration.collapsed(
                   hintText: "Nhập chỉ số protein"
               ),
@@ -92,7 +196,12 @@ class _CarbsLogState extends State<CarbsLog>{
               ),
             ),
             title: TextField(
+              controller: calo,
+              onChanged: (value){
+                checkCondition();
+              },
               textAlign: TextAlign.right,
+              keyboardType: TextInputType.number,
               decoration: InputDecoration.collapsed(
                   hintText: "Nhập chỉ số calo"
               ),
@@ -103,6 +212,25 @@ class _CarbsLogState extends State<CarbsLog>{
             height: 5,
             color: Colors.black,
           ),
+          (selectedReportList.length > 0) ?
+          Container(
+              child: Wrap(
+                spacing: 5.0,
+                runSpacing: 5.0,
+                children: <Widget>[
+                  choiceChipWidget(reportList: selectedReportList),
+                  InputChip(
+                      backgroundColor: Colors.lightBlueAccent,
+                      avatar: CircleAvatar(child: Icon(FontAwesomeIcons.pen)),
+                      label: Text("Sửa", style: TextStyle(color: Colors.white),),
+                      onSelected: (_) async {
+                        await showDialogFunc(context);
+                      }
+                  )
+                ],
+              )
+          )
+              :
           ListTile(
             leading: Text(
               "Tags",
@@ -137,7 +265,9 @@ class _CarbsLogState extends State<CarbsLog>{
               ),
             ),
             title: TextField(
-              textAlign: TextAlign.right,
+              controller: note,
+              textAlign: TextAlign.left,
+              maxLines: 3,
               decoration: InputDecoration.collapsed(
                 hintText: "Nhập ghi chú",
               ),
@@ -253,4 +383,8 @@ class _CarbsLogState extends State<CarbsLog>{
         }
     );
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }

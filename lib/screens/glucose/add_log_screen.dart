@@ -24,6 +24,7 @@ class AddLogSceen extends StatefulWidget {
 class _AddLogSceenState extends State<AddLogSceen> with TickerProviderStateMixin{
   Color colorVal = Colors.lightBlue;
   TabController _controller;
+  int countAddLog = 0;
 //  GlobalKey<AppKeysState> key = new GlobalKey<AppKeysState>();
 
   @override
@@ -55,7 +56,10 @@ class _AddLogSceenState extends State<AddLogSceen> with TickerProviderStateMixin
               title: Text("Thêm thông tin"),
               actions: [
                 IconButton(
-                  icon: const Icon(Icons.save_outlined),
+                  icon: Icon(
+                    Icons.save_outlined,
+                    semanticLabel: countAddLog.toString(),
+                  ),
                   tooltip: 'Lưu',
                   onPressed: () {
                     setState(() {
@@ -69,9 +73,24 @@ class _AddLogSceenState extends State<AddLogSceen> with TickerProviderStateMixin
                           if(GlobalKeys.key2.currentState.isValid)
                           {
                             GlobalKeys.key2.currentState.addWeight();
-                            Navigator.pop(context);
+                            //Navigator.pop(context);
                           }
                       }
+                      if(GlobalKeys.keyCarbs.currentState!=null){
+                        if(GlobalKeys.keyCarbs.currentState.isValid)
+                        {
+                          GlobalKeys.keyCarbs.currentState.addCarb();
+                          //Navigator.pop(context);
+                        }
+                      }
+                      if(GlobalKeys.keyMedicine.currentState!=null){
+                        if(GlobalKeys.keyMedicine.currentState.isValid)
+                        {
+                          GlobalKeys.keyMedicine.currentState.addMedicine();
+                          Navigator.pop(context);
+                        }
+                      }
+
 
                     });
                   },
@@ -150,15 +169,15 @@ class _AddLogSceenState extends State<AddLogSceen> with TickerProviderStateMixin
                 new Container(
                   color: Colors.white,
                   margin: const EdgeInsets.only(top: 20),
-                  height: 400,
+                  height: 500,
                   child: new TabBarView(
                     controller: _controller,
                     children: <Widget>[
                       BloodGlucosoLog(key:GlobalKeys.key1),
-                      MedicineLog(),
+                      MedicineLog(key: GlobalKeys.keyMedicine),
                       WeightLog(key:GlobalKeys.key2),
-                      CarbsLog(),
-                      ExerciseLog()
+                      CarbsLog(key: GlobalKeys.keyCarbs),
+                      ExerciseLog(key: GlobalKeys.keyExcercise)
                     ],
                   ),
                 ),
@@ -173,6 +192,9 @@ class _AddLogSceenState extends State<AddLogSceen> with TickerProviderStateMixin
 class GlobalKeys {
   static GlobalKey<BloodGlucosoLogState> key1 = GlobalKey<BloodGlucosoLogState>();
   static GlobalKey<WeightLogState> key2 = GlobalKey<WeightLogState>();
+  static GlobalKey<MedicineLogState> keyMedicine = GlobalKey<MedicineLogState>();
+  static GlobalKey<ExerciseLogState> keyExcercise = GlobalKey<ExerciseLogState>();
+  static GlobalKey<CarbsLogState> keyCarbs = GlobalKey<CarbsLogState>();
 }
 
 
