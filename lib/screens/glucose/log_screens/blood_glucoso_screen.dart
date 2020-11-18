@@ -134,7 +134,6 @@ class BloodGlucosoLogState extends State<BloodGlucosoLog> with AutomaticKeepAliv
                             }
                           });
                       },
-                      keyboardType: TextInputType.numberWithOptions(),
                       textAlign: TextAlign.right,
                       keyboardType: TextInputType.number,
                       decoration: InputDecoration.collapsed(

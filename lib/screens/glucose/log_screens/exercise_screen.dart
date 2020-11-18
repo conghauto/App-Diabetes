@@ -69,7 +69,6 @@ class ExerciseLogState extends State<ExerciseLog>with AutomaticKeepAliveClientMi
   void initState() {
     note = TextEditingController(text:"");
     timeActivity = TextEditingController(text:"");
-
     setState(() {
       isValidTime= false;
       isValidType= false;
