@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:diabetesapp/components/log_card.dart';
 import 'package:diabetesapp/constants.dart';
 import 'package:diabetesapp/models/glycemic.dart';
 import 'package:diabetesapp/screens/glucose/add_log_screen.dart';
@@ -53,16 +54,6 @@ class _GlucoseScreenStateful extends State<GlucoseScreen>{
       throw Exception('Failed to load data.');
     }
   }
-
-//  final europeanCountries = ['Albania', 'Andorra', 'Armenia', 'Austria',
-//    'Azerbaijan', 'Belarus', 'Belgium', 'Bosnia and Herzegovina', 'Bulgaria',
-//    'Croatia', 'Cyprus', 'Czech Republic', 'Denmark', 'Estonia', 'Finland',
-//    'France', 'Georgia', 'Germany', 'Greece', 'Hungary', 'Iceland', 'Ireland',
-//    'Italy', 'Kazakhstan', 'Kosovo', 'Latvia', 'Liechtenstein', 'Lithuania',
-//    'Luxembourg', 'Macedonia', 'Malta', 'Moldova', 'Monaco', 'Montenegro',
-//    'Netherlands', 'Norway', 'Poland', 'Portugal', 'Romania', 'Russia',
-//    'San Marino', 'Serbia', 'Slovakia', 'Slovenia', 'Spain', 'Sweden',
-//    'Switzerland', 'Turkey', 'Ukraine', 'United Kingdom', 'Vatican City'];
 
   @override
   Widget build(BuildContext context) {
@@ -338,69 +329,20 @@ class _GlucoseScreenStateful extends State<GlucoseScreen>{
             ListView.builder(
                 itemCount: listOfGlycemics.length,
                 itemBuilder: (context, index) {
-              return Card(
-                  color: Colors.red[50],
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: ListTile(
-                      title: Text(listOfGlycemics[index].indexG.toString(), style: TextStyle(
-                        fontWeight: FontWeight.bold, fontSize: 20,)
-                      ),
-                      subtitle: new Row(children: <Widget>[
-                        new Padding(padding: EdgeInsets.fromLTRB(5, 20, 0, 0)),
-                        Container(
-                          height: 10.0,
-                          width: 10.0,
-                          color: Colors.green,
-                          child: Container(
-                            decoration: BoxDecoration(
-                                color: Colors.green,
-                                borderRadius: BorderRadius.all(Radius.circular(30.0))),
-                          ),
-                        ),
-                        new Padding(padding: EdgeInsets.fromLTRB(10, 0, 0, 0)),
-//                        new Text("${FormatDateTime.formatDay(event.eventStartDate.day)} th ${event.eventStartDate.month}, ${event.eventStartDate.year} | ${FormatDateTime.formatHour(event.eventStartDate.hour)}:${FormatDateTime.formatMinute(event.eventStartDate.minute)}"),
-                      ]),
-                      trailing: IconButton(
-                        icon: const Icon(Icons.more_vert_outlined),
-                        tooltip: 'Xóa',
-                        onPressed: (){
-
-                        },
-                      ),
-                      onTap: () async {
-
-                      },
-                    ),
-                  )
+              return LogCard(
+                  iconSrc: "assets/icons/user.svg",
+                  title: "Đường huyết",
+                  unit: "ml/dl",
+                  indexValue: listOfGlycemics[index].indexG,
+                  time: listOfGlycemics[index].measureTime,
+                  press: (){
+                    Navigator.pop(context);
+                  }
               );
             }))
           ],
         ),
       ),
-    );
-  }
-
-  Widget itemsListDisplay(BuildContext context){
-    final europeanCountries = ['Albania', 'Andorra', 'Armenia', 'Austria',
-      'Azerbaijan', 'Belarus', 'Belgium', 'Bosnia and Herzegovina', 'Bulgaria',
-      'Croatia', 'Cyprus', 'Czech Republic', 'Denmark', 'Estonia', 'Finland',
-      'France', 'Georgia', 'Germany', 'Greece', 'Hungary', 'Iceland', 'Ireland',
-      'Italy', 'Kazakhstan', 'Kosovo', 'Latvia', 'Liechtenstein', 'Lithuania',
-      'Luxembourg', 'Macedonia', 'Malta', 'Moldova', 'Monaco', 'Montenegro',
-      'Netherlands', 'Norway', 'Poland', 'Portugal', 'Romania', 'Russia',
-      'San Marino', 'Serbia', 'Slovakia', 'Slovenia', 'Spain', 'Sweden',
-      'Switzerland', 'Turkey', 'Ukraine', 'United Kingdom', 'Vatican City'];
-
-    return ListView.builder(
-      itemCount: europeanCountries.length,
-      itemBuilder: (context, index) {
-        return Card(
-          child: ListTile(
-            title: Text(europeanCountries[index]),
-          ),
-        );
-      },
     );
   }
 }

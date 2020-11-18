@@ -89,7 +89,6 @@ class BloodGlucosoLogState extends State<BloodGlucosoLog>with AutomaticKeepAlive
     }
   }
 
-
   List<String> reportList = [
     "Trước bữa sáng",
     "Sau bữa sáng",
@@ -135,13 +134,15 @@ class BloodGlucosoLogState extends State<BloodGlucosoLog>with AutomaticKeepAlive
                             }
                           });
                       },
+                      keyboardType: TextInputType.numberWithOptions(),
                       textAlign: TextAlign.right,
                       decoration: InputDecoration.collapsed(
                           hintText: "Nhập chỉ số đường huyết"
                       ),
                     ),
                     trailing: Text("mg/dL",
-                    style: TextStyle(fontWeight: FontWeight.bold),),
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
                   ),
                   Divider(
                     height: 5,
@@ -184,7 +185,7 @@ class BloodGlucosoLogState extends State<BloodGlucosoLog>with AutomaticKeepAlive
                       ),
                     ),
                     trailing: IconButton(
-                      icon: Icon(Icons.add, color: Colors.black),
+                      icon: Icon(Icons.add_circle, color: Colors.blue),
                       tooltip: "Thêm mới",
                       onPressed: () async {
                         await showDialogFunc(context);
@@ -263,18 +264,6 @@ class BloodGlucosoLogState extends State<BloodGlucosoLog>with AutomaticKeepAlive
                       ),
                     ),
                   ),
-//                  Padding(
-//                    padding: const EdgeInsets.all(8.0),
-//                    child: Container(
-//                      child: Text(
-//                        'Thêm tags để tạo log',
-//                        style: TextStyle(
-//                            color: Colors.black,
-//                            fontFamily: 'Roboto',
-//                            fontSize: 18.0),
-//                      ),
-//                    ),
-//                  ),
                   SizedBox(height:15),
                   Container(
                       child: Wrap(

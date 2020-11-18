@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 17, 2020 at 03:31 AM
+-- Generation Time: Nov 18, 2020 at 11:31 AM
 -- Server version: 10.4.14-MariaDB
--- PHP Version: 7.4.11
+-- PHP Version: 7.2.34
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -27,7 +27,7 @@ SET time_zone = "+00:00";
 -- Table structure for table `weight`
 --
 
-CREATE TABLE `weight` (
+CREATE TABLE `weights` (
   `id` int(11) NOT NULL,
   `userID` int(11) NOT NULL,
   `tags` varchar(1000) CHARACTER SET utf8 DEFAULT NULL,
@@ -40,9 +40,15 @@ CREATE TABLE `weight` (
 -- Dumping data for table `weight`
 --
 
-INSERT INTO `weight` (`id`, `userID`, `tags`, `note`, `weight`, `measureTime`) VALUES
-(1, 1, 'Trước bữa ăn', 'Ăn xong', 1.3, '2020-11-16 01:14:52'),
-(2, 11, '', '', 16.6, '2020-11-16 22:45:31');
+INSERT INTO `weights` (`id`, `userID`, `tags`, `note`, `weight`, `measureTime`) VALUES
+(3, 17, '', '', 12.3, '2020-11-17 10:52:48'),
+(4, 17, '', '', 99, '2020-11-17 10:54:27'),
+(5, 17, '', '', 23, '2020-11-17 13:04:29'),
+(6, 17, '', '', 188, '2020-11-17 13:05:16'),
+(7, 17, '', '', 78, '2020-11-17 13:19:24'),
+(8, 17, '', '', 111, '2020-11-17 13:20:26'),
+(9, 17, '', '', 222.3, '2020-11-17 13:23:00'),
+(10, 17, '', '', 44.3, '2020-11-17 13:29:50');
 
 --
 -- Indexes for dumped tables
@@ -51,7 +57,7 @@ INSERT INTO `weight` (`id`, `userID`, `tags`, `note`, `weight`, `measureTime`) V
 --
 -- Indexes for table `weight`
 --
-ALTER TABLE `weight`
+ALTER TABLE `weights`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -61,8 +67,8 @@ ALTER TABLE `weight`
 --
 -- AUTO_INCREMENT for table `weight`
 --
-ALTER TABLE `weight`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+ALTER TABLE `weights`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

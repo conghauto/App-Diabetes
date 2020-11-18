@@ -35,12 +35,12 @@ class WeightLogState extends State<WeightLog>with AutomaticKeepAliveClientMixin 
     });
 
 
-    if(userID==null||userID=="") {
-      UserCurrent.getUserID().then((String s) =>
-          setState(() {
-            userID = s;
-          }));
-    }
+//    if(userID==null||userID=="") {
+//      UserCurrent.getUserID().then((String s) =>
+//          setState(() {
+//            userID = s;
+//          }));
+//    }
   }
 
   void addWeight()async{

@@ -36,6 +36,13 @@ class _AddLogSceenState extends State<AddLogSceen> with TickerProviderStateMixin
       colorVal = Colors.lightBlue;});
     });
   }
+
+//
+//  @override
+//  void dispose() {
+//
+//  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -69,8 +76,16 @@ class _AddLogSceenState extends State<AddLogSceen> with TickerProviderStateMixin
                           if(GlobalKeys.key2.currentState.isValid)
                           {
                             GlobalKeys.key2.currentState.addWeight();
-                            Navigator.pop(context);
+//                            Navigator.pop(context);
                           }
+                      }
+                      if(GlobalKeys.key3.currentState!=null){
+                        if(GlobalKeys.key3.currentState.isValidTime&&
+                            GlobalKeys.key3.currentState.isValidType)
+                        {
+                          GlobalKeys.key3.currentState.addActivity();
+                          Navigator.pop(context);
+                        }
                       }
 
                     });
@@ -158,7 +173,7 @@ class _AddLogSceenState extends State<AddLogSceen> with TickerProviderStateMixin
                       MedicineLog(),
                       WeightLog(key:GlobalKeys.key2),
                       CarbsLog(),
-                      ExerciseLog()
+                      ExerciseLog(key:GlobalKeys.key3)
                     ],
                   ),
                 ),
@@ -173,6 +188,7 @@ class _AddLogSceenState extends State<AddLogSceen> with TickerProviderStateMixin
 class GlobalKeys {
   static GlobalKey<BloodGlucosoLogState> key1 = GlobalKey<BloodGlucosoLogState>();
   static GlobalKey<WeightLogState> key2 = GlobalKey<WeightLogState>();
+  static GlobalKey<ExerciseLogState> key3 = GlobalKey<ExerciseLogState>();
 }
 
 
