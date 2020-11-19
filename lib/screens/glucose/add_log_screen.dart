@@ -38,12 +38,6 @@ class _AddLogSceenState extends State<AddLogSceen> with TickerProviderStateMixin
     });
   }
 
-//
-//  @override
-//  void dispose() {
-//
-//  }
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -69,7 +63,6 @@ class _AddLogSceenState extends State<AddLogSceen> with TickerProviderStateMixin
                   ),
                   tooltip: 'Lưu',
                   onPressed: () {
-                    setState(() {
                       if(GlobalKeys.key1.currentState!=null){
                         if(GlobalKeys.key1.currentState.isValid){
                           GlobalKeys.key1.currentState.addGlycemic();
@@ -101,11 +94,9 @@ class _AddLogSceenState extends State<AddLogSceen> with TickerProviderStateMixin
                         if(GlobalKeys.keyMedicine.currentState.isValid)
                         {
                           GlobalKeys.keyMedicine.currentState.addMedicine();
-                          Navigator.pop(context);
+//                          Navigator.pop(context);
                         }
                       }
-
-                    });
                   },
                 ),
               ],

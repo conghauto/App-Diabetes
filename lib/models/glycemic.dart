@@ -6,8 +6,10 @@ class GlycemicModel{
   final String note;
   final DateTime measureTime;
   final String userID;
+  final String idModel;
 
-  GlycemicModel({this.id, this.indexG, this.tags, this.note,this.measureTime,this.userID});
+  GlycemicModel({this.id, this.indexG, this.tags, this.note,
+    this.measureTime,this.userID, this.idModel});
 
   factory GlycemicModel.fromJson(Map<String, dynamic> json) {
     return GlycemicModel(
@@ -17,6 +19,7 @@ class GlycemicModel{
       note: json['note'].toString(),
       measureTime: DateTime.parse(json['measureTime'].toString()),
       userID: json['userID'].toString(),
+      idModel: "1",
     );
   }
 }

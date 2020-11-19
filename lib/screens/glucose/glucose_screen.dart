@@ -2,7 +2,11 @@ import 'dart:convert';
 
 import 'package:diabetesapp/components/log_card.dart';
 import 'package:diabetesapp/constants.dart';
+import 'package:diabetesapp/models/activity.dart';
+import 'package:diabetesapp/models/carb.dart';
 import 'package:diabetesapp/models/glycemic.dart';
+import 'package:diabetesapp/models/medicine.dart';
+import 'package:diabetesapp/models/weight.dart';
 import 'package:diabetesapp/screens/glucose/add_log_screen.dart';
 import 'package:diabetesapp/size_config.dart';
 import 'package:diabetesapp/user_current.dart';
@@ -21,7 +25,7 @@ class GlucoseScreen extends StatefulWidget{
 class _GlucoseScreenStateful extends State<GlucoseScreen>{
 
   String userID = "17";
-  List<GlycemicModel> listOfGlycemics =new List<GlycemicModel>();
+  List<dynamic> listItems=new List<dynamic>();
 
   @override
   void initState() {
@@ -33,6 +37,10 @@ class _GlucoseScreenStateful extends State<GlucoseScreen>{
     }
 
     fetchGlycemics();
+    fetchActivities();
+    fetchCarbs();
+    fetchMedicine();
+    fetchWeights();
   }
 
   Future<void> fetchGlycemics() async {
@@ -47,7 +55,87 @@ class _GlucoseScreenStateful extends State<GlucoseScreen>{
       }).toList();
 
       setState(() {
-        listOfGlycemics=list;
+        list.forEach((element) => listItems.add(element));
+      });
+    }
+    else {
+      throw Exception('Failed to load data.');
+    }
+  }
+
+  Future<void> fetchWeights() async {
+    String url = ip + "/api/getWeights.php?userID="+userID;
+    var response = await http.get(url);
+
+    if (response.statusCode == 200) {
+      final items = json.decode(response.body).cast<Map<String, dynamic>>();
+
+      List<WeightModel> list = items.map<WeightModel>((json) {
+        return WeightModel.fromJson(json);
+      }).toList();
+
+      setState(() {
+        list.forEach((element) => listItems.add(element));
+      });
+    }
+    else {
+      throw Exception('Failed to load data.');
+    }
+  }
+
+  Future<void> fetchActivities() async {
+    String url = ip + "/api/getActivities.php?userID="+userID;
+    var response = await http.get(url);
+
+    if (response.statusCode == 200) {
+      final items = json.decode(response.body).cast<Map<String, dynamic>>();
+
+      List<ActivityModel> list = items.map<ActivityModel>((json) {
+        return ActivityModel.fromJson(json);
+      }).toList();
+
+      setState(() {
+        list.forEach((element) => listItems.add(element));
+      });
+    }
+    else {
+      throw Exception('Failed to load data.');
+    }
+  }
+
+  Future<void> fetchCarbs() async {
+    String url = ip + "/api/getCarbs.php?userID="+userID;
+    var response = await http.get(url);
+
+    if (response.statusCode == 200) {
+      final items = json.decode(response.body).cast<Map<String, dynamic>>();
+
+      List<CarbModel> list = items.map<CarbModel>((json) {
+        return CarbModel.fromJson(json);
+      }).toList();
+
+      setState(() {
+        list.forEach((element) => listItems.add(element));
+      });
+    }
+    else {
+      throw Exception('Failed to load data.');
+    }
+  }
+
+  Future<void> fetchMedicine() async {
+    String url = ip + "/api/getMedicine.php?userID="+userID;
+    var response = await http.get(url);
+
+    if (response.statusCode == 200) {
+      final items = json.decode(response.body).cast<Map<String, dynamic>>();
+
+      List<MedicineModel> list = items.map<MedicineModel>((json) {
+        return MedicineModel.fromJson(json);
+      }).toList();
+
+      setState(() {
+        list.forEach((element) => listItems.add(element));
       });
     }
     else {
@@ -324,21 +412,79 @@ class _GlucoseScreenStateful extends State<GlucoseScreen>{
                  )
                ],
             ),
-            SizedBox(height:10.0),
             new Expanded(child:
             ListView.builder(
-                itemCount: listOfGlycemics.length,
+                itemCount: listItems.length,
                 itemBuilder: (context, index) {
-              return LogCard(
-                  iconSrc: "assets/icons/user.svg",
-                  title: "Đường huyết",
-                  unit: "ml/dl",
-                  indexValue: listOfGlycemics[index].indexG,
-                  time: listOfGlycemics[index].measureTime,
-                  press: (){
-                    Navigator.pop(context);
+                  if ((listItems[index].idModel=="1")) {
+                    return LogCard(
+                      iconSrc: "assets/icons/glucose.svg",
+                      title: "Đường huyết",
+                      nameMedicine: "",
+                      unit: "ml/dl",
+                      indexValue: listItems[index].indexG,
+                      time: listItems[index].measureTime,
+                      press: (){
+
+                      },
+                      colorPrimary: Colors.red,
+                    );
                   }
-              );
+                  else if(listItems[index].idModel=="2"){
+                    return LogCard(
+                      iconSrc: "assets/icons/pill-2.svg",
+                      title: "Thuốc",
+                      nameMedicine: listItems[index].name,
+                      unit: listItems[index].unit,
+                      indexValue: listItems[index].amount,
+                      time: listItems[index].measureTime,
+                      press: (){
+
+                      },
+                      colorPrimary: Colors.teal,
+                    );
+                  }
+                  else if(listItems[index].idModel=="3"){
+                    return LogCard(
+                      iconSrc: "assets/icons/weight.svg",
+                      title: "Cân nặng",
+                      nameMedicine: "",
+                      unit: "kg",
+                      indexValue: listItems[index].weight,
+                      time: listItems[index].measureTime,
+                      press: (){
+                      },
+                      colorPrimary: Colors.grey,
+                    );
+                  }
+                  else if(listItems[index].idModel=="4"){
+                    return LogCard(
+                      iconSrc: "assets/icons/food.svg",
+                      title: "Thức ăn",
+                      nameMedicine: "Carbs "+listItems[index].carb+" gam",
+                      unit: "",
+                      indexValue: "",
+                      time: listItems[index].measureTime,
+                      press: (){
+
+                      },
+                      colorPrimary: Colors.orange,
+                    );
+                  }
+                  else{
+                    return LogCard(
+                      iconSrc: "assets/icons/run.svg",
+                      title: "Hoạt động",
+                      nameMedicine: listItems[index].nameActivity,
+                      unit: "phút",
+                      indexValue: listItems[index].timeActivity,
+                      time: listItems[index].activityTime,
+                      press: (){
+
+                      },
+                      colorPrimary: Colors.green,
+                    );
+                  }
             }))
           ],
         ),
