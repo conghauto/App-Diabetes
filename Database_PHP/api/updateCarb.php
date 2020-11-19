@@ -1,18 +1,20 @@
 <?php
     header("Content-type: application/json; charset=utf-8");
     include("config.php");
-    include("Glycemic.php");
+    include("Carbs.php");
 
-    $glycemic = new Glycemic($con);
+    $carbs = new Carbs($con);
 
-    $indexG = $_POST['indexG'];
+    $carb = $_POST['carb'];
+    $fat = $_POST['fat'];
+    $protein = $_POST['protein'];
+    $calo = $_POST['calo'];
     $tags = $_POST['tags'];
     $note = $_POST['note'];
     $measureTime = $_POST['measureTime'];
-    $userID = $_POST['userID'];
+    $id = $_POST['id'];
 
-
-    $query = $glycemic->insertGlycemic($indexG,$tags,$note,$measureTime,$userID);
+    $query = $carbs->updateCarbs($id, $carb,$fat, $protein, $calo, $tags,$note, $measureTime);
 
     if($query){
         echo json_encode("Success");

@@ -9,10 +9,10 @@
     $tags = $_POST['tags'];
     $note = $_POST['note'];
     $measureTime = $_POST['measureTime'];
-    $userID = $_POST['userID'];
+    $id = $_POST['id'];
 
 
-    $query = $glycemic->insertGlycemic($indexG,$tags,$note,$measureTime,$userID);
+    $query = $glycemic->updateGlycemic($id, $indexG,$tags,$note,$measureTime);
 
     if($query){
         echo json_encode("Success");

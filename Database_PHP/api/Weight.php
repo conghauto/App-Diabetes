@@ -19,5 +19,12 @@
             $result=mysqli_query($this->con, "INSERT INTO weights VALUES ('','$userID','$tags','$note','$weight','$measureTime')");
             return $result;
         }
+
+        public function updateWeight($id,$weight,$tags,$note,$measureTime){
+
+            $query = "UPDATE weights SET weight='$weight', tags='$tags', note='$note', measureTime='$measureTime'  WHERE id='$id'";
+            $result=mysqli_query($this->con, $query);
+            return $result;
+        }
     }
 ?>

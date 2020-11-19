@@ -10,5 +10,11 @@
             $result=mysqli_query($this->con, "INSERT INTO glycemics VALUES ('','$indexG','$tags','$note','$measureTime','$userID')");
             return $result;
         }
+
+        public function updateGlycemic($id,$indexG,$tags,$note,$measureTime){
+            $query = "UPDATE glycemics SET indexG='$indexG', tags='$tags', note='$note', measureTime='$measureTime' WHERE id='$id'";
+            $result=mysqli_query($this->con, $query);
+            return $result;
+        }
     }
 ?>
