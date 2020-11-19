@@ -25,11 +25,11 @@
 
     // Công thức tính lượng kCal: Total calories burned = minutes × (MET × 3.5 × your weight in kg) / 200
     if($weight){
-        $kCal = $timeActivity*($indexMET*3.5*$weight)/200;
+        $calo = $timeActivity*($indexMET*3.5*$weight)/200;
     }
 
 
-    $query = $activity->insertActivity($nameActivity,$indexMET,$timeActivity,$tags,$note,$activityTime,$kCal,$userID);
+    $query = $activity->insertActivity($nameActivity,$indexMET,$timeActivity,$tags,$note,$activityTime,$calo,$userID);
 
     if($query){
         echo json_encode("Success");
