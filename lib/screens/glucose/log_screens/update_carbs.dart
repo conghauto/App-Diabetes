@@ -55,7 +55,24 @@ class _UpdateCarbsState extends State<UpdateCarbs> {
     time = widget.carbModel.measureTime;
     String listTags = widget.carbModel.tags;
     if (listTags.length > 0){
-      selectedReportList = listTags.split(", ").toList();
+      listTags = listTags.substring(1, listTags.length - 1);
+      if (listTags.contains(",")){// remove [ ]
+        selectedReportList = listTags.split(", ");
+      } else {
+        selectedReportList.add(listTags);
+      }
+      // Insert choice to list
+      for(String choice in selectedReportList){
+        int isDupicate = -1;
+        for(int i = 0; i < reportList.length; i++){
+          if (choice == reportList[i]){
+            isDupicate = i;
+          }
+        }
+        if (isDupicate == -1){
+          reportList.add(choice);
+        }
+      }
     }
   }
 
