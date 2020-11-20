@@ -26,7 +26,6 @@ class BloodGlucosoLogState extends State<BloodGlucosoLog> with AutomaticKeepAliv
 //  final _formKey = GlobalKey<FormState>();
 
   TextEditingController indexG;
-  String userID="";
   TextEditingController note;
   bool isValid=false;
 
@@ -38,13 +37,6 @@ class BloodGlucosoLogState extends State<BloodGlucosoLog> with AutomaticKeepAliv
     setState(() {
       isValid= false;
     });
-
-    if(userID==null||userID=="") {
-      UserCurrent.getUserID().then((String s) =>
-          setState(() {
-            userID = s;
-          }));
-    }
   }
 
   void addGlycemic()async{
@@ -62,7 +54,7 @@ class BloodGlucosoLogState extends State<BloodGlucosoLog> with AutomaticKeepAliv
       'tags': selectedReportList.length==0?"":selectedReportList.toString(),
       'note': note.text,
       'measureTime': AddLogSceen.time.toString(),
-      'userID': userID,
+      'userID': UserCurrent.userID.toString(),
     });
 
     var data = json.decode(response.body);

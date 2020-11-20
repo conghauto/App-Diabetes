@@ -23,7 +23,6 @@ class CarbsLogState extends State<CarbsLog> with AutomaticKeepAliveClientMixin{
   TextEditingController fat;
   TextEditingController protein;
   TextEditingController calo;
-  String userID="";
   TextEditingController note;
   final List<String> errors = [];
   bool isValid=false;
@@ -36,16 +35,10 @@ class CarbsLogState extends State<CarbsLog> with AutomaticKeepAliveClientMixin{
     carb = TextEditingController(text:"");
     fat = TextEditingController(text:"");
     protein = TextEditingController(text:"");
+
     setState(() {
       isValid = false;
     });
-
-    if(userID==null||userID=="") {
-      UserCurrent.getUserID().then((String s) =>
-          setState(() {
-            userID = s;
-          }));
-    }
   }
 
   void checkCondition(){
@@ -69,7 +62,7 @@ class CarbsLogState extends State<CarbsLog> with AutomaticKeepAliveClientMixin{
       'tags': selectedReportList.length==0?"":selectedReportList.toString(),
       'note': note.text,
       'measureTime': AddLogSceen.time.toString(),
-      'userID': userID,
+      'userID': UserCurrent.userID.toString(),
     });
 
     var data = json.decode(response.body);

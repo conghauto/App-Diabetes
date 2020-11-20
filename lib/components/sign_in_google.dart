@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:diabetesapp/screens/info_personal/info_person_sreeen.dart';
+import 'package:diabetesapp/user_current.dart';
 import 'package:diabetesapp/widgets/ProgressDialog.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -30,11 +31,11 @@ class _SignInGoogleState extends State<SignInGoogle> {
   Future<void> _handleSignIn() async {
     await Firebase.initializeApp();
 
-    showDialog(
-      barrierDismissible: false,
-      context: context,
-      builder: (BuildContext context) => ProgressDialog(status: 'Đang xử lý'),
-    );
+//    showDialog(
+//      barrierDismissible: false,
+//      context: context,
+//      builder: (BuildContext context) => ProgressDialog(status: 'Đang xử lý'),
+//    );
 
     final GoogleSignInAccount googleSignInAccount = await SignInGoogle.googleSignIn.signIn();
     final GoogleSignInAuthentication googleSignInAuthentication = await googleSignInAccount.authentication;
@@ -54,16 +55,18 @@ class _SignInGoogleState extends State<SignInGoogle> {
       final User currentUser = _auth.currentUser;
       assert(user.uid == currentUser.uid);
 
-//      print('signInWithGoogle succeeded: $user');
-
-      // Lưu trạng thái đăng nhập
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      prefs.setString('email', user.email);
 
       SignInGoogle.isLoggedIn=true;
 
       var phone=user.phoneNumber==null?"":user.phoneNumber;
       saveInfoUser(user.displayName,user.email,phone);
+
+      // Lưu trạng thái đăng nhập
+      final String userID =await UserCurrent.getUserID(user.email);
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setString('userID', userID);
+
+      UserCurrent().init(context);
     }
   }
 

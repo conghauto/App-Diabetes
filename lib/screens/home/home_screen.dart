@@ -3,11 +3,13 @@ import 'package:diabetesapp/screens/chart/chart_screen.dart';
 import 'package:diabetesapp/screens/glucose/glucose_screen.dart';
 import 'package:diabetesapp/screens/more/more_screen.dart';
 import 'package:diabetesapp/screens/plan/plan_screen.dart';
+import 'package:diabetesapp/user_current.dart';
 import 'package:flutter/material.dart';
 
 import '../../size_config.dart';
 class HomeScreen extends StatefulWidget {
   static String routeName = "/home";
+
   @override
   _HomeScreenStateful createState() {
     return _HomeScreenStateful();
@@ -28,6 +30,7 @@ class _HomeScreenStateful extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
 //    SizeConfig().init(context);
+//    UserCurrent().init(context);
     return Scaffold(
       body: PageView(
        controller: _pageController,

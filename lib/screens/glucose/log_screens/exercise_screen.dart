@@ -36,8 +36,6 @@ class ExerciseLogState extends State<ExerciseLog>with AutomaticKeepAliveClientMi
     "Sau hoạt động",
   ];
   List<String> selectedReportList = List();
-
-  String userID = "";
   TextEditingController note;
   TextEditingController timeActivity;
   bool isValidTime=false;
@@ -73,13 +71,6 @@ class ExerciseLogState extends State<ExerciseLog>with AutomaticKeepAliveClientMi
       isValidTime= false;
       isValidType= false;
     });
-
-    if(userID==null||userID=="") {
-      UserCurrent.getUserID().then((String s) =>
-          setState(() {
-            userID = s;
-          }));
-    }
   }
 
   @override
@@ -144,6 +135,7 @@ class ExerciseLogState extends State<ExerciseLog>with AutomaticKeepAliveClientMi
                 });
               },
               textAlign: TextAlign.right,
+              keyboardType: TextInputType.number,
               decoration: InputDecoration.collapsed(
                   hintText: "Nhập thời gian hoạt động"
               ),
@@ -254,7 +246,7 @@ class ExerciseLogState extends State<ExerciseLog>with AutomaticKeepAliveClientMi
         'tags': selectedReportList.length==0?"":selectedReportList.toString(),
         'note': note.text,
         'activityTime': AddLogSceen.time.toString(),
-        'userID': userID,
+        'userID': UserCurrent.userID.toString(),
       });
 
       var data = json.decode(response.body);

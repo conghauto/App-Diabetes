@@ -5,6 +5,7 @@ import 'package:diabetesapp/components/form_error.dart';
 import 'package:diabetesapp/screens/forgot_password/forgot_password.dart';
 import 'package:diabetesapp/screens/home/home_screen.dart';
 import 'package:diabetesapp/size_config.dart';
+import 'package:diabetesapp/user_current.dart';
 import 'package:diabetesapp/widgets/ProgressDialog.dart';
 import 'package:diabetesapp/widgets/default_button.dart';
 import 'package:flutter/material.dart';
@@ -45,8 +46,11 @@ class _SignInFormState extends State<SignInForm> {
 
     if(data=="Success"){
       // Lưu trạng thái đăng nhập
+      final String userID = await UserCurrent.getUserID(email);
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      prefs.setString('email', email);
+      prefs.setString('userID', userID);
+
+      UserCurrent().init(context);
 
       Fluttertoast.showToast(
           msg: "Đăng nhập thành công",

@@ -5,7 +5,8 @@ class AccountModel {
   final String email;
   final String phone;
   final String avatar;
-  AccountModel({this.id, this.fullname, this.username, this.email, this.phone, this.avatar});
+  AccountModel({this.id, this.fullname, this.username, this.email,
+    this.phone, this.avatar});
 
   factory AccountModel.fromJson(Map<String, dynamic> json) {
     return AccountModel(
@@ -14,7 +15,7 @@ class AccountModel {
       username: json['username'].toString(),
       email: json['email'].toString(),
       phone: json['phone'].toString(),
-      avatar: json['avatar'].toString()
+      avatar: json['avatar'].toString(),
     );
   }
 }

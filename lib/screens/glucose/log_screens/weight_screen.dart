@@ -20,7 +20,6 @@ class WeightLog extends StatefulWidget{
 }
 class WeightLogState extends State<WeightLog> with AutomaticKeepAliveClientMixin {
   TextEditingController weight;
-  String userID="";
   TextEditingController note;
   final List<String> errors = [];
   bool isValid=false;
@@ -34,13 +33,6 @@ class WeightLogState extends State<WeightLog> with AutomaticKeepAliveClientMixin
       isValid = false;
     });
 
-
-//    if(userID==null||userID=="") {
-//      UserCurrent.getUserID().then((String s) =>
-//          setState(() {
-//            userID = s;
-//          }));
-//    }
   }
 
   void addWeight()async{
@@ -50,7 +42,7 @@ class WeightLogState extends State<WeightLog> with AutomaticKeepAliveClientMixin
       'tags': selectedReportList.length==0?"":selectedReportList.toString(),
       'note': note.text,
       'measureTime': AddLogSceen.time.toString(),
-      'userID': userID,
+      'userID': UserCurrent.userID.toString(),
     });
 
     var data = json.decode(response.body);

@@ -4,6 +4,7 @@ import 'package:diabetesapp/constants.dart';
 import 'package:diabetesapp/screens/more/components/daily_steps_page.dart';
 import 'package:diabetesapp/screens/more/components/update_infor_screen.dart';
 import 'package:diabetesapp/screens/sign_in/sign_in_screen.dart';
+import 'package:diabetesapp/user_current.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -23,19 +24,17 @@ class Body extends StatefulWidget {
 class _BodyState extends State<Body> {
   String _avatar = "";
   String _username = "";
-  String _email = "";
+  String _email= "";
 
   void initState()  {
      fetchUser();
   }
 
   void fetchUser() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    var email = prefs.getString('email');
 
     String url = ip + "/api/getAccount.php";
     var response = await http.post(url, body: {
-      'email': email.toString(),
+      'id': UserCurrent.userID.toString(),
     });
 
     if (response.statusCode == 200) {
@@ -89,7 +88,7 @@ class _BodyState extends State<Body> {
             title: "Đăng xuất",
             press: () async {
               SharedPreferences prefs = await SharedPreferences.getInstance();
-              prefs.remove('email');
+              prefs.remove('userID');
 
               // Đăng xuất
               facebookLogout();

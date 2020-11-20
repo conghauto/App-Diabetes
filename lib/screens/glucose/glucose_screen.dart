@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:diabetesapp/components/log_card.dart';
+import 'package:diabetesapp/components/select_filter.dart';
 import 'package:diabetesapp/constants.dart';
 import 'package:diabetesapp/models/activity.dart';
 import 'package:diabetesapp/models/carb.dart';
@@ -23,19 +24,10 @@ class GlucoseScreen extends StatefulWidget{
   }
 }
 class _GlucoseScreenStateful extends State<GlucoseScreen>{
-
-  String userID = "17";
   List<dynamic> listItems=new List<dynamic>();
 
   @override
   void initState() {
-    if(userID==null||userID=="") {
-      UserCurrent.getUserID().then((String s) =>
-          setState(() {
-            userID = s;
-          }));
-    }
-
     fetchGlycemics();
     fetchActivities();
     fetchCarbs();
@@ -44,7 +36,7 @@ class _GlucoseScreenStateful extends State<GlucoseScreen>{
   }
 
   Future<void> fetchGlycemics() async {
-    String url = ip + "/api/getGlycemics.php?userID="+userID;
+    String url = ip + "/api/getGlycemics.php?userID="+UserCurrent.userID.toString();
     var response = await http.get(url);
 
     if (response.statusCode == 200) {
@@ -64,7 +56,7 @@ class _GlucoseScreenStateful extends State<GlucoseScreen>{
   }
 
   Future<void> fetchWeights() async {
-    String url = ip + "/api/getWeights.php?userID="+userID;
+    String url = ip + "/api/getWeights.php?userID="+UserCurrent.userID.toString();
     var response = await http.get(url);
 
     if (response.statusCode == 200) {
@@ -84,7 +76,7 @@ class _GlucoseScreenStateful extends State<GlucoseScreen>{
   }
 
   Future<void> fetchActivities() async {
-    String url = ip + "/api/getActivities.php?userID="+userID;
+    String url = ip + "/api/getActivities.php?userID="+UserCurrent.userID.toString();
     var response = await http.get(url);
 
     if (response.statusCode == 200) {
@@ -104,7 +96,7 @@ class _GlucoseScreenStateful extends State<GlucoseScreen>{
   }
 
   Future<void> fetchCarbs() async {
-    String url = ip + "/api/getCarbs.php?userID="+userID;
+    String url = ip + "/api/getCarbs.php?userID="+UserCurrent.userID.toString();
     var response = await http.get(url);
 
     if (response.statusCode == 200) {
@@ -124,7 +116,7 @@ class _GlucoseScreenStateful extends State<GlucoseScreen>{
   }
 
   Future<void> fetchMedicine() async {
-    String url = ip + "/api/getMedicine.php?userID="+userID;
+    String url = ip + "/api/getMedicine.php?userID="+UserCurrent.userID.toString();
     var response = await http.get(url);
 
     if (response.statusCode == 200) {
@@ -395,7 +387,13 @@ class _GlucoseScreenStateful extends State<GlucoseScreen>{
                mainAxisAlignment: MainAxisAlignment.end,
                children: [
                  FlatButton(
-                   onPressed: () => {},
+                   onPressed: () async => {
+                     await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                            builder: (_) =>
+                            SelectFilter(listItems: listItems,)))
+                   },
                    color: Colors.white,
                    padding: EdgeInsets.all(10.0),
                    child: Row(

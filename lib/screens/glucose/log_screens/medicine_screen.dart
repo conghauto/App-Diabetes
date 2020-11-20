@@ -32,7 +32,6 @@ class MedicineLogState extends State<MedicineLog> with AutomaticKeepAliveClientM
 
   bool isValid=false;
   TextEditingController name;
-  String userID="";
   TextEditingController amount;
   TextEditingController note;
   @override
@@ -44,12 +43,6 @@ class MedicineLogState extends State<MedicineLog> with AutomaticKeepAliveClientM
     setState(() {
       isValid = false;
     });
-    if(userID==null||userID=="") {
-      UserCurrent.getUserID().then((String s) =>
-          setState(() {
-            userID = s;
-          }));
-    }
   }
   void checkCondition(){
     if (amount.text.length <= 0 || name.text.length <= 0) {
@@ -71,7 +64,7 @@ class MedicineLogState extends State<MedicineLog> with AutomaticKeepAliveClientM
       'note': note.text,
       'amount': amount.text,
       'measureTime': AddLogSceen.time.toString(),
-      'userID': userID,
+      'userID': UserCurrent.userID.toString(),
     });
 
     var data = json.decode(response.body);
