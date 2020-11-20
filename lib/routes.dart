@@ -4,7 +4,10 @@ import 'package:diabetesapp/screens/chart/report_screen.dart';
 import 'package:diabetesapp/screens/forgot_password/forgot_password.dart';
 import 'package:diabetesapp/screens/glucose/add_log_screen.dart';
 import 'package:diabetesapp/screens/glucose/log_screens/update_blood_glucoso.dart';
+import 'package:diabetesapp/screens/glucose/log_screens/update_carbs.dart';
+import 'package:diabetesapp/screens/glucose/log_screens/update_exercise.dart';
 import 'package:diabetesapp/screens/glucose/log_screens/update_medicine.dart';
+import 'package:diabetesapp/screens/glucose/log_screens/update_weight.dart';
 import 'package:diabetesapp/screens/home/home_screen.dart';
 import 'package:diabetesapp/screens/info_personal/info_person_sreeen.dart';
 import 'package:diabetesapp/screens/more/components/update_infor_screen.dart';
@@ -34,4 +37,7 @@ final Map<String, WidgetBuilder> routes= {
   ReportScreen.routeName: (context) => ReportScreen(),
   UpdateBloodGlucoso.routeName: (context) => UpdateBloodGlucoso(),
   UpdateMedicine.routeName: (context) => UpdateMedicine(),
+  UpdateWeight.routeName: (context) => UpdateWeight(),
+  UpdateCarbs.routeName: (context) => UpdateCarbs(),
+  UpdateExercise.routeName: (context) => UpdateExercise(),
 };

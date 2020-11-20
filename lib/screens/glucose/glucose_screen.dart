@@ -9,6 +9,7 @@ import 'package:diabetesapp/models/medicine.dart';
 import 'package:diabetesapp/models/weight.dart';
 import 'package:diabetesapp/screens/glucose/add_log_screen.dart';
 import 'package:diabetesapp/screens/glucose/log_screens/update_blood_glucoso.dart';
+import 'package:diabetesapp/screens/glucose/log_screens/update_carbs.dart';
 import 'package:diabetesapp/screens/glucose/log_screens/update_medicine.dart';
 import 'package:diabetesapp/size_config.dart';
 import 'package:diabetesapp/user_current.dart';
@@ -16,6 +17,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:http/http.dart' as http;
+
+import 'log_screens/update_exercise.dart';
+import 'log_screens/update_weight.dart';
 
 class GlucoseScreen extends StatefulWidget{
   static String routeName = "/chart_screen";
@@ -461,7 +465,10 @@ class _GlucoseScreenStateful extends State<GlucoseScreen>{
                           unit: "kg",
                           indexValue: listItems[index].weight,
                           time: listItems[index].measureTime,
-                          press: (){
+                          press: () async {
+                            await Navigator.push(context, MaterialPageRoute(
+                                builder: (context) => UpdateWeight(weightModel: listItems[index])
+                            ));
                           },
                           colorPrimary: Colors.grey,
                         );
@@ -474,8 +481,10 @@ class _GlucoseScreenStateful extends State<GlucoseScreen>{
                           unit: "",
                           indexValue: "",
                           time: listItems[index].measureTime,
-                          press: (){
-
+                          press: () async{
+                            await Navigator.push(context, MaterialPageRoute(
+                                builder: (context) => UpdateCarbs(carbModel: listItems[index])
+                            ));
                           },
                           colorPrimary: Colors.orange,
                         );
@@ -488,8 +497,10 @@ class _GlucoseScreenStateful extends State<GlucoseScreen>{
                           unit: "phút",
                           indexValue: listItems[index].timeActivity,
                           time: listItems[index].activityTime,
-                          press: (){
-
+                          press: () async{
+                            await Navigator.push(context, MaterialPageRoute(
+                                builder: (context) => UpdateExercise(activityModel: listItems[index])
+                            ));
                           },
                           colorPrimary: Colors.green,
                         );
