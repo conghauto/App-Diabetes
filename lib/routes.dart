@@ -1,7 +1,10 @@
+
 import 'package:diabetesapp/components/sign_in_google.dart';
 import 'package:diabetesapp/screens/chart/report_screen.dart';
 import 'package:diabetesapp/screens/forgot_password/forgot_password.dart';
 import 'package:diabetesapp/screens/glucose/add_log_screen.dart';
+import 'package:diabetesapp/screens/glucose/log_screens/update_blood_glucoso.dart';
+import 'package:diabetesapp/screens/glucose/log_screens/update_medicine.dart';
 import 'package:diabetesapp/screens/home/home_screen.dart';
 import 'package:diabetesapp/screens/info_personal/info_person_sreeen.dart';
 import 'package:diabetesapp/screens/more/components/update_infor_screen.dart';
@@ -29,4 +32,6 @@ final Map<String, WidgetBuilder> routes= {
   EditProfilePage.routeName: (context) => EditProfilePage(),
   InfoPersonScreen.routeName: (context) => InfoPersonScreen(),
   ReportScreen.routeName: (context) => ReportScreen(),
+  UpdateBloodGlucoso.routeName: (context) => UpdateBloodGlucoso(),
+  UpdateMedicine.routeName: (context) => UpdateMedicine(),
 };

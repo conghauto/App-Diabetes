@@ -49,13 +49,6 @@ class BloodGlucosoLogState extends State<BloodGlucosoLog> with AutomaticKeepAliv
 
   void addGlycemic()async{
 
-    // show please wait dialog
-//    showDialog(
-//      barrierDismissible: false,
-//      context: context,
-//      builder: (BuildContext context) => ProgressDialog(status: 'Đang xử lý',),
-//    );
-
     var url = ip + "/api/addGlycemic.php";
     var response = await http.post(url, body: {
       'indexG': indexG.text,

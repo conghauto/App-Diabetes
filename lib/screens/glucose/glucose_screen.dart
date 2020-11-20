@@ -8,6 +8,8 @@ import 'package:diabetesapp/models/glycemic.dart';
 import 'package:diabetesapp/models/medicine.dart';
 import 'package:diabetesapp/models/weight.dart';
 import 'package:diabetesapp/screens/glucose/add_log_screen.dart';
+import 'package:diabetesapp/screens/glucose/log_screens/update_blood_glucoso.dart';
+import 'package:diabetesapp/screens/glucose/log_screens/update_medicine.dart';
 import 'package:diabetesapp/size_config.dart';
 import 'package:diabetesapp/user_current.dart';
 import 'package:flutter/cupertino.dart';
@@ -23,19 +25,22 @@ class GlucoseScreen extends StatefulWidget{
   }
 }
 class _GlucoseScreenStateful extends State<GlucoseScreen>{
-
-  String userID = "17";
+  int count;
+  String userID = "13";
   List<dynamic> listItems=new List<dynamic>();
 
   @override
   void initState() {
+    count = 0;
     if(userID==null||userID=="") {
       UserCurrent.getUserID().then((String s) =>
           setState(() {
             userID = s;
           }));
     }
-
+    loadData();
+  }
+  void loadData(){
     fetchGlycemics();
     fetchActivities();
     fetchCarbs();
@@ -412,80 +417,86 @@ class _GlucoseScreenStateful extends State<GlucoseScreen>{
                  )
                ],
             ),
-            new Expanded(child:
-            ListView.builder(
-                itemCount: listItems.length,
-                itemBuilder: (context, index) {
-                  if ((listItems[index].idModel=="1")) {
-                    return LogCard(
-                      iconSrc: "assets/icons/glucose.svg",
-                      title: "Đường huyết",
-                      nameMedicine: "",
-                      unit: "ml/dl",
-                      indexValue: listItems[index].indexG,
-                      time: listItems[index].measureTime,
-                      press: (){
+            new Expanded(
+                child: ListView.builder(
+                    itemCount: listItems.length,
+                    itemBuilder: (context, index) {
+                      if ((listItems[index].idModel=="1")) {
+                        return LogCard(
+                          iconSrc: "assets/icons/glucose.svg",
+                          title: "Đường huyết",
+                          nameMedicine: "",
+                          unit: "ml/dl",
+                          indexValue: listItems[index].indexG,
+                          time: listItems[index].measureTime,
+                          press: () async {
+                            await Navigator.push(context, MaterialPageRoute(
+                                builder: (context) => UpdateBloodGlucoso(glycemicModel: listItems[index])
+                            ));
+                          },
+                          colorPrimary: Colors.red,
+                        );
+                      }
+                      else if(listItems[index].idModel=="2"){
+                        return LogCard(
+                          iconSrc: "assets/icons/pill-2.svg",
+                          title: "Thuốc",
+                          nameMedicine: listItems[index].name,
+                          unit: listItems[index].unit,
+                          indexValue: listItems[index].amount,
+                          time: listItems[index].measureTime,
+                          press: () async {
+                            await Navigator.push(context, MaterialPageRoute(
+                                builder: (context) => UpdateMedicine(medicineModel: listItems[index])
+                            ));
+                          },
+                          colorPrimary: Colors.teal,
+                        );
+                      }
+                      else if(listItems[index].idModel=="3"){
+                        return LogCard(
+                          iconSrc: "assets/icons/weight.svg",
+                          title: "Cân nặng",
+                          nameMedicine: "",
+                          unit: "kg",
+                          indexValue: listItems[index].weight,
+                          time: listItems[index].measureTime,
+                          press: (){
+                          },
+                          colorPrimary: Colors.grey,
+                        );
+                      }
+                      else if(listItems[index].idModel=="4"){
+                        return LogCard(
+                          iconSrc: "assets/icons/food.svg",
+                          title: "Thức ăn",
+                          nameMedicine: "Carbs "+listItems[index].carb+" gam",
+                          unit: "",
+                          indexValue: "",
+                          time: listItems[index].measureTime,
+                          press: (){
 
-                      },
-                      colorPrimary: Colors.red,
-                    );
-                  }
-                  else if(listItems[index].idModel=="2"){
-                    return LogCard(
-                      iconSrc: "assets/icons/pill-2.svg",
-                      title: "Thuốc",
-                      nameMedicine: listItems[index].name,
-                      unit: listItems[index].unit,
-                      indexValue: listItems[index].amount,
-                      time: listItems[index].measureTime,
-                      press: (){
+                          },
+                          colorPrimary: Colors.orange,
+                        );
+                      }
+                      else{
+                        return LogCard(
+                          iconSrc: "assets/icons/run.svg",
+                          title: "Hoạt động",
+                          nameMedicine: listItems[index].nameActivity,
+                          unit: "phút",
+                          indexValue: listItems[index].timeActivity,
+                          time: listItems[index].activityTime,
+                          press: (){
 
-                      },
-                      colorPrimary: Colors.teal,
-                    );
-                  }
-                  else if(listItems[index].idModel=="3"){
-                    return LogCard(
-                      iconSrc: "assets/icons/weight.svg",
-                      title: "Cân nặng",
-                      nameMedicine: "",
-                      unit: "kg",
-                      indexValue: listItems[index].weight,
-                      time: listItems[index].measureTime,
-                      press: (){
-                      },
-                      colorPrimary: Colors.grey,
-                    );
-                  }
-                  else if(listItems[index].idModel=="4"){
-                    return LogCard(
-                      iconSrc: "assets/icons/food.svg",
-                      title: "Thức ăn",
-                      nameMedicine: "Carbs "+listItems[index].carb+" gam",
-                      unit: "",
-                      indexValue: "",
-                      time: listItems[index].measureTime,
-                      press: (){
+                          },
+                          colorPrimary: Colors.green,
+                        );
+                      }
+                    })
 
-                      },
-                      colorPrimary: Colors.orange,
-                    );
-                  }
-                  else{
-                    return LogCard(
-                      iconSrc: "assets/icons/run.svg",
-                      title: "Hoạt động",
-                      nameMedicine: listItems[index].nameActivity,
-                      unit: "phút",
-                      indexValue: listItems[index].timeActivity,
-                      time: listItems[index].activityTime,
-                      press: (){
-
-                      },
-                      colorPrimary: Colors.green,
-                    );
-                  }
-            }))
+            )
           ],
         ),
       ),
