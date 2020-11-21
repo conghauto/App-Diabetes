@@ -17,7 +17,7 @@
             $row['timeActivity'],
             $row['tags'],
             $row['note'],
-            $row['activityTime'],
+            $row['measureTime'],
             $row['calo'],
             $row['userID'])
         );
@@ -26,14 +26,14 @@
     echo json_encode($result);
 
     class Activity{
-        public function Activity($id,$nameActivity,$indexMET,$timeActivity,$tags,$note,$activityTime,$calo,$userID){
+        public function Activity($id,$nameActivity,$indexMET,$timeActivity,$tags,$note,$measureTime,$calo,$userID){
             $this->id=$id;
             $this->nameActivity=$nameActivity;
             $this->indexMET=$indexMET;
             $this->timeActivity=$timeActivity;
             $this->tags=$tags;
             $this->note=$note;
-            $this->activityTime=$activityTime;
+            $this->measureTime=$measureTime;
             $this->calo=$calo;
             $this->userID=$userID;
         }

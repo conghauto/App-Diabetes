@@ -10,7 +10,7 @@
     $timeActivity = $_POST['timeActivity'];
     $tags = $_POST['tags'];
     $note = $_POST['note'];
-    $activityTime = $_POST['activityTime'];
+    $measureTime = $_POST['measureTime'];
     $userID = $_POST['userID'];
 
     $result=mysqli_query($con,"SELECT weight FROM weights WHERE userID='".$userID."' ORDER BY measureTime DESC LIMIT 1");
@@ -31,7 +31,7 @@
     }
 
 
-    $query = $activity->insertActivity($nameActivity,$indexMET,$timeActivity,$tags,$note,$activityTime,$calo,$userID);
+    $query = $activity->insertActivity($nameActivity,$indexMET,$timeActivity,$tags,$note,$measureTime,$calo,$userID);
 
     if($query){
         echo json_encode("Success");

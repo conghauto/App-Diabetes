@@ -14,25 +14,190 @@ import 'package:diabetesapp/user_current.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
 class GlucoseScreen extends StatefulWidget{
   static String routeName = "/chart_screen";
   @override
-  _GlucoseScreenStateful createState() {
-    return _GlucoseScreenStateful();
+  GlucoseScreenState createState() {
+    return GlucoseScreenState();
   }
 }
-class _GlucoseScreenStateful extends State<GlucoseScreen>{
+class GlucoseScreenState extends State<GlucoseScreen>{
   List<dynamic> listItems=new List<dynamic>();
+  List<GlycemicModel> listGlycemics=new List<GlycemicModel>();
+  List<CarbModel> listCarbs=new List<CarbModel>();
+  List<MedicineModel> listMedicine=new List<MedicineModel>();
+  List<ActivityModel> listActivities=new List<ActivityModel>();
+  List<WeightModel> listWeights=new List<WeightModel>();
+  List<String>query;
 
   @override
   void initState() {
-    fetchGlycemics();
-    fetchActivities();
-    fetchCarbs();
-    fetchMedicine();
-    fetchWeights();
+    setState(() {
+      sortItems();
+    });
+//    fetchGlycemics();
+//    fetchActivities();
+//    fetchCarbs();
+//    fetchMedicine();
+//    fetchWeights();
+  }
+
+
+  void sortItems()async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    query = prefs.getStringList('query');
+
+    await fetchGlycemics();
+    await fetchActivities();
+    await fetchCarbs();
+    await fetchMedicine();
+    await fetchWeights();
+
+    setState(() {
+
+      if(query!=null){
+        if(query[0]=="allDate"||query[1]==""){
+          if(query[4]=="0"){
+            listGlycemics.forEach((element) {
+              listItems.add(element);
+            });
+            listCarbs.forEach((element) {
+              listItems.add(element);
+            });
+            listCarbs.forEach((element) {
+              listItems.add(element);
+            });
+            listWeights.forEach((element) {
+              listItems.add(element);
+            });
+            listActivities.forEach((element) {
+              listItems.add(element);
+            });
+
+            listItems.sort((b,a) => a.measureTime.compareTo(b.measureTime));
+          }
+          if(query[5]=="1"){
+            listGlycemics.forEach((element) {
+              listItems.add(element);
+            });
+          }
+
+          if(query[6]=="2"){
+            listCarbs.forEach((element) {
+              listItems.add(element);
+            });
+          }
+
+          if(query[7]=="3"){
+            listMedicine.forEach((element) {
+              listItems.add(element);
+            });
+          }
+
+          if(query[8]=="4"){
+            listWeights.forEach((element) {
+              listItems.add(element);
+            });
+          }
+
+          if(query[9]=="5"){
+            listActivities.forEach((element) {
+              listItems.add(element);
+            });
+          }
+        }
+        else if(query[0]==""&&query[1]=="customDate"&&query[2]!=""&&query[3]!=""){
+          DateTime startDate=DateTime.parse(query[2]);
+          DateTime endDate=DateTime.parse(query[3]);
+
+          if(query[4]=="0"){
+            listGlycemics.forEach((element) {
+              if(element.measureTime.isAfter(startDate)&&element.measureTime.isBefore(endDate))
+              listItems.add(element);
+            });
+            listCarbs.forEach((element) {
+              if(element.measureTime.isAfter(startDate)&&element.measureTime.isBefore(endDate))
+                listItems.add(element);
+            });
+            listMedicine.forEach((element) {
+              if(element.measureTime.isAfter(startDate)&&element.measureTime.isBefore(endDate))
+                listItems.add(element);
+            });
+            listWeights.forEach((element) {
+              if(element.measureTime.isAfter(startDate)&&element.measureTime.isBefore(endDate))
+                listItems.add(element);
+            });
+            listActivities.forEach((element) {
+              if(element.measureTime.isAfter(startDate)&&element.measureTime.isBefore(endDate))
+                listItems.add(element);
+            });
+
+            listItems.sort((b,a) => a.measureTime.compareTo(b.measureTime));
+          }
+          else {
+            if (query[5] == "1") {
+              listGlycemics.forEach((element) {
+                if(element.measureTime.isAfter(startDate)&&element.measureTime.isBefore(endDate))
+                  listItems.add(element);
+              });
+            }
+
+            if (query[6] == "2") {
+              listCarbs.forEach((element) {
+                if(element.measureTime.isAfter(startDate)&&element.measureTime.isBefore(endDate))
+                  listItems.add(element);
+              });
+            }
+
+            if (query[7] == "3") {
+              listMedicine.forEach((element) {
+                if(element.measureTime.isAfter(startDate)&&element.measureTime.isBefore(endDate))
+                  listItems.add(element);
+              });
+            }
+
+            if (query[8] == "4") {
+              listWeights.forEach((element) {
+                if(element.measureTime.isAfter(startDate)&&element.measureTime.isBefore(endDate))
+                  listItems.add(element);
+              });
+            }
+
+            if (query[9] == "5") {
+              listActivities.forEach((element) {
+                if(element.measureTime.isAfter(startDate)&&element.measureTime.isBefore(endDate))
+                  listItems.add(element);
+              });
+            }
+
+            listItems.sort((b,a) => a.measureTime.compareTo(b.measureTime));
+          }
+        }
+      }
+      else{
+        listGlycemics.forEach((element) {
+          listItems.add(element);
+        });
+        listCarbs.forEach((element) {
+          listItems.add(element);
+        });
+        listCarbs.forEach((element) {
+          listItems.add(element);
+        });
+        listWeights.forEach((element) {
+          listItems.add(element);
+        });
+        listActivities.forEach((element) {
+          listItems.add(element);
+        });
+
+        listItems.sort((b,a) => a.measureTime.compareTo(b.measureTime));
+
+      }
+    });
   }
 
   Future<void> fetchGlycemics() async {
@@ -42,13 +207,17 @@ class _GlucoseScreenStateful extends State<GlucoseScreen>{
     if (response.statusCode == 200) {
       final items = json.decode(response.body).cast<Map<String, dynamic>>();
 
-      List<GlycemicModel> list = items.map<GlycemicModel>((json) {
+      List<GlycemicModel> list= items.map<GlycemicModel>((json) {
         return GlycemicModel.fromJson(json);
       }).toList();
 
-      setState(() {
-        list.forEach((element) => listItems.add(element));
-      });
+      if(list!=null){
+        list.sort((b, a) => a.measureTime.compareTo(b.measureTime));
+        setState(() {
+          list.forEach((element) => listGlycemics.add(element));
+        });
+      }
+
     }
     else {
       throw Exception('Failed to load data.');
@@ -62,13 +231,20 @@ class _GlucoseScreenStateful extends State<GlucoseScreen>{
     if (response.statusCode == 200) {
       final items = json.decode(response.body).cast<Map<String, dynamic>>();
 
-      List<WeightModel> list = items.map<WeightModel>((json) {
+      listWeights = items.map<WeightModel>((json) {
         return WeightModel.fromJson(json);
       }).toList();
 
+//      if(listWeights!=null){
+//        listWeights.sort((b, a) => a.measureTime.compareTo(b.measureTime));
+//      }
       setState(() {
-        list.forEach((element) => listItems.add(element));
+        listWeights.sort((b, a) => a.measureTime.compareTo(b.measureTime));
       });
+
+//      setState(() {
+//        list.forEach((element) => listWeights.add(element));
+//      });
     }
     else {
       throw Exception('Failed to load data.');
@@ -82,12 +258,16 @@ class _GlucoseScreenStateful extends State<GlucoseScreen>{
     if (response.statusCode == 200) {
       final items = json.decode(response.body).cast<Map<String, dynamic>>();
 
-      List<ActivityModel> list = items.map<ActivityModel>((json) {
+      listActivities= items.map<ActivityModel>((json) {
         return ActivityModel.fromJson(json);
       }).toList();
 
+//      if(list!=null){
+//        listActivities.sort((b, a) => a.activityTime.compareTo(b.activityTime));
+//      }
+
       setState(() {
-        list.forEach((element) => listItems.add(element));
+        listActivities.sort((b, a) => a.measureTime.compareTo(b.measureTime));
       });
     }
     else {
@@ -102,12 +282,15 @@ class _GlucoseScreenStateful extends State<GlucoseScreen>{
     if (response.statusCode == 200) {
       final items = json.decode(response.body).cast<Map<String, dynamic>>();
 
-      List<CarbModel> list = items.map<CarbModel>((json) {
+      listCarbs = items.map<CarbModel>((json) {
         return CarbModel.fromJson(json);
       }).toList();
 
+//      if(listCarbs!=null){
+//        listCarbs.sort((b, a) => a.measureTime.compareTo(b.measureTime));
+//      }
       setState(() {
-        list.forEach((element) => listItems.add(element));
+        listCarbs.sort((b, a) => a.measureTime.compareTo(b.measureTime));
       });
     }
     else {
@@ -122,12 +305,12 @@ class _GlucoseScreenStateful extends State<GlucoseScreen>{
     if (response.statusCode == 200) {
       final items = json.decode(response.body).cast<Map<String, dynamic>>();
 
-      List<MedicineModel> list = items.map<MedicineModel>((json) {
+      listMedicine = items.map<MedicineModel>((json) {
         return MedicineModel.fromJson(json);
       }).toList();
 
       setState(() {
-        list.forEach((element) => listItems.add(element));
+        listMedicine.sort((b, a) => a.measureTime.compareTo(b.measureTime));
       });
     }
     else {
@@ -392,7 +575,7 @@ class _GlucoseScreenStateful extends State<GlucoseScreen>{
                             context,
                             MaterialPageRoute(
                             builder: (_) =>
-                            SelectFilter(listItems: listItems,)))
+                            SelectFilter()))
                    },
                    color: Colors.white,
                    padding: EdgeInsets.all(10.0),
@@ -476,7 +659,7 @@ class _GlucoseScreenStateful extends State<GlucoseScreen>{
                       nameMedicine: listItems[index].nameActivity,
                       unit: "phút",
                       indexValue: listItems[index].timeActivity,
-                      time: listItems[index].activityTime,
+                      time: listItems[index].measureTime,
                       press: (){
 
                       },

@@ -1,10 +1,12 @@
 import 'package:diabetesapp/components/custom_surffix_icon.dart';
 import 'package:diabetesapp/constants.dart';
+import 'package:diabetesapp/screens/glucose/glucose_screen.dart';
 import 'package:diabetesapp/screens/glucose/log_screens/blood_glucoso_screen.dart';
 import 'package:diabetesapp/screens/glucose/log_screens/carbs_screen.dart';
 import 'package:diabetesapp/screens/glucose/log_screens/exercise_screen.dart';
 import 'package:diabetesapp/screens/glucose/log_screens/medicine_screen.dart';
 import 'package:diabetesapp/screens/glucose/log_screens/weight_screen.dart';
+import 'package:diabetesapp/screens/home/home_screen.dart';
 import 'package:diabetesapp/screens/more/components/menu_item.dart';
 import 'package:flutter/material.dart';
 import 'package:diabetesapp/extensions/format_datetime.dart';
@@ -62,11 +64,10 @@ class _AddLogSceenState extends State<AddLogSceen> with TickerProviderStateMixin
                     semanticLabel: countAddLog.toString(),
                   ),
                   tooltip: 'Lưu',
-                  onPressed: () {
+                  onPressed: () async {
                       if(GlobalKeys.key1.currentState!=null){
                         if(GlobalKeys.key1.currentState.isValid){
                           GlobalKeys.key1.currentState.addGlycemic();
-//                          Navigator.pop(context);
                         }
                       }
                       if(GlobalKeys.key2.currentState!=null){
@@ -97,6 +98,8 @@ class _AddLogSceenState extends State<AddLogSceen> with TickerProviderStateMixin
 //                          Navigator.pop(context);
                         }
                       }
+
+                      Navigator.pushReplacementNamed(context, HomeScreen.routeName);
                   },
                 ),
               ],

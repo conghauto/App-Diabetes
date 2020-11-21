@@ -43,7 +43,7 @@ const String kUsernameNullError = "Bạn chưa điền tên đăng nhập";
 const String kIndexGlycemicNullError = "Bạn chưa nhập chỉ số đường huyết";
 const String kShortUsername = "Tên đăng nhập không hợp lệ";
 
-const String ip = "http://192.168.1.6:8080";
+const String ip = "http://172.31.98.120:8080";
 
 final otpInputDecoration = InputDecoration(
   contentPadding:

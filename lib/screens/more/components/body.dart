@@ -89,6 +89,7 @@ class _BodyState extends State<Body> {
             press: () async {
               SharedPreferences prefs = await SharedPreferences.getInstance();
               prefs.remove('userID');
+              prefs.remove('query');
 
               // Đăng xuất
               facebookLogout();

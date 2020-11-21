@@ -245,7 +245,7 @@ class ExerciseLogState extends State<ExerciseLog>with AutomaticKeepAliveClientMi
         'timeActivity': timeActivity.text,
         'tags': selectedReportList.length==0?"":selectedReportList.toString(),
         'note': note.text,
-        'activityTime': AddLogSceen.time.toString(),
+        'measureTime': AddLogSceen.time.toString(),
         'userID': UserCurrent.userID.toString(),
       });
 
