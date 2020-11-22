@@ -20,6 +20,7 @@ class UpdateMedicine extends StatefulWidget{
   }
 }
 class _UpdateMedicineState extends State<UpdateMedicine> {
+  MedicineModel medicineModelBack;
   bool isInsulin = false;
   List<String> listInsulin = ["Tác dụng nhanh", "Tác dụng ngắn", "Tác dụng trung bình", "Tác dụng dài"];
   String typeOfInsulin = "";
@@ -110,7 +111,7 @@ class _UpdateMedicineState extends State<UpdateMedicine> {
       'measureTime': time.toString(),
       'id': ID,
     });
-
+    medicineModelBack = new MedicineModel(id: ID, name: name.text, typeInsulin: typeOfInsulin, note: note.text, amount: amount.text, measureTime: time, idModel: widget.medicineModel.idModel, unit: typeOfUnit, userID: widget.medicineModel.userID);
     var data = json.decode(response.body);
     if(data=="Error"){
       Fluttertoast.showToast(
@@ -453,7 +454,7 @@ class _UpdateMedicineState extends State<UpdateMedicine> {
                 color: Colors.lightBlue,
                 onPressed: () async {
                   await updateMedicine();
-                  Navigator.pop(context);
+                  Navigator.pop(context, medicineModelBack);
                 },
                 child: Text(
                   "Cập nhật",

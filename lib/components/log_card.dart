@@ -12,11 +12,12 @@ class LogCard extends StatelessWidget {
     this.indexValue,
     this.time,
     this.press,
+    this.longPress,
     this.colorPrimary,
   }) : super(key: key);
   final String iconSrc, title, nameMedicine, unit, indexValue;
   final DateTime time;
-  final Function press;
+  final Function press, longPress;
   final Color colorPrimary;
 
   @override
@@ -130,6 +131,7 @@ class LogCard extends StatelessWidget {
               )
             ),
             onTap: press,
+            onLongPress: longPress,
           ),
     );
   }

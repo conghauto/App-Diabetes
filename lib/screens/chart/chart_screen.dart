@@ -70,12 +70,6 @@ class _ChartScreenStateful extends State<ChartScreen>{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   title: Text("Biểu đồ"),
-      //   automaticallyImplyLeading: false,
-      //   centerTitle: true,
-      //   backgroundColor: Colors.lightBlueAccent,
-      // ),
       body: ListView(
         scrollDirection: Axis.vertical,
         children: [

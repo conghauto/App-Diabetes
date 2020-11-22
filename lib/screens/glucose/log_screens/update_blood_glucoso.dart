@@ -21,7 +21,7 @@ class UpdateBloodGlucoso extends StatefulWidget {
   _UpdateBloodGlucosoState createState() => _UpdateBloodGlucosoState();
 }
 class _UpdateBloodGlucosoState extends State<UpdateBloodGlucoso> {
-
+  GlycemicModel glycemicModelBack;
   TextEditingController indexG;
   String id = "";
   TextEditingController note;
@@ -81,7 +81,7 @@ class _UpdateBloodGlucosoState extends State<UpdateBloodGlucoso> {
       'measureTime': time.toString(),
       'id': id,
     });
-
+    glycemicModelBack = new GlycemicModel(id: id, indexG: indexG.text, note: note.text, tags: selectedReportList.length==0?"":selectedReportList.toString(), measureTime: time, idModel: widget.glycemicModel.idModel, userID: widget.glycemicModel.userID);
     var data = json.decode(response.body);
     if(data=="Error"){
       Fluttertoast.showToast(
@@ -270,7 +270,7 @@ class _UpdateBloodGlucosoState extends State<UpdateBloodGlucoso> {
                 color: Colors.lightBlue,
                 onPressed: () async {
                   await updateGlycemic();
-                  Navigator.pop(context);
+                  Navigator.pop(context, glycemicModelBack);
                 },
                 child: Text(
                   "Cập nhật",

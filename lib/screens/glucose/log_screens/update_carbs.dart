@@ -24,6 +24,7 @@ class UpdateCarbs extends StatefulWidget{
   }
 }
 class _UpdateCarbsState extends State<UpdateCarbs> {
+  CarbModel carbModelBack;
   TextEditingController carb;
   TextEditingController fat;
   TextEditingController protein;
@@ -99,7 +100,7 @@ class _UpdateCarbsState extends State<UpdateCarbs> {
       'measureTime': time.toString(),
       'id': id,
     });
-
+    carbModelBack = new CarbModel(id: id, carb: carb.text, protein: protein.text, calo: calo.text, tags: selectedReportList.length==0?"":selectedReportList.toString(), note: note.text, userID: widget.carbModel.userID, measureTime: time, idModel: widget.carbModel.idModel);
     var data = json.decode(response.body);
     if(data=="Error"){
       Fluttertoast.showToast(
@@ -334,7 +335,7 @@ class _UpdateCarbsState extends State<UpdateCarbs> {
                 color: Colors.lightBlue,
                 onPressed: () async {
                   await updateCarb();
-                  Navigator.pop(context);
+                  Navigator.pop(context, carbModelBack);
                 },
                 child: Text(
                   "Cập nhật",

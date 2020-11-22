@@ -22,6 +22,7 @@ class UpdateWeight extends StatefulWidget{
   }
 }
 class _UpdateWeightState extends State<UpdateWeight>{
+  WeightModel weightModelBack;
   TextEditingController weight;
   TextEditingController note;
   TextEditingController tags;
@@ -77,7 +78,7 @@ class _UpdateWeightState extends State<UpdateWeight>{
       'measureTime': time.toString(),
       'id': id,
     });
-
+    weightModelBack = new WeightModel(id: id, userID: widget.weightModel.userID, tags: selectedReportList.length==0?"":selectedReportList.toString(), note: note.text, weight: weight.text, measureTime: time, idModel: widget.weightModel.idModel);
     var data = json.decode(response.body);
     if(data=="Error"){
       Fluttertoast.showToast(
@@ -247,7 +248,7 @@ class _UpdateWeightState extends State<UpdateWeight>{
                 color: Colors.lightBlue,
                 onPressed: () async {
                   await updateWeight();
-                  Navigator.pop(context);
+                  Navigator.pop(context,weightModelBack);
                 },
                 child: Text(
                   "Cập nhật",

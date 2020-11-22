@@ -20,7 +20,6 @@ class SimpleSeriesLegend extends StatelessWidget {
   }
 
 }
-
 /// Sample ordinal data type.
 class OrdinalSales {
   final String year;

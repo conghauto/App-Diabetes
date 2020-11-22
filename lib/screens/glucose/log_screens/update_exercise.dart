@@ -26,6 +26,7 @@ class UpdateExercise extends StatefulWidget{
   }
 }
 class _UpdateExerciseState extends State<UpdateExercise> {
+  ActivityModel activityModelBack;
   List<TypeExerciseModel> listTypeExercises;
   TypeExerciseModel selectedTypeExercise;
 
@@ -302,7 +303,7 @@ class _UpdateExerciseState extends State<UpdateExercise> {
                 color: Colors.lightBlue,
                 onPressed: () async {
                   await updateActivity();
-                  Navigator.pop(context);
+                  Navigator.pop(context, activityModelBack);
                 },
                 child: Text(
                   "Cập nhật",
@@ -331,7 +332,7 @@ class _UpdateExerciseState extends State<UpdateExercise> {
       'id': id,
       'userID': widget.activityModel.userID
     });
-
+    activityModelBack = new ActivityModel(id: id, nameActivity: selectedTypeExercise.typeExercise.toString(), indexMET: selectedTypeExercise.mETs.toString(), timeActivity: timeActivity.text, tags: selectedReportList.length==0?"":selectedReportList.toString(), note: note.text, activityTime: time, calo: widget.activityModel.calo, userID: widget.activityModel.userID, idModel: widget.activityModel.idModel);
     var data = json.decode(response.body);
     if(data=="Error"){
       Fluttertoast.showToast(

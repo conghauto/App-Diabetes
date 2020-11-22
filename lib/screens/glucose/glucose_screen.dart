@@ -16,6 +16,7 @@ import 'package:diabetesapp/user_current.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 
 import 'log_screens/update_exercise.dart';
@@ -31,7 +32,7 @@ class GlucoseScreen extends StatefulWidget{
 class _GlucoseScreenStateful extends State<GlucoseScreen>{
   int count;
   String userID = "13";
-  List<dynamic> listItems=new List<dynamic>();
+  List<dynamic> listItems = new List<dynamic>();
 
   @override
   void initState() {
@@ -44,12 +45,12 @@ class _GlucoseScreenStateful extends State<GlucoseScreen>{
     }
     loadData();
   }
-  void loadData(){
-    fetchGlycemics();
-    fetchActivities();
-    fetchCarbs();
-    fetchMedicine();
-    fetchWeights();
+  void loadData() async {
+    await fetchGlycemics();
+    await fetchActivities();
+    await fetchCarbs();
+    await fetchMedicine();
+    await fetchWeights();
   }
 
   Future<void> fetchGlycemics() async {
@@ -149,6 +150,156 @@ class _GlucoseScreenStateful extends State<GlucoseScreen>{
     }
     else {
       throw Exception('Failed to load data.');
+    }
+  }
+  void deleteGlycemic(String id) async {
+
+    var url = ip + "/api/deleteGlycemic.php";
+    var response = await http.post(url, body: {
+      'id': id,
+    });
+
+    var data = json.decode(response.body);
+    if(data=="Error"){
+      Fluttertoast.showToast(
+          msg: "Đã xảy ra lỗi",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0
+      );
+    }else{
+      Fluttertoast.showToast(
+          msg: "Xoá thành công",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.green,
+          textColor: Colors.white,
+          fontSize: 16.0
+      );
+    }
+  }
+  void deleteActivity(String id) async {
+
+    var url = ip + "/api/deleteActivity.php";
+    var response = await http.post(url, body: {
+      'id': id,
+    });
+
+    var data = json.decode(response.body);
+    if(data=="Error"){
+      Fluttertoast.showToast(
+          msg: "Đã xảy ra lỗi",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0
+      );
+    }else{
+      Fluttertoast.showToast(
+          msg: "Xoá thành công",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.green,
+          textColor: Colors.white,
+          fontSize: 16.0
+      );
+    }
+  }
+  void deleteCarb(String id) async {
+
+    var url = ip + "/api/deleteCarb.php";
+    var response = await http.post(url, body: {
+      'id': id,
+    });
+
+    var data = json.decode(response.body);
+    if(data=="Error"){
+      Fluttertoast.showToast(
+          msg: "Đã xảy ra lỗi",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0
+      );
+    }else{
+      Fluttertoast.showToast(
+          msg: "Xoá thành công",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.green,
+          textColor: Colors.white,
+          fontSize: 16.0
+      );
+    }
+  }
+  void deleteMedicine(String id) async {
+
+    var url = ip + "/api/deleteWeight.php";
+    var response = await http.post(url, body: {
+      'id': id,
+    });
+
+    var data = json.decode(response.body);
+    if(data=="Error"){
+      Fluttertoast.showToast(
+          msg: "Đã xảy ra lỗi",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0
+      );
+    }else{
+      Fluttertoast.showToast(
+          msg: "Xoá thành công",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.green,
+          textColor: Colors.white,
+          fontSize: 16.0
+      );
+    }
+  }
+  void deleteWeight(String id) async {
+
+    var url = ip + "/api/deleteGlycemic.php";
+    var response = await http.post(url, body: {
+      'id': id,
+    });
+
+    var data = json.decode(response.body);
+    if(data=="Error"){
+      Fluttertoast.showToast(
+          msg: "Đã xảy ra lỗi",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0
+      );
+    }else{
+      Fluttertoast.showToast(
+          msg: "Xoá thành công",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.green,
+          textColor: Colors.white,
+          fontSize: 16.0
+      );
     }
   }
 
@@ -434,9 +585,17 @@ class _GlucoseScreenStateful extends State<GlucoseScreen>{
                           indexValue: listItems[index].indexG,
                           time: listItems[index].measureTime,
                           press: () async {
-                            await Navigator.push(context, MaterialPageRoute(
+                            final result = await Navigator.push(context, MaterialPageRoute(
                                 builder: (context) => UpdateBloodGlucoso(glycemicModel: listItems[index])
                             ));
+                            if (result.idModel != null){
+                              setState(() {
+                                listItems[index] = result;
+                              });
+                            }
+                          },
+                          longPress: () async {
+                            await showDeleteConfirm(context, "glucoso", listItems[index].id, index);
                           },
                           colorPrimary: Colors.red,
                         );
@@ -450,9 +609,17 @@ class _GlucoseScreenStateful extends State<GlucoseScreen>{
                           indexValue: listItems[index].amount,
                           time: listItems[index].measureTime,
                           press: () async {
-                            await Navigator.push(context, MaterialPageRoute(
+                            final result = await Navigator.push(context, MaterialPageRoute(
                                 builder: (context) => UpdateMedicine(medicineModel: listItems[index])
                             ));
+                            if (result.idModel != null){
+                              setState(() {
+                                listItems[index] = result;
+                              });
+                            }
+                          },
+                          longPress: () async {
+                            await showDeleteConfirm(context, "medicine", listItems[index].id, index);
                           },
                           colorPrimary: Colors.teal,
                         );
@@ -466,9 +633,17 @@ class _GlucoseScreenStateful extends State<GlucoseScreen>{
                           indexValue: listItems[index].weight,
                           time: listItems[index].measureTime,
                           press: () async {
-                            await Navigator.push(context, MaterialPageRoute(
+                           final result = await Navigator.push(context, MaterialPageRoute(
                                 builder: (context) => UpdateWeight(weightModel: listItems[index])
                             ));
+                           if (result.idModel != null){
+                             setState(() {
+                               listItems[index] = result;
+                             });
+                           }
+                          },
+                          longPress: () async {
+                            await showDeleteConfirm(context, "weight", listItems[index].id, index);
                           },
                           colorPrimary: Colors.grey,
                         );
@@ -482,9 +657,17 @@ class _GlucoseScreenStateful extends State<GlucoseScreen>{
                           indexValue: "",
                           time: listItems[index].measureTime,
                           press: () async{
-                            await Navigator.push(context, MaterialPageRoute(
+                            final result = await Navigator.push(context, MaterialPageRoute(
                                 builder: (context) => UpdateCarbs(carbModel: listItems[index])
                             ));
+                            if (result.idModel != null){
+                              setState(() {
+                                listItems[index] = result;
+                              });
+                            }
+                          },
+                          longPress: () async {
+                            await showDeleteConfirm(context, "carb", listItems[index].id, index);
                           },
                           colorPrimary: Colors.orange,
                         );
@@ -498,9 +681,17 @@ class _GlucoseScreenStateful extends State<GlucoseScreen>{
                           indexValue: listItems[index].timeActivity,
                           time: listItems[index].activityTime,
                           press: () async{
-                            await Navigator.push(context, MaterialPageRoute(
+                            final result = await Navigator.push(context, MaterialPageRoute(
                                 builder: (context) => UpdateExercise(activityModel: listItems[index])
                             ));
+                            if (result.idModel != null){
+                              setState(() {
+                                listItems[index] = result;
+                              });
+                            }
+                          },
+                          longPress: () async {
+                            await showDeleteConfirm(context, "activity", listItems[index].id, index);
                           },
                           colorPrimary: Colors.green,
                         );
@@ -511,6 +702,75 @@ class _GlucoseScreenStateful extends State<GlucoseScreen>{
           ],
         ),
       ),
+    );
+  }
+  showDeleteConfirm(BuildContext context, String type, String id, int index) {
+    // set up the buttons
+    Widget cancelButton = FlatButton(
+      child: Text("Hủy"),
+      onPressed: () {
+        Navigator.pop(context);
+      },
+    );
+    Widget continueButton = FlatButton(
+      child: Text("Ok"),
+      onPressed: () async {
+        switch(type){
+          case "glucoso":
+            await deleteGlycemic(id);
+            setState(() {
+              listItems.removeAt(index);
+            });
+            Navigator.pop(context);
+            break;
+          case "weight":
+            await deleteWeight(id);
+            setState(() {
+              listItems.removeAt(index);
+            });
+            Navigator.pop(context);
+            break;
+          case "activity":
+            await deleteActivity(id);
+            setState(() {
+              listItems.removeAt(index);
+            });
+            Navigator.pop(context);
+            break;
+          case "carb":
+            await deleteCarb(id);
+            setState(() {
+              listItems.removeAt(index);
+            });
+            Navigator.pop(context);
+            break;
+          case "medicine":
+            await deleteMedicine(id);
+            setState(() {
+              listItems.removeAt(index);
+            });
+            Navigator.pop(context);
+            break;
+        }
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Xác nhận"),
+      content: Text("Bạn có muốn xóa không?"),
+      actions: [
+        continueButton,
+        cancelButton
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
     );
   }
 }
