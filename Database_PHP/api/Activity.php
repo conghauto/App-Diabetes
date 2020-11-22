@@ -18,5 +18,11 @@
             $result=mysqli_query($this->con, $query);
             return $result;
         }
+
+        public function deleteActivity($id){
+            $query = "DELETE FROM activities WHERE id='$id'";
+            $result=mysqli_query($this->con, $query);
+            return $result;
+        }
     }
 ?>

@@ -30,9 +30,6 @@ class GlucoseScreen extends StatefulWidget{
     return GlucoseScreenState();
   }
 }
-  int count;
-  String userID = "13";
-  List<dynamic> listItems = new List<dynamic>();
 
 class IndexGlycemic{
   double avgG;
@@ -183,7 +180,10 @@ class GlucoseScreenState extends State<GlucoseScreen>{
               listIndexGlycemic.forEach((element) {
                 gly.avgG+= element;
               });
-              gly.avgG/=listIndexGlycemic.length;
+              if (gly != null){
+                gly.avgG/=listIndexGlycemic.length;
+              }
+
             }
 
             listCarbs.forEach((element) {
@@ -238,7 +238,9 @@ class GlucoseScreenState extends State<GlucoseScreen>{
                 listIndexGlycemic.forEach((element) {
                   gly.avgG+= element;
                 });
-                gly.avgG/=listIndexGlycemic.length;
+                if (gly != null) {
+                  gly.avgG/=listIndexGlycemic.length;
+                }
               }
             }
 
@@ -465,7 +467,7 @@ class GlucoseScreenState extends State<GlucoseScreen>{
           textColor: Colors.white,
           fontSize: 16.0
       );
-    }else{
+    }else {
       Fluttertoast.showToast(
           msg: "Xoá thành công",
           toastLength: Toast.LENGTH_SHORT,
@@ -930,7 +932,7 @@ class GlucoseScreenState extends State<GlucoseScreen>{
                             final result = await Navigator.push(context, MaterialPageRoute(
                                 builder: (context) => UpdateBloodGlucoso(glycemicModel: listItems[index])
                             ));
-                            if (result.idModel != null){
+                            if (result != null){
                               setState(() {
                                 listItems[index] = result;
                               });
@@ -954,7 +956,7 @@ class GlucoseScreenState extends State<GlucoseScreen>{
                             final result = await Navigator.push(context, MaterialPageRoute(
                                 builder: (context) => UpdateMedicine(medicineModel: listItems[index])
                             ));
-                            if (result.idModel != null){
+                            if (result != null){
                               setState(() {
                                 listItems[index] = result;
                               });
@@ -978,7 +980,7 @@ class GlucoseScreenState extends State<GlucoseScreen>{
                            final result = await Navigator.push(context, MaterialPageRoute(
                                 builder: (context) => UpdateWeight(weightModel: listItems[index])
                             ));
-                           if (result.idModel != null){
+                           if (result != null){
                              setState(() {
                                listItems[index] = result;
                              });
@@ -1002,7 +1004,7 @@ class GlucoseScreenState extends State<GlucoseScreen>{
                             final result = await Navigator.push(context, MaterialPageRoute(
                                 builder: (context) => UpdateCarbs(carbModel: listItems[index])
                             ));
-                            if (result.idModel != null){
+                            if (result != null){
                               setState(() {
                                 listItems[index] = result;
                               });
@@ -1021,12 +1023,12 @@ class GlucoseScreenState extends State<GlucoseScreen>{
                           nameMedicine: listItems[index].nameActivity,
                           unit: "phút",
                           indexValue: listItems[index].timeActivity,
-                          time: listItems[index].activityTime,
+                          time: listItems[index].measureTime,
                           press: () async{
                             final result = await Navigator.push(context, MaterialPageRoute(
                                 builder: (context) => UpdateExercise(activityModel: listItems[index])
                             ));
-                            if (result.idModel != null){
+                            if (result != null){
                               setState(() {
                                 listItems[index] = result;
                               });

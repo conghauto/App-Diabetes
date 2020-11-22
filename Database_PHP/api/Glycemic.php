@@ -16,5 +16,11 @@
             $result=mysqli_query($this->con, $query);
             return $result;
         }
+
+        public function deleteGlycemic($id){
+            $query = "DELETE FROM glycemics WHERE id='$id'";
+            $result=mysqli_query($this->con, $query);
+            return $result;
+        }
     }
 ?>

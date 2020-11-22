@@ -26,5 +26,11 @@
             $result=mysqli_query($this->con, $query);
             return $result;
         }
+
+        public function deleteWeight($id){
+            $query = "DELETE FROM weights WHERE id='$id'";
+            $result=mysqli_query($this->con, $query);
+            return $result;
+        }
     }
 ?>

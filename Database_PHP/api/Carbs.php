@@ -17,5 +17,11 @@
             $result=mysqli_query($this->con, $query);
             return $result;
         }
+
+        public function deleteCarbs($id){
+            $query = "DELETE FROM carbs WHERE id='$id'";
+            $result=mysqli_query($this->con, $query);
+            return $result;
+        }
     }
 ?>

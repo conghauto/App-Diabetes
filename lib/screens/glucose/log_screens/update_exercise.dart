@@ -77,7 +77,7 @@ class _UpdateExerciseState extends State<UpdateExercise> {
     note = TextEditingController(text: widget.activityModel.note);
     timeActivity = TextEditingController(text: widget.activityModel.timeActivity);
     id = widget.activityModel.id;
-    time = widget.activityModel.activityTime;
+    time = widget.activityModel.measureTime;
     String listTags = widget.activityModel.tags;
     if (listTags.length > 0){
       listTags = listTags.substring(1, listTags.length - 1);
@@ -332,7 +332,7 @@ class _UpdateExerciseState extends State<UpdateExercise> {
       'id': id,
       'userID': widget.activityModel.userID
     });
-    activityModelBack = new ActivityModel(id: id, nameActivity: selectedTypeExercise.typeExercise.toString(), indexMET: selectedTypeExercise.mETs.toString(), timeActivity: timeActivity.text, tags: selectedReportList.length==0?"":selectedReportList.toString(), note: note.text, activityTime: time, calo: widget.activityModel.calo, userID: widget.activityModel.userID, idModel: widget.activityModel.idModel);
+    activityModelBack = new ActivityModel(id: id, nameActivity: selectedTypeExercise.typeExercise.toString(), indexMET: selectedTypeExercise.mETs.toString(), timeActivity: timeActivity.text, tags: selectedReportList.length==0?"":selectedReportList.toString(), note: note.text, measureTime: time, calo: widget.activityModel.calo, userID: widget.activityModel.userID, idModel: widget.activityModel.idModel);
     var data = json.decode(response.body);
     if(data=="Error"){
       Fluttertoast.showToast(
