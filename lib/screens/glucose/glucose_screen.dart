@@ -24,27 +24,65 @@ class GlucoseScreen extends StatefulWidget{
     return GlucoseScreenState();
   }
 }
+
+class IndexGlycemic{
+  double avgG;
+  double min;
+  double max;
+
+  IndexGlycemic(this.avgG, this.min, this.max);
+}
+
+class IndexFood{
+  double carbs;
+  double cal;
+
+  IndexFood(this.carbs, this.cal);
+}
+
+class IndexActivity{
+  double cal;
+  double time;
+
+  IndexActivity(this.cal, this.time);
+}
+
+class Insulin{
+  int fastInsulin; // số lượng
+  int shortInsulin;
+  int avgInsulin;
+  int longInsulin;
+
+  Insulin(this.fastInsulin, this.shortInsulin, this.avgInsulin,
+      this.longInsulin);
+
+}
+
+
 class GlucoseScreenState extends State<GlucoseScreen>{
-  List<dynamic> listItems=new List<dynamic>();
-  List<GlycemicModel> listGlycemics=new List<GlycemicModel>();
-  List<CarbModel> listCarbs=new List<CarbModel>();
-  List<MedicineModel> listMedicine=new List<MedicineModel>();
-  List<ActivityModel> listActivities=new List<ActivityModel>();
-  List<WeightModel> listWeights=new List<WeightModel>();
+  List<dynamic> listItems = new List<dynamic>();
+  List<GlycemicModel> listGlycemics = new List<GlycemicModel>();
+  List<CarbModel> listCarbs = new List<CarbModel>();
+  List<MedicineModel> listMedicine = new List<MedicineModel>();
+  List<ActivityModel> listActivities = new List<ActivityModel>();
+  List<WeightModel> listWeights = new List<WeightModel>();
   List<String>query;
+  List<String> listInsulin = ["Tác dụng nhanh", "Tác dụng ngắn", "Tác dụng trung bình", "Tác dụng dài"];
+
+  List<double>listIndexGlycemic = new List<double>();
+
+  IndexGlycemic gly = new IndexGlycemic(0,1000,0);
+  IndexFood food = new IndexFood(0,0);
+  IndexActivity activity = new IndexActivity(0, 0);
+  Insulin insulin = new Insulin(0, 0, 0, 0);
 
   @override
   void initState() {
+
     setState(() {
       sortItems();
     });
-//    fetchGlycemics();
-//    fetchActivities();
-//    fetchCarbs();
-//    fetchMedicine();
-//    fetchWeights();
   }
-
 
   void sortItems()async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -114,17 +152,45 @@ class GlucoseScreenState extends State<GlucoseScreen>{
           DateTime endDate=DateTime.parse(query[3]);
 
           if(query[4]=="0"){
+            // Hiển thị danh sách Glycemic theo khoảng thời gian
             listGlycemics.forEach((element) {
-              if(element.measureTime.isAfter(startDate)&&element.measureTime.isBefore(endDate))
-              listItems.add(element);
+              if(element.measureTime.isAfter(startDate)&&element.measureTime.isBefore(endDate)){
+                gly.max=gly.max>double.parse(element.indexG)?gly.max:double.parse(element.indexG);
+                gly.min=gly.min>double.parse(element.indexG)?double.parse(element.indexG):gly.min;
+
+                listIndexGlycemic.add(double.parse(element.indexG));
+                listItems.add(element);
+              }
             });
+            // Tính chỉ số trung bình Glycemic
+            if(listIndexGlycemic!=null){
+              listIndexGlycemic.forEach((element) {
+                gly.avgG+= element;
+              });
+              gly.avgG/=listIndexGlycemic.length;
+            }
+
             listCarbs.forEach((element) {
               if(element.measureTime.isAfter(startDate)&&element.measureTime.isBefore(endDate))
+                food.cal+=double.parse(element.calo);
+                food.carbs+=double.parse(element.carb);
+
                 listItems.add(element);
             });
             listMedicine.forEach((element) {
               if(element.measureTime.isAfter(startDate)&&element.measureTime.isBefore(endDate))
-                listItems.add(element);
+                if(element.measureTime.isAfter(startDate)&&element.measureTime.isBefore(endDate))
+                  if(element.typeInsulin==listInsulin[0]){
+                    insulin.fastInsulin+= int.parse(element.amount);
+                  }else if(element.typeInsulin==listInsulin[1]){
+                    insulin.shortInsulin+= int.parse(element.amount);
+                  }else if(element.typeInsulin==listInsulin[2]){
+                    insulin.avgInsulin+= int.parse(element.amount);
+                  }else{
+                    insulin.longInsulin+= int.parse(element.amount);
+                  }
+
+              listItems.add(element);
             });
             listWeights.forEach((element) {
               if(element.measureTime.isAfter(startDate)&&element.measureTime.isBefore(endDate))
@@ -132,6 +198,9 @@ class GlucoseScreenState extends State<GlucoseScreen>{
             });
             listActivities.forEach((element) {
               if(element.measureTime.isAfter(startDate)&&element.measureTime.isBefore(endDate))
+                activity.cal+=double.parse(element.calo);
+                activity.time+=double.parse(element.timeActivity);
+
                 listItems.add(element);
             });
 
@@ -140,14 +209,29 @@ class GlucoseScreenState extends State<GlucoseScreen>{
           else {
             if (query[5] == "1") {
               listGlycemics.forEach((element) {
-                if(element.measureTime.isAfter(startDate)&&element.measureTime.isBefore(endDate))
+                if(element.measureTime.isAfter(startDate)&&element.measureTime.isBefore(endDate)){
+                  gly.max=gly.max>double.parse(element.indexG)?gly.max:double.parse(element.indexG);
+                  gly.min=gly.min>double.parse(element.indexG)?double.parse(element.indexG):gly.min;
+
+                  listIndexGlycemic.add(double.parse(element.indexG));
                   listItems.add(element);
+                }
               });
+              // Tính chỉ số trung bình Glycemic
+              if(listIndexGlycemic!=null){
+                listIndexGlycemic.forEach((element) {
+                  gly.avgG+= element;
+                });
+                gly.avgG/=listIndexGlycemic.length;
+              }
             }
 
             if (query[6] == "2") {
               listCarbs.forEach((element) {
                 if(element.measureTime.isAfter(startDate)&&element.measureTime.isBefore(endDate))
+                  food.cal+=double.parse(element.calo);
+                  food.carbs+=double.parse(element.carb);
+
                   listItems.add(element);
               });
             }
@@ -155,6 +239,16 @@ class GlucoseScreenState extends State<GlucoseScreen>{
             if (query[7] == "3") {
               listMedicine.forEach((element) {
                 if(element.measureTime.isAfter(startDate)&&element.measureTime.isBefore(endDate))
+                  if(element.typeInsulin==listInsulin[0]){
+                    insulin.fastInsulin++;
+                  }else if(element.typeInsulin==listInsulin[1]){
+                    insulin.shortInsulin++;
+                  }else if(element.typeInsulin==listInsulin[2]){
+                    insulin.avgInsulin++;
+                  }else{
+                    insulin.longInsulin++;
+                  }
+
                   listItems.add(element);
               });
             }
@@ -169,6 +263,9 @@ class GlucoseScreenState extends State<GlucoseScreen>{
             if (query[9] == "5") {
               listActivities.forEach((element) {
                 if(element.measureTime.isAfter(startDate)&&element.measureTime.isBefore(endDate))
+                  activity.cal+=double.parse(element.calo);
+                  activity.time+=double.parse(element.timeActivity);
+
                   listItems.add(element);
               });
             }
@@ -235,16 +332,9 @@ class GlucoseScreenState extends State<GlucoseScreen>{
         return WeightModel.fromJson(json);
       }).toList();
 
-//      if(listWeights!=null){
-//        listWeights.sort((b, a) => a.measureTime.compareTo(b.measureTime));
-//      }
       setState(() {
         listWeights.sort((b, a) => a.measureTime.compareTo(b.measureTime));
       });
-
-//      setState(() {
-//        list.forEach((element) => listWeights.add(element));
-//      });
     }
     else {
       throw Exception('Failed to load data.');
@@ -261,10 +351,6 @@ class GlucoseScreenState extends State<GlucoseScreen>{
       listActivities= items.map<ActivityModel>((json) {
         return ActivityModel.fromJson(json);
       }).toList();
-
-//      if(list!=null){
-//        listActivities.sort((b, a) => a.activityTime.compareTo(b.activityTime));
-//      }
 
       setState(() {
         listActivities.sort((b, a) => a.measureTime.compareTo(b.measureTime));
@@ -286,9 +372,6 @@ class GlucoseScreenState extends State<GlucoseScreen>{
         return CarbModel.fromJson(json);
       }).toList();
 
-//      if(listCarbs!=null){
-//        listCarbs.sort((b, a) => a.measureTime.compareTo(b.measureTime));
-//      }
       setState(() {
         listCarbs.sort((b, a) => a.measureTime.compareTo(b.measureTime));
       });
@@ -310,7 +393,8 @@ class GlucoseScreenState extends State<GlucoseScreen>{
       }).toList();
 
       setState(() {
-        listMedicine.sort((b, a) => a.measureTime.compareTo(b.measureTime));
+        if(listMedicine!=null)
+          listMedicine.sort((b, a) => a.measureTime.compareTo(b.measureTime));
       });
     }
     else {
@@ -368,25 +452,40 @@ class GlucoseScreenState extends State<GlucoseScreen>{
                                       SizedBox(height: 15.0),
                                       Row(
                                           children: <Widget>[
-                                            new Text("avg  -",
+                                            new Text("avg  ",
                                                 style: new TextStyle(color: Colors.blueGrey,
-                                                    fontSize: 12))
+                                                    fontSize: 12)),
+                                            new Text("- "+"${gly.avgG==0.0?"":gly.avgG.toStringAsFixed(1)}",
+                                                style: new TextStyle(color: Colors.white,
+                                                  fontSize: 10,
+                                                  fontWeight: FontWeight.bold,
+                                                ),)
                                           ]
                                       ),
                                       SizedBox(height: 5.0),
                                       Row(
                                           children: <Widget>[
-                                            new Text("max -",
+                                            new Text("max ",
                                                 style: new TextStyle(color: Colors.blueGrey,
-                                                    fontSize: 12))
+                                                    fontSize: 12)),
+                                            new Text("- "+"${gly.max==0.0?"":gly.max.toStringAsFixed(1)}",
+                                              style: new TextStyle(color: Colors.white,
+                                                fontSize: 10,
+                                                fontWeight: FontWeight.bold,
+                                              ),)
                                           ]
                                       ),
                                       SizedBox(height: 5.0),
                                       Row(
                                           children: <Widget>[
-                                            new Text("min  -",
+                                            new Text("min  ",
                                                 style: new TextStyle(color: Colors.blueGrey,
-                                                    fontSize: 12))
+                                                    fontSize: 12)),
+                                            new Text("- "+"${gly.min==1000.0?"":gly.min.toStringAsFixed(1)}",
+                                              style: new TextStyle(color: Colors.white,
+                                                fontSize: 10,
+                                                fontWeight: FontWeight.bold,
+                                              ),)
                                           ]
                                       )
                                     ],
@@ -423,17 +522,53 @@ class GlucoseScreenState extends State<GlucoseScreen>{
                                       SizedBox(height: 20.0),
                                       Row(
                                           children: <Widget>[
-                                            new Text("bol -",
+                                            new Text("nhanh ",
                                                 style: new TextStyle(color: Colors.blueGrey,
-                                                    fontSize: 12))
+                                                    fontSize: 12)),
+                                            new Text("- "+"${insulin.fastInsulin==0?"":insulin.fastInsulin.toString()+" viên"} ",
+                                              style: new TextStyle(color: Colors.white,
+                                                fontSize: 10,
+                                                fontWeight: FontWeight.bold,
+                                              ),)
                                           ]
                                       ),
                                       SizedBox(height: 5.0),
                                       Row(
                                           children: <Widget>[
-                                            new Text("bas -",
+                                            new Text("ngắn ",
                                                 style: new TextStyle(color: Colors.blueGrey,
-                                                    fontSize: 12))
+                                                    fontSize: 12)),
+                                            new Text("- "+"${insulin.shortInsulin==0?"":insulin.shortInsulin.toString()+" viên"} ",
+                                              style: new TextStyle(color: Colors.white,
+                                                fontSize: 10,
+                                                fontWeight: FontWeight.bold,
+                                              ),)
+                                          ]
+                                      ),
+                                      SizedBox(height: 5.0),
+                                      Row(
+                                          children: <Widget>[
+                                            new Text("tb ",
+                                                style: new TextStyle(color: Colors.blueGrey,
+                                                    fontSize: 12)),
+                                            new Text("- "+"${insulin.avgInsulin==0?"":insulin.avgInsulin.toString()+" viên"} ",
+                                              style: new TextStyle(color: Colors.white,
+                                                fontSize: 10,
+                                                fontWeight: FontWeight.bold,
+                                              ),)
+                                          ]
+                                      ),
+                                      SizedBox(height: 5.0),
+                                      Row(
+                                          children: <Widget>[
+                                            new Text("dài ",
+                                                style: new TextStyle(color: Colors.blueGrey,
+                                                    fontSize: 12)),
+                                            new Text("- "+"${insulin.longInsulin==0?"":insulin.longInsulin.toString()+" viên"} ",
+                                              style: new TextStyle(color: Colors.white,
+                                                fontSize: 10,
+                                                fontWeight: FontWeight.bold,
+                                              ),)
                                           ]
                                       ),
                                     ],
@@ -471,17 +606,27 @@ class GlucoseScreenState extends State<GlucoseScreen>{
                                       SizedBox(height: 15.0),
                                       Row(
                                           children: <Widget>[
-                                            new Text("carbs -",
+                                            new Text("carbs ",
                                                 style: new TextStyle(color: Colors.blueGrey,
-                                                    fontSize: 12))
+                                                    fontSize: 12)),
+                                            new Text("- "+"${food.carbs==0.0?"":food.carbs.toStringAsFixed(1)}",
+                                              style: new TextStyle(color: Colors.white,
+                                                fontSize: 10,
+                                                fontWeight: FontWeight.bold,
+                                              ),)
                                           ]
                                       ),
                                       SizedBox(height: 5.0),
                                       Row(
                                           children: <Widget>[
-                                            new Text("cal -",
+                                            new Text("cal ",
                                                 style: new TextStyle(color: Colors.blueGrey,
-                                                    fontSize: 12))
+                                                    fontSize: 12)),
+                                            new Text("- "+"${food.cal==0.0?"":food.cal.toStringAsFixed(1)}",
+                                              style: new TextStyle(color: Colors.white,
+                                                  fontSize: 10,
+                                                  fontWeight: FontWeight.bold,
+                                              ),)
                                           ]
                                       ),
                                     ],
@@ -518,17 +663,27 @@ class GlucoseScreenState extends State<GlucoseScreen>{
                                       SizedBox(height: 15.0),
                                       Row(
                                           children: <Widget>[
-                                            new Text("số bước   -",
+                                            new Text("cal   ",
                                                 style: new TextStyle(color: Colors.blueGrey,
-                                                    fontSize: 12))
+                                                    fontSize: 12)),
+                                            new Text("- "+"${activity.cal==0.0?"":activity.cal.toStringAsFixed(1)}",
+                                              style: new TextStyle(color: Colors.white,
+                                                fontSize: 10,
+                                                fontWeight: FontWeight.bold,
+                                              ),)
                                           ]
                                       ),
                                       SizedBox(height: 5.0),
                                       Row(
                                           children: <Widget>[
-                                            new Text("thời gian  -",
+                                            new Text("phút ",
                                                 style: new TextStyle(color: Colors.blueGrey, fontSize: 12)
-                                            )
+                                            ),
+                                            new Text("- "+"${activity.time==0.0?"":activity.time.toStringAsFixed(1)}",
+                                              style: new TextStyle(color: Colors.white,
+                                                fontSize: 10,
+                                                fontWeight: FontWeight.bold,
+                                              ),)
                                           ]
                                       )
                                     ],

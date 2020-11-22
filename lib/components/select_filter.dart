@@ -14,17 +14,12 @@ class SelectFilter extends StatefulWidget {
   _SelectFilterState createState() => _SelectFilterState();
 }
 
-enum SelectDate {
-  allDate,
-  customDate,
-}
-
-class OptionDate{
-  final String select;
-  final int id;
-
-  OptionDate(this.select, this.id);
-}
+//class OptionDate{
+//  final String select;
+//  final int id;
+//
+//  OptionDate(this.select, this.id);
+//}
 
 class OptionType{
   final String select;
@@ -35,14 +30,21 @@ class OptionType{
 
 class _SelectFilterState extends State<SelectFilter> {
   var tmpArray = [];
-  DateTime startDate=new DateTime(2020,01,04);
-  DateTime endDate=new DateTime.now();
+  DateTime startDate=new DateTime.now();
+  DateTime endDate= (new DateTime.now()).add(new Duration(days:1));
   FilterService query;
   List<String>listQuery;
 
   @override
   void initState() {
     setState(() {
+//      if(startDate==null){
+//        startDate=new DateTime.now();
+//      }
+//
+//      if(endDate==null){
+//        endDate=(new DateTime.now()).a;
+//      }
       query = new FilterService("", "",
           null, null, 10, 10,
           10, 10, 10, 10);
@@ -354,7 +356,7 @@ class _SelectFilterState extends State<SelectFilter> {
                                   children: [
                                     Row(
                                       children: [
-                                        Text("Từ"),
+                                        Text("Đến"),
                                         FlatButton(onPressed: () async {
                                           final DateTime picked = await showDatePicker(
                                             context: context,
