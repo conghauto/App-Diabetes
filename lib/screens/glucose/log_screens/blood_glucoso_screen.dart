@@ -5,6 +5,7 @@ import 'package:diabetesapp/components/form_error.dart';
 import 'package:diabetesapp/components/multi_choice_chip.dart';
 import 'package:diabetesapp/constants.dart';
 import 'package:diabetesapp/screens/glucose/add_log_screen.dart';
+import 'package:diabetesapp/screens/glucose/glucose_screen.dart';
 import 'package:diabetesapp/screens/glucose/log_screens/add_tab_screen.dart';
 import 'package:diabetesapp/size_config.dart';
 import 'package:diabetesapp/user_current.dart';
@@ -26,7 +27,6 @@ class BloodGlucosoLogState extends State<BloodGlucosoLog> with AutomaticKeepAliv
 //  final _formKey = GlobalKey<FormState>();
 
   TextEditingController indexG;
-  String userID="";
   TextEditingController note;
   bool isValid=false;
 
@@ -38,13 +38,6 @@ class BloodGlucosoLogState extends State<BloodGlucosoLog> with AutomaticKeepAliv
     setState(() {
       isValid= false;
     });
-
-    if(userID==null||userID=="") {
-      UserCurrent.getUserID().then((String s) =>
-          setState(() {
-            userID = s;
-          }));
-    }
   }
 
   void addGlycemic()async{
@@ -55,7 +48,7 @@ class BloodGlucosoLogState extends State<BloodGlucosoLog> with AutomaticKeepAliv
       'tags': selectedReportList.length==0?"":selectedReportList.toString(),
       'note': note.text,
       'measureTime': AddLogSceen.time.toString(),
-      'userID': userID,
+      'userID': UserCurrent.userID.toString(),
     });
 
     var data = json.decode(response.body);

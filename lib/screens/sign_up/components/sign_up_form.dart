@@ -5,6 +5,7 @@ import 'package:diabetesapp/components/form_error.dart';
 import 'package:diabetesapp/screens/home/home_screen.dart';
 import 'package:diabetesapp/screens/info_personal/info_person_sreeen.dart';
 import 'package:diabetesapp/size_config.dart';
+import 'package:diabetesapp/user_current.dart';
 import 'package:diabetesapp/widgets/ProgressDialog.dart';
 import 'package:diabetesapp/widgets/default_button.dart';
 import 'package:flutter/material.dart';
@@ -61,9 +62,10 @@ class _SignUpFormState extends State<SignUpForm> {
           fontSize: 16.0
       );
     }else{
-      // Lưu trạng thái đăng nhập
+      // Lưu trạng thái đăng nhậpuserID
+      final String userID = await UserCurrent.getUserID(email);
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      prefs.setString('email',email);
+      prefs.setString('userID', userID);
 
       Navigator.pushNamed(context, InfoPersonScreen.routeName);
       Fluttertoast.showToast(
@@ -211,7 +213,7 @@ class _SignUpFormState extends State<SignUpForm> {
         labelText: "Họ tên",
         hintText: "Nhập họ tên của bạn",
         floatingLabelBehavior: FloatingLabelBehavior.always,
-        suffixIcon: CustomSurffixIcon(svgIcon: "assets/icons/User.svg"),
+        suffixIcon: CustomSurffixIcon(svgIcon: "assets/icons/user.svg"),
       ),
     );
   }

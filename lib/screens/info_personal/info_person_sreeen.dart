@@ -24,7 +24,6 @@ class _InfoPersonScreenState extends State<InfoPersonScreen> {
   final _formKey = GlobalKey<FormState>();
   int _gender = 1;
   int _type = 2;
-  String _idUser = "";
 
   String height;
   String weight;
@@ -36,28 +35,8 @@ class _InfoPersonScreenState extends State<InfoPersonScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    fetchIDUser();
   }
 
-  void fetchIDUser() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    var email = prefs.getString('email');
-
-    String url = ip + "/api/getAccount.php";
-    var response = await http.post(url, body: {
-      'email': email.toString(),
-    });
-
-    if (response.statusCode == 200) {
-      final items = json.decode(response.body).cast<Map<String, dynamic>>();
-      AccountModel inforAccount = AccountModel.fromJson(items[0]);
-      setState(() {
-        _idUser  = inforAccount.id;
-      });
-    } else {
-      throw Exception('Failed to load data.');
-    }
-  }
 
   void setValueGender(int value) {
     setState(() {
@@ -72,6 +51,10 @@ class _InfoPersonScreenState extends State<InfoPersonScreen> {
   }
 
   void sendInforUser()async{
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var userID = prefs.getString('userID');
+
     var url = ip + "/api/registerInfoUser.php";
     var response = await http.post(url, body: {
       'birthday': selectedDate.toString(),
@@ -79,7 +62,7 @@ class _InfoPersonScreenState extends State<InfoPersonScreen> {
       'height': height,
       'weight': weight,
       'typeDiabete': _type.toString(),
-      'userID': _idUser,
+      'userID': userID.toString(),
     });
 
     Navigator.pop(context);

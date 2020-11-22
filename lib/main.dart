@@ -24,33 +24,35 @@ Future<void> main() async {
   await Firebase.initializeApp();
 
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  var email = prefs.getString('email');
-  print(email);
+  var userID = prefs.getString('userID');
+  print(userID);
 
 
   final appDocumentDirectory = await path_provider.getApplicationDocumentsDirectory();
   await Hive.init(appDocumentDirectory.path);
   await Hive.openBox<int>('steps');
   initializeDateFormatting('vi_VN', null)
-      .then((_) => runApp(MyApp(email: email)));
+      .then((_) => runApp(MyApp(userID: userID)));
 }
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   const MyApp({
     Key key,
-    this.email,
+    this.userID,
   }) : super(key: key);
-  final String email;
+  final String userID;
 
   @override
   Widget build(BuildContext context) {
-    UserCurrent().init(context);
+    if (userID!=null){
+      UserCurrent().init(context);
+    }
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(fontFamily: 'Roboto'),
 //      initialRoute: SplashScreen.routeName,
-      initialRoute: (email==null)? SplashScreen.routeName:HomeScreen.routeName,
+      initialRoute: (userID==null)? SplashScreen.routeName:HomeScreen.routeName,
 //      debugShowCheckedModeBanner: false,
       routes: routes,
     );

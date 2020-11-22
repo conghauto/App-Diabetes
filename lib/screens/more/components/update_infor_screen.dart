@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:diabetesapp/components/form_error.dart';
 import 'package:diabetesapp/models/account.dart';
+import 'package:diabetesapp/user_current.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -30,7 +31,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
   final List<String> errors = [];
   final _formKey = GlobalKey<FormState>();
   final ImagePicker _imagePicker = new ImagePicker();
-  String _userID="";
 
   @override
   void initState() {
@@ -51,19 +51,16 @@ class _EditProfilePageState extends State<EditProfilePage> {
       });
   }
   void fetchUser() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    var email = prefs.getString('email');
 
     String url = ip + "/api/getAccount.php";
     var response = await http.post(url, body: {
-      'email': email.toString(),
+      'id': UserCurrent.userID.toString(),
     });
 
     if (response.statusCode == 200) {
       final items = json.decode(response.body).cast<Map<String, dynamic>>();
       AccountModel inforAccount = AccountModel.fromJson(items[0]);
       setState(() {
-        _userID = inforAccount.id;
         _username  = TextEditingController(text: inforAccount.username);
         _fullName  = TextEditingController(text: inforAccount.fullname);
         _email  = TextEditingController(text: inforAccount.email);
@@ -77,7 +74,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
   void updateInfor() async {
     var url = ip + "/api/updateAccount.php";
     final response = await http.post(url, body: {
-      "id": _userID,
+      "id": UserCurrent.userID.toString(),
       "fullname": _fullName.text,
       "username": _username.text,
       "email": _email.text,

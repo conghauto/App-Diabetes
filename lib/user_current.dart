@@ -8,14 +8,14 @@ import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class UserCurrent{
-  static String email;
+  static String userID;
   void init(BuildContext context) async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    email = prefs.getString('email');
+    userID = prefs.getString('userID');
   }
-  static Future<String> getUserID() async{
+  static Future<String> getUserID(String email) async{
     String userID = "";
-    String url = ip + "/api/getAccount.php";
+    String url = ip + "/api/getEmailAccount.php";
     var response = await http.post(url, body: {
       'email': email.toString(),
     });

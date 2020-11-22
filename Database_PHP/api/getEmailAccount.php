@@ -3,8 +3,8 @@
     include("config.php");
     // include("Note.php");
 
-    $id= $_POST['id'];
-    $query="SELECT * FROM users WHERE id='".$id."'";
+    $email= $_POST['email'];
+    $query="SELECT * FROM users WHERE email='".$email."'";
     
     $data= mysqli_query($con,$query);
 

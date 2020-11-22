@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:diabetesapp/screens/home/home_screen.dart';
 import 'package:diabetesapp/screens/info_personal/info_person_sreeen.dart';
+import 'package:diabetesapp/user_current.dart';
 import 'package:diabetesapp/widgets/ProgressDialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -41,10 +42,6 @@ class _SignInFacebookState extends State<SignInFacebook>{
         final graphResponse = await http.get('https://graph.facebook.com/v2.12/me?fields=name,picture,email&access_token=${token}');
         final profile = JSON.jsonDecode(graphResponse.body);
 
-        // Lưu trạng thái đăng nhập
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-        prefs.setString('email', profile['email']);
-
         this.setState(() {
           userProfile = profile;
           SignInFacebook.isLoggedIn = true;
@@ -78,6 +75,12 @@ class _SignInFacebookState extends State<SignInFacebook>{
     });
 
     var data = json.decode(response.body);
+    // Lưu trạng thái đăng nhập
+    final String userID = await UserCurrent.getUserID(email);
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('userID', userID);
+
+    UserCurrent().init(context);
 
     if(data == "Success"){
       Navigator.pushNamed(context, InfoPersonScreen.routeName);
