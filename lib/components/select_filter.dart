@@ -1,10 +1,9 @@
-import 'package:diabetesapp/extensions/format_datetime.dart';
 import 'package:diabetesapp/models/filter-service.dart';
 import 'package:diabetesapp/screens/home/home_screen.dart';
-import 'package:diabetesapp/widgets/default_button.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 
 class SelectFilter extends StatefulWidget {
 
@@ -317,28 +316,21 @@ class _SelectFilterState extends State<SelectFilter> {
                                         children: [
                                           Text("Từ"),
                                           FlatButton(onPressed: () async {
-                                            final DateTime picked = await showDatePicker(
-                                              context: context,
-                                              initialDate: startDate,
-                                              firstDate: DateTime(2020),
-                                              lastDate: DateTime(2050),
-                                              initialEntryMode: DatePickerEntryMode
-                                                  .input,
-                                              helpText: 'Từ ngày',
-                                              // Can be used as title
-                                              cancelText: 'Hủy bỏ',
-                                              confirmText: 'Chọn',
-                                              errorFormatText: 'Nhập ngày hợp lệ',
-                                              errorInvalidText: 'Ngày không hợp lệ',
-                                              fieldLabelText: 'Nhập ngày',
-                                              fieldHintText: 'dd/mm/yyyy',
+                                            await DatePicker.showDatePicker(context,
+                                              showTitleActions: true,
+                                              minTime: DateTime(2020,1,1),
+                                              maxTime: DateTime(2050,1,1),
+                                              locale: LocaleType.vi,
+                                              currentTime: DateTime.now(),
+                                              onChanged: (date){
+
+                                              },
+                                              onConfirm: (date) {
+                                                setState(() {
+                                                  startDate = date;
+                                                });
+                                              }
                                             );
-                                            if (picked != null &&
-                                                picked != startDate)
-                                              setState(() {
-                                                startDate = picked;
-//                                                query.startDate=startDate;
-                                              });
                                           }, child: Text(
                                               DateFormat("dd/MM/yyyy").format(
                                                   startDate),
@@ -358,28 +350,21 @@ class _SelectFilterState extends State<SelectFilter> {
                                       children: [
                                         Text("Đến"),
                                         FlatButton(onPressed: () async {
-                                          final DateTime picked = await showDatePicker(
-                                            context: context,
-                                            initialDate: endDate,
-                                            firstDate: DateTime(2020),
-                                            lastDate: DateTime(2050),
-                                            initialEntryMode: DatePickerEntryMode
-                                                .input,
-                                            helpText: 'Từ ngày',
-                                            // Can be used as title
-                                            cancelText: 'Hủy bỏ',
-                                            confirmText: 'Chọn',
-                                            errorFormatText: 'Nhập ngày hợp lệ',
-                                            errorInvalidText: 'Ngày không hợp lệ',
-                                            fieldLabelText: 'Nhập ngày',
-                                            fieldHintText: 'dd/mm/yyyy',
+                                          await DatePicker.showDatePicker(context,
+                                              showTitleActions: true,
+                                              minTime: DateTime(2020,1,1),
+                                              maxTime: DateTime(2050,1,1),
+                                              locale: LocaleType.vi,
+                                              currentTime: DateTime.now(),
+                                              onChanged: (date){
+
+                                              },
+                                              onConfirm: (date) {
+                                                setState(() {
+                                                  endDate = date;
+                                                });
+                                              }
                                           );
-                                          if (picked != null &&
-                                              picked != endDate)
-                                            setState(() {
-                                              endDate = picked;
-//                                              query.endDate=endDate;
-                                            });
                                         }, child: Text(
                                             DateFormat("dd/MM/yyyy").format(
                                                 endDate),
@@ -485,13 +470,5 @@ class _SelectFilterState extends State<SelectFilter> {
     );
   }
 
-//  void search(){
-//    List<dynamic>list=List<dynamic>();
-//    widget.listItems.forEach((element) {
-//        if(query.glycemicType==1){
-//          list.add(element);
-//        }
-//    });
-//  }
 }
 
