@@ -11,6 +11,7 @@ import 'package:diabetesapp/screens/more/components/menu_item.dart';
 import 'package:flutter/material.dart';
 import 'package:diabetesapp/extensions/format_datetime.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class AddLogSceen extends StatefulWidget {
@@ -65,41 +66,65 @@ class _AddLogSceenState extends State<AddLogSceen> with TickerProviderStateMixin
                   ),
                   tooltip: 'Lưu',
                   onPressed: () async {
+                    int countValid = 0;
+                    int countAdded = 0;
                       if(GlobalKeys.key1.currentState!=null){
                         if(GlobalKeys.key1.currentState.isValid){
+                          countValid ++;
                           GlobalKeys.key1.currentState.addGlycemic();
+                          countAdded++;
                         }
                       }
                       if(GlobalKeys.key2.currentState!=null){
                           if(GlobalKeys.key2.currentState.isValid)
                           {
+                            countValid ++;
                             GlobalKeys.key2.currentState.addWeight();
-                            //Navigator.pop(context);
+                            countAdded++;
                           }
                       }
                       if(GlobalKeys.key3.currentState!=null){
                         if(GlobalKeys.key3.currentState.isValidTime&&
                             GlobalKeys.key3.currentState.isValidType)
                         {
+                          countValid ++;
                           GlobalKeys.key3.currentState.addActivity();
+                          countAdded++;
                         }
                       }
 					            if(GlobalKeys.keyCarbs.currentState!=null){
                         if(GlobalKeys.keyCarbs.currentState.isValid)
                         {
+                          countValid ++;
                           GlobalKeys.keyCarbs.currentState.addCarb();
-                          //Navigator.pop(context);
+                          countAdded++;
                         }
                       }
                       if(GlobalKeys.keyMedicine.currentState!=null){
                         if(GlobalKeys.keyMedicine.currentState.isValid)
                         {
+                          countValid ++;
                           GlobalKeys.keyMedicine.currentState.addMedicine();
-//                          Navigator.pop(context);
+                          countAdded++;
+                        }
+                      }
+                      if (countValid == countAdded){
+                        if (countValid > 0) {
+                          Navigator.pushReplacementNamed(
+                              context, HomeScreen.routeName);
+                        } else {
+                          Fluttertoast.showToast(
+                              msg: "Chưa nhập thông tin",
+                              toastLength: Toast.LENGTH_SHORT,
+                              gravity: ToastGravity.CENTER,
+                              timeInSecForIosWeb: 1,
+                              backgroundColor: Colors.red,
+                              textColor: Colors.white,
+                              fontSize: 16.0
+                          );
                         }
                       }
 
-                      Navigator.pushReplacementNamed(context, HomeScreen.routeName);
                   },
                 ),
               ],

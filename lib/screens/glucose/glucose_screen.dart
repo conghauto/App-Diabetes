@@ -109,120 +109,64 @@ class GlucoseScreenState extends State<GlucoseScreen>{
     await fetchMedicine();
     await fetchWeights();
 
-    if(query!=null){
-      if(query[0]=="allDate"||query[1]==""){
-        if(query[4]=="0"){
-          listGlycemics.forEach((element) {
-            listItems.add(element);
-          });
-          listCarbs.forEach((element) {
-            listItems.add(element);
-          });
-          listCarbs.forEach((element) {
-            listItems.add(element);
-          });
-          listWeights.forEach((element) {
-            listItems.add(element);
-          });
-          listActivities.forEach((element) {
-            listItems.add(element);
-          });
-
-          listItems.sort((b,a) => a.measureTime.compareTo(b.measureTime));
-        }
-        if(query[5]=="1"){
-          listGlycemics.forEach((element) {
-            listItems.add(element);
-          });
-        }
-
-        if(query[6]=="2"){
-          listCarbs.forEach((element) {
-            listItems.add(element);
-          });
-        }
-
-        if(query[7]=="3"){
-          listMedicine.forEach((element) {
-            listItems.add(element);
-          });
-        }
-
-        if(query[8]=="4"){
-          listWeights.forEach((element) {
-            listItems.add(element);
-          });
-        }
-
-        if(query[9]=="5"){
-          listActivities.forEach((element) {
-            listItems.add(element);
-          });
-        }
-      }
-      else if(query[0]==""&&query[1]=="customDate"&&query[2]!=""&&query[3]!=""){
-        DateTime startDate=DateTime.parse(query[2]);
-        DateTime endDate=DateTime.parse(query[3]);
-
-        if(query[4]=="0"){
-          // Hiển thị danh sách Glycemic theo khoảng thời gian
-          listGlycemics.forEach((element) {
-            if(element.measureTime.isAfter(startDate)&&element.measureTime.isBefore(endDate)){
-              gly.max=gly.max>double.parse(element.indexG)?gly.max:double.parse(element.indexG);
-              gly.min=gly.min>double.parse(element.indexG)?double.parse(element.indexG):gly.min;
-
-              listIndexGlycemic.add(double.parse(element.indexG));
+    setState(() {
+      if(query!=null){
+        if(query[0]=="allDate"||query[1]==""){
+          if(query[4]=="0"){
+            listGlycemics.forEach((element) {
               listItems.add(element);
-            }
-          });
-          // Tính chỉ số trung bình Glycemic
-          if(listIndexGlycemic.length!=0){
-            listIndexGlycemic.forEach((element) {
-              gly.avgG+= element;
             });
-            gly.avgG/=listIndexGlycemic.length;
+            listCarbs.forEach((element) {
+              listItems.add(element);
+            });
+            listMedicine.forEach((element) {
+              listItems.add(element);
+            });
+            listWeights.forEach((element) {
+              listItems.add(element);
+            });
+            listActivities.forEach((element) {
+              listItems.add(element);
+            });
+
+            listItems.sort((b,a) => a.measureTime.compareTo(b.measureTime));
+          }
+          if(query[5]=="1"){
+            listGlycemics.forEach((element) {
+              listItems.add(element);
+            });
           }
 
-          listCarbs.forEach((element) {
-            if(element.measureTime.isAfter(startDate)&&element.measureTime.isBefore(endDate)){
-              food.cal+=double.parse(element.calo);
-              food.carbs+=double.parse(element.carb);
-
+          if(query[6]=="2"){
+            listCarbs.forEach((element) {
               listItems.add(element);
-            }
-          });
-          listMedicine.forEach((element) {
-            if(element.measureTime.isAfter(startDate)&&element.measureTime.isBefore(endDate))
-              if(element.measureTime.isAfter(startDate)&&element.measureTime.isBefore(endDate))
-                if(element.typeInsulin==listInsulin[0]){
-                  insulin.fastInsulin+= int.parse(element.amount);
-                }else if(element.typeInsulin==listInsulin[1]){
-                  insulin.shortInsulin+= int.parse(element.amount);
-                }else if(element.typeInsulin==listInsulin[2]){
-                  insulin.avgInsulin+= int.parse(element.amount);
-                }else{
-                  insulin.longInsulin+= int.parse(element.amount);
-                }
+            });
+          }
 
-            listItems.add(element);
-          });
-          listWeights.forEach((element) {
-            if(element.measureTime.isAfter(startDate)&&element.measureTime.isBefore(endDate))
+          if(query[7]=="3"){
+            listMedicine.forEach((element) {
               listItems.add(element);
-          });
-          listActivities.forEach((element) {
-            if(element.measureTime.isAfter(startDate)&&element.measureTime.isBefore(endDate)){
-              activity.cal+=double.parse(element.calo);
-              activity.time+=double.parse(element.timeActivity);
+            });
+          }
 
+          if(query[8]=="4"){
+            listWeights.forEach((element) {
               listItems.add(element);
-            }
-          });
+            });
+          }
 
-          listItems.sort((b,a) => a.measureTime.compareTo(b.measureTime));
+          if(query[9]=="5"){
+            listActivities.forEach((element) {
+              listItems.add(element);
+            });
+          }
         }
-        else {
-          if (query[5] == "1") {
+        else if(query[0]==""&&query[1]=="customDate"&&query[2]!=""&&query[3]!=""){
+          DateTime startDate=DateTime.parse(query[2]);
+          DateTime endDate=DateTime.parse(query[3]);
+
+          if(query[4]=="0"){
+            // Hiển thị danh sách Glycemic theo khoảng thời gian
             listGlycemics.forEach((element) {
               if(element.measureTime.isAfter(startDate)&&element.measureTime.isBefore(endDate)){
                 gly.max=gly.max>double.parse(element.indexG)?gly.max:double.parse(element.indexG);
@@ -239,9 +183,7 @@ class GlucoseScreenState extends State<GlucoseScreen>{
               });
               gly.avgG/=listIndexGlycemic.length;
             }
-          }
 
-          if (query[6] == "2") {
             listCarbs.forEach((element) {
               if(element.measureTime.isAfter(startDate)&&element.measureTime.isBefore(endDate)){
                 food.cal+=double.parse(element.calo);
@@ -250,33 +192,25 @@ class GlucoseScreenState extends State<GlucoseScreen>{
                 listItems.add(element);
               }
             });
-          }
-
-          if (query[7] == "3") {
             listMedicine.forEach((element) {
               if(element.measureTime.isAfter(startDate)&&element.measureTime.isBefore(endDate))
-                if(element.typeInsulin==listInsulin[0]){
-                  insulin.fastInsulin+= int.parse(element.amount);
-                }else if(element.typeInsulin==listInsulin[1]){
-                  insulin.shortInsulin+= int.parse(element.amount);
-                }else if(element.typeInsulin==listInsulin[2]){
-                  insulin.avgInsulin+= int.parse(element.amount);
-                }else{
-                  insulin.longInsulin+= int.parse(element.amount);
-                }
+                if(element.measureTime.isAfter(startDate)&&element.measureTime.isBefore(endDate))
+                  if(element.typeInsulin==listInsulin[0]){
+                    insulin.fastInsulin+= int.parse(element.amount);
+                  }else if(element.typeInsulin==listInsulin[1]){
+                    insulin.shortInsulin+= int.parse(element.amount);
+                  }else if(element.typeInsulin==listInsulin[2]){
+                    insulin.avgInsulin+= int.parse(element.amount);
+                  }else{
+                    insulin.longInsulin+= int.parse(element.amount);
+                  }
 
               listItems.add(element);
             });
-          }
-
-          if (query[8] == "4") {
             listWeights.forEach((element) {
               if(element.measureTime.isAfter(startDate)&&element.measureTime.isBefore(endDate))
                 listItems.add(element);
             });
-          }
-
-          if (query[9] == "5") {
             listActivities.forEach((element) {
               if(element.measureTime.isAfter(startDate)&&element.measureTime.isBefore(endDate)){
                 activity.cal+=double.parse(element.calo);
@@ -285,32 +219,100 @@ class GlucoseScreenState extends State<GlucoseScreen>{
                 listItems.add(element);
               }
             });
-          }
 
-          listItems.sort((b,a) => a.measureTime.compareTo(b.measureTime));
+            listItems.sort((b,a) => a.measureTime.compareTo(b.measureTime));
+          }
+          else {
+            if (query[5] == "1") {
+              listGlycemics.forEach((element) {
+                if(element.measureTime.isAfter(startDate)&&element.measureTime.isBefore(endDate)){
+                  gly.max=gly.max>double.parse(element.indexG)?gly.max:double.parse(element.indexG);
+                  gly.min=gly.min>double.parse(element.indexG)?double.parse(element.indexG):gly.min;
+
+                  listIndexGlycemic.add(double.parse(element.indexG));
+                  listItems.add(element);
+                }
+              });
+              // Tính chỉ số trung bình Glycemic
+              if(listIndexGlycemic.length!=0){
+                listIndexGlycemic.forEach((element) {
+                  gly.avgG+= element;
+                });
+                gly.avgG/=listIndexGlycemic.length;
+              }
+            }
+
+            if (query[6] == "2") {
+              listCarbs.forEach((element) {
+                if(element.measureTime.isAfter(startDate)&&element.measureTime.isBefore(endDate)){
+                  food.cal+=double.parse(element.calo);
+                  food.carbs+=double.parse(element.carb);
+
+                  listItems.add(element);
+                }
+              });
+            }
+
+            if (query[7] == "3") {
+              listMedicine.forEach((element) {
+                if(element.measureTime.isAfter(startDate)&&element.measureTime.isBefore(endDate))
+                  if(element.typeInsulin==listInsulin[0]){
+                    insulin.fastInsulin+= int.parse(element.amount);
+                  }else if(element.typeInsulin==listInsulin[1]){
+                    insulin.shortInsulin+= int.parse(element.amount);
+                  }else if(element.typeInsulin==listInsulin[2]){
+                    insulin.avgInsulin+= int.parse(element.amount);
+                  }else{
+                    insulin.longInsulin+= int.parse(element.amount);
+                  }
+
+                listItems.add(element);
+              });
+            }
+
+            if (query[8] == "4") {
+              listWeights.forEach((element) {
+                if(element.measureTime.isAfter(startDate)&&element.measureTime.isBefore(endDate))
+                  listItems.add(element);
+              });
+            }
+
+            if (query[9] == "5") {
+              listActivities.forEach((element) {
+                if(element.measureTime.isAfter(startDate)&&element.measureTime.isBefore(endDate)){
+                  activity.cal+=double.parse(element.calo);
+                  activity.time+=double.parse(element.timeActivity);
+
+                  listItems.add(element);
+                }
+              });
+            }
+
+            listItems.sort((b,a) => a.measureTime.compareTo(b.measureTime));
+          }
         }
       }
-    }
-    else{
-      listGlycemics.forEach((element) {
-        listItems.add(element);
-      });
-      listCarbs.forEach((element) {
-        listItems.add(element);
-      });
-      listCarbs.forEach((element) {
-        listItems.add(element);
-      });
-      listWeights.forEach((element) {
-        listItems.add(element);
-      });
-      listActivities.forEach((element) {
-        listItems.add(element);
-      });
+      else{
+        listGlycemics.forEach((element) {
+          listItems.add(element);
+        });
+        listCarbs.forEach((element) {
+          listItems.add(element);
+        });
+        listCarbs.forEach((element) {
+          listItems.add(element);
+        });
+        listWeights.forEach((element) {
+          listItems.add(element);
+        });
+        listActivities.forEach((element) {
+          listItems.add(element);
+        });
 
-      listItems.sort((b,a) => a.measureTime.compareTo(b.measureTime));
+        listItems.sort((b,a) => a.measureTime.compareTo(b.measureTime));
 
-    }
+      }
+    });
 
   }
 
