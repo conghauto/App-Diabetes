@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
-import 'package:diabetesapp/extensions/format_datetime.dart';
+import 'package:intl/intl.dart';
 class ReportScreen extends StatefulWidget{
   static String routeName = "/report_screen";
   @override
@@ -12,8 +12,8 @@ class ReportScreen extends StatefulWidget{
 class _ReportScreenState extends State<ReportScreen>{
   String _name = "Toàn Trần";
   String _email = "quoctoan0629@gmail.com";
-  DateTime _eventStartDate = DateTime.now();
-  DateTime _eventEndDate = DateTime.now();
+  DateTime startDate = DateTime.now();
+  DateTime endDate = DateTime.now();
   List _types = ["Đường huyết", "Insulin", "Carbs"];
 
   List<DropdownMenuItem<String>> _dropDownMenuItems;
@@ -67,45 +67,76 @@ class _ReportScreenState extends State<ReportScreen>{
                 ),
               ],
             ),
-            Column(
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                ListTile(
-                  title: Text("Từ ngày"),
-                  subtitle: Text(
-                      "${FormatDateTime.convertDayOfWeek(_eventStartDate.weekday)}, ${FormatDateTime.formatDay(_eventStartDate.day)} th ${_eventStartDate.month}, ${_eventStartDate.year} ",
-                      style: TextStyle(color: Colors.blue[800])),
-                  trailing: Icon(Icons.calendar_today_sharp),
-                  onTap: ()async{
-                    DateTime picked = await DatePicker.showDateTimePicker(context, showTitleActions: true, onChanged: (date) {
-//                    print('change $date in time zone ' + date.timeZoneOffset.inHours.toString());
-                    }, onConfirm: (date) {
-                      print('confirm $date');
-                    }, currentTime: DateTime.now(), locale: LocaleType.vi);
-//                  DateTime picked = await showDatePicker(context: context, initialDate: _eventStartDate, firstDate: DateTime(_eventStartDate.year-5), lastDate: DateTime(_eventStartDate.year+5));
-                    if(picked != null) {
-                      setState(() {
-                        _eventStartDate = picked;
-                      });
-                    }
-                  },
+                Column(
+                  children: [
+                    Row(
+                      children: [
+                        Text("Từ"),
+                        FlatButton(onPressed: () async {
+                          await DatePicker.showDatePicker(context,
+                              showTitleActions: true,
+                              minTime: DateTime(2020,1,1),
+                              maxTime: DateTime(2050,1,1),
+                              locale: LocaleType.vi,
+                              currentTime: DateTime.now(),
+                              onChanged: (date){
+
+                              },
+                              onConfirm: (date) {
+                                setState(() {
+                                  startDate = date;
+                                });
+                              }
+                          );},
+                          child: Text(
+                            DateFormat("dd/MM/yyyy").format(
+                                startDate),
+                            style: TextStyle(
+                                color: Colors.blue[800],
+                                fontFamily: 'Roboto',
+                                fontSize: 16)
+                        ),
+                        )
+                      ],
+                    ),
+                  ],
                 ),
-                ListTile(
-                  title: Text("Đến ngày", style: TextStyle(color: Colors.black),),
-                  subtitle: Text(
-                      "${FormatDateTime.convertDayOfWeek(_eventEndDate.weekday)}, ${FormatDateTime.formatDay(_eventEndDate.day)} th ${_eventEndDate.month}, ${_eventEndDate.year}",
-                      style: TextStyle(color: Colors.blue[800])),
-                  trailing: Icon(Icons.calendar_today),
-                  onTap: ()async{
-                    DateTime picked = await DatePicker.showDateTimePicker(context, showTitleActions: true, onChanged: (date) {
-                    }, onConfirm: (date) {
-                      print('confirm $date');
-                    }, currentTime: DateTime.now(), locale: LocaleType.vi);
-                    if(picked != null) {
-                      setState(() {
-                        _eventEndDate = picked;
-                      });
-                    }
-                  },
+                Column(
+                  children: [
+                    Row(
+                      children: [
+                        Text("Đến"),
+                        FlatButton(onPressed: () async {
+                          await DatePicker.showDatePicker(context,
+                              showTitleActions: true,
+                              minTime: DateTime(2020,1,1),
+                              maxTime: DateTime(2050,1,1),
+                              locale: LocaleType.vi,
+                              currentTime: DateTime.now(),
+                              onChanged: (date){
+
+                              },
+                              onConfirm: (date) {
+                                setState(() {
+                                  endDate = date;
+                                });
+                              }
+                          );
+                        }, child: Text(
+                            DateFormat("dd/MM/yyyy").format(
+                                endDate),
+                            style: TextStyle(
+                                color: Colors.blue[800],
+                                fontFamily: 'Roboto',
+                                fontSize: 16)
+                        ),
+                        )
+                      ],
+                    )
+                  ],
                 ),
               ],
             ),

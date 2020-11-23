@@ -1,3 +1,4 @@
+import 'package:diabetesapp/screens/chart/components/simple_time_chart.dart';
 import 'package:diabetesapp/screens/chart/report_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +13,50 @@ class ChartScreen extends StatefulWidget{
   }
 }
 class _ChartScreenStateful extends State<ChartScreen>{
+  static List<charts.Series<TimeSeriesSales, DateTime>> _createSampleDataTimeSeries() {
+    final data1 = [
+      new TimeSeriesSales(new DateTime(2017, 9, 19), 5),
+      new TimeSeriesSales(new DateTime(2017, 9, 26), 25),
+      new TimeSeriesSales(new DateTime(2017, 10, 3), 100),
+      new TimeSeriesSales(new DateTime(2017, 10, 10), 75),
+    ];
+    final data2 = [
+      new TimeSeriesSales(new DateTime(2017, 9, 19), 10),
+      new TimeSeriesSales(new DateTime(2017, 9, 26), 20),
+      new TimeSeriesSales(new DateTime(2017, 10, 3), 125),
+      new TimeSeriesSales(new DateTime(2017, 10, 10), 65),
+    ];
+    final data3 = [
+      new TimeSeriesSales(new DateTime(2017, 9, 19), 7),
+      new TimeSeriesSales(new DateTime(2017, 9, 26), 35),
+      new TimeSeriesSales(new DateTime(2017, 10, 3), 60),
+      new TimeSeriesSales(new DateTime(2017, 10, 10), 175),
+    ];
+
+    return [
+      new charts.Series<TimeSeriesSales, DateTime>(
+        id: 'Trước bữa ăn',
+        colorFn: (_, __) => charts.MaterialPalette.red.shadeDefault,
+        domainFn: (TimeSeriesSales sales, _) => sales.time,
+        measureFn: (TimeSeriesSales sales, _) => sales.sales,
+        data: data1,
+      ),
+      new charts.Series<TimeSeriesSales, DateTime>(
+        id: 'Sau bữa ăn',
+        colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
+        domainFn: (TimeSeriesSales sales, _) => sales.time,
+        measureFn: (TimeSeriesSales sales, _) => sales.sales,
+        data: data2,
+      ),
+      new charts.Series<TimeSeriesSales, DateTime>(
+        id: 'Khác',
+        colorFn: (_, __) => charts.MaterialPalette.green.shadeDefault,
+        domainFn: (TimeSeriesSales sales, _) => sales.time,
+        measureFn: (TimeSeriesSales sales, _) => sales.sales,
+        data: data3,
+      )
+    ];
+  }
   static List<charts.Series<OrdinalSales, String>> _createSampleData() {
     final desktopSalesData = [
       new OrdinalSales('2014', 5),
@@ -178,7 +223,7 @@ class _ChartScreenStateful extends State<ChartScreen>{
                 SizedBox(
                   width: double.infinity,
                   height: 200,
-                  child: SimpleSeriesLegend(_createSampleData(), animate: false),
+                  child: SimpleTimeSeriesChart(_createSampleDataTimeSeries(), animate: false),
                 )
               ],
             ),
