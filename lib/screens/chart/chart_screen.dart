@@ -1,10 +1,15 @@
+import 'dart:convert';
+
+import 'package:diabetesapp/models/glycemic.dart';
 import 'package:diabetesapp/screens/chart/components/simple_time_chart.dart';
 import 'package:diabetesapp/screens/chart/report_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
+import '../../constants.dart';
+import '../../user_current.dart';
 import 'components/bar_chart_component.dart';
-
+import 'package:http/http.dart' as http;
 class ChartScreen extends StatefulWidget{
   static String routeName = "/chart_screen";
   @override
@@ -13,47 +18,91 @@ class ChartScreen extends StatefulWidget{
   }
 }
 class _ChartScreenStateful extends State<ChartScreen>{
-  static List<charts.Series<TimeSeriesSales, DateTime>> _createSampleDataTimeSeries() {
-    final data1 = [
-      new TimeSeriesSales(new DateTime(2017, 9, 19), 5),
-      new TimeSeriesSales(new DateTime(2017, 9, 26), 25),
-      new TimeSeriesSales(new DateTime(2017, 10, 3), 100),
-      new TimeSeriesSales(new DateTime(2017, 10, 10), 75),
-    ];
-    final data2 = [
-      new TimeSeriesSales(new DateTime(2017, 9, 19), 10),
-      new TimeSeriesSales(new DateTime(2017, 9, 26), 20),
-      new TimeSeriesSales(new DateTime(2017, 10, 3), 125),
-      new TimeSeriesSales(new DateTime(2017, 10, 10), 65),
-    ];
-    final data3 = [
-      new TimeSeriesSales(new DateTime(2017, 9, 19), 7),
-      new TimeSeriesSales(new DateTime(2017, 9, 26), 35),
-      new TimeSeriesSales(new DateTime(2017, 10, 3), 60),
-      new TimeSeriesSales(new DateTime(2017, 10, 10), 175),
-    ];
+  List<GlycemicModel> listGlycemics = new List<GlycemicModel>();
+  List<TimeSeriesGlycemic> listBeforeMeal = new List<TimeSeriesGlycemic>();
+  List<TimeSeriesGlycemic> listAfterMeal = new List<TimeSeriesGlycemic>();
+  List<TimeSeriesGlycemic> listOthers = new List<TimeSeriesGlycemic>();
+  DateTime startDate = DateTime.now().subtract(new Duration(days: 7));
+  DateTime endDate = DateTime.now();
+  List _types = ["1 tuần", "1 tháng", "1 năm"];
+  String _currentTime;
+  List<DropdownMenuItem<String>> _dropDownMenuItems;
+  @override
+  void initState() {
+    _dropDownMenuItems = getDropDownMenuItems();
+    _currentTime = _dropDownMenuItems[0].value;
+    fetchGlycemics();
+  }
+  Future<void> fetchGlycemics() async {
+    String url = ip + "/api/getGlycemics.php?userID="+UserCurrent.userID.toString();
+    var response = await http.get(url);
 
+    if (response.statusCode == 200) {
+      final items = json.decode(response.body).cast<Map<String, dynamic>>();
+
+      List<GlycemicModel> list= items.map<GlycemicModel>((json) {
+        return GlycemicModel.fromJson(json);
+      }).toList();
+
+      if (list != null) {
+        setState(() {
+          listGlycemics = list;
+        });
+        filterGlycemics(this.startDate, this.endDate);
+      }
+    }
+    else {
+      throw Exception('Failed to load data.');
+    }
+  }
+  void filterGlycemics(DateTime startDate, DateTime endDate) {
+    listBeforeMeal = new List();
+    listAfterMeal = new List();
+    listOthers = new List();
+    if (listGlycemics != null) {
+      listGlycemics.forEach((element) {
+        if(element.measureTime.isAfter(startDate) && element.measureTime.isBefore(endDate)){
+          if (element.tags.contains("Trước bữa")){
+            setState(() {
+              listBeforeMeal.add(new TimeSeriesGlycemic(element.measureTime, double.tryParse(element.indexG)));
+            });
+          }
+          if (element.tags.contains("Sau bữa")){
+            setState(() {
+              listAfterMeal.add(new TimeSeriesGlycemic(element.measureTime, double.tryParse(element.indexG)));
+            });
+          }
+          if (!element.tags.contains("Trước bữa") && !element.tags.contains("Sau bữa")){
+            setState(() {
+              listOthers.add(new TimeSeriesGlycemic(element.measureTime, double.tryParse(element.indexG)));
+            });
+          }
+        }
+      });
+    }
+  }
+  List<charts.Series<TimeSeriesGlycemic, DateTime>> _createGlycemicDataTimeSeries() {
     return [
-      new charts.Series<TimeSeriesSales, DateTime>(
+      new charts.Series<TimeSeriesGlycemic, DateTime>(
         id: 'Trước bữa ăn',
         colorFn: (_, __) => charts.MaterialPalette.red.shadeDefault,
-        domainFn: (TimeSeriesSales sales, _) => sales.time,
-        measureFn: (TimeSeriesSales sales, _) => sales.sales,
-        data: data1,
+        domainFn: (TimeSeriesGlycemic sales, _) => sales.time,
+        measureFn: (TimeSeriesGlycemic sales, _) => sales.glycemic,
+        data: listBeforeMeal,
       ),
-      new charts.Series<TimeSeriesSales, DateTime>(
+      new charts.Series<TimeSeriesGlycemic, DateTime>(
         id: 'Sau bữa ăn',
         colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
-        domainFn: (TimeSeriesSales sales, _) => sales.time,
-        measureFn: (TimeSeriesSales sales, _) => sales.sales,
-        data: data2,
+        domainFn: (TimeSeriesGlycemic sales, _) => sales.time,
+        measureFn: (TimeSeriesGlycemic sales, _) => sales.glycemic,
+        data: listAfterMeal,
       ),
-      new charts.Series<TimeSeriesSales, DateTime>(
+      new charts.Series<TimeSeriesGlycemic, DateTime>(
         id: 'Khác',
         colorFn: (_, __) => charts.MaterialPalette.green.shadeDefault,
-        domainFn: (TimeSeriesSales sales, _) => sales.time,
-        measureFn: (TimeSeriesSales sales, _) => sales.sales,
-        data: data3,
+        domainFn: (TimeSeriesGlycemic sales, _) => sales.time,
+        measureFn: (TimeSeriesGlycemic sales, _) => sales.glycemic,
+        data: listOthers,
       )
     ];
   }
@@ -111,6 +160,16 @@ class _ChartScreenStateful extends State<ChartScreen>{
         data: mobileSalesData,
       ),
     ];
+  }
+  List<DropdownMenuItem<String>> getDropDownMenuItems() {
+    List<DropdownMenuItem<String>> items = new List();
+    for (String type in _types) {
+      items.add(new DropdownMenuItem(
+          value: type,
+          child: new Text(type)
+      ));
+    }
+    return items;
   }
   @override
   Widget build(BuildContext context) {
@@ -218,12 +277,16 @@ class _ChartScreenStateful extends State<ChartScreen>{
                     ),
                     textAlign: TextAlign.right,
                   ),
-                  trailing: Text("10 mg/dL"),
+                  trailing: DropdownButton(
+                    value: _currentTime,
+                    items: _dropDownMenuItems,
+                    onChanged: changedDropDownItem,
+                  ),
                 ),
                 SizedBox(
                   width: double.infinity,
                   height: 200,
-                  child: SimpleTimeSeriesChart(_createSampleDataTimeSeries(), animate: false),
+                  child: SimpleTimeSeriesChart(_createGlycemicDataTimeSeries(), animate: false),
                 )
               ],
             ),
@@ -263,4 +326,23 @@ class _ChartScreenStateful extends State<ChartScreen>{
       ),
     );
   }
+  void changedDropDownItem(String selectedTime) {
+    setState(() {
+      _currentTime = selectedTime;
+      if (selectedTime == "1 tuần"){
+        this.startDate = DateTime.now().subtract(Duration(days: 7));
+      } else if (selectedTime == "1 tháng") {
+        this.startDate = DateTime.now().subtract(Duration(days: 30));
+      } else if (selectedTime == "1 năm") {
+        this.startDate = DateTime.now().subtract(Duration(days: 365));
+      }
+    });
+    filterGlycemics(startDate, endDate);
+  }
+}
+class TimeSeriesSales {
+  final DateTime time;
+  final int sales;
+
+  TimeSeriesSales(this.time, this.sales);
 }

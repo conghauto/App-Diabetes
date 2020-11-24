@@ -22,9 +22,9 @@ class SimpleTimeSeriesChart extends StatelessWidget {
 }
 
 /// Sample time series data type.
-class TimeSeriesSales {
+class TimeSeriesGlycemic {
   final DateTime time;
-  final int sales;
+  final double glycemic;
 
-  TimeSeriesSales(this.time, this.sales);
+  TimeSeriesGlycemic(this.time, this.glycemic);
 }
