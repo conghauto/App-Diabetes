@@ -24,7 +24,7 @@ class SimpleTimeSeriesChart extends StatelessWidget {
 /// Sample time series data type.
 class TimeSeriesGlycemic {
   final DateTime time;
-  final double glycemic;
+  final double data;
 
-  TimeSeriesGlycemic(this.time, this.glycemic);
+  TimeSeriesGlycemic(this.time, this.data);
 }
