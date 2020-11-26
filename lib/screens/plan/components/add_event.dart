@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:diabetesapp/constants.dart';
 import 'package:diabetesapp/extensions/format_datetime.dart';
 import 'package:diabetesapp/models/event.dart';
+import 'package:diabetesapp/user_current.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -55,6 +56,7 @@ class _AddEventScreenState extends State<AddEventScreen> {
   final _formKey = GlobalKey<FormState>();
   final _key = GlobalKey<ScaffoldState>();
   bool processing;
+  int id = 0;
 
   @override
   void initState() {
@@ -159,10 +161,12 @@ class _AddEventScreenState extends State<AddEventScreen> {
       "description": _description.text,
       "eventStartDate": _eventStartDate.toString(),
       "eventEndDate": _eventEndDate.toString(),
+      'userID': UserCurrent.userID.toString(),
     });
 
-    var data = json.decode(response.body);
-    print(data);
+    var data = (json.decode(response.body)).toString();
+
+
     if(data=="Fail"){
       Fluttertoast.showToast(
           msg: "Đã xáy ra lỗi",
@@ -174,6 +178,8 @@ class _AddEventScreenState extends State<AddEventScreen> {
           fontSize: 16.0
       );
     }else {
+      id = int.parse((json.decode(response.body)).toString());
+      showNotificationCustomSound(_eventEndDate,id,_title.text.toString(),_description.text.toString());
       Fluttertoast.showToast(
           msg: "Tạo lịch nhắc thành công",
           toastLength: Toast.LENGTH_SHORT,
@@ -296,10 +302,9 @@ class _AddEventScreenState extends State<AddEventScreen> {
                              Navigator.pop(context);
                            });
                         } else {
-                            sendData();
+                            await sendData();
 
                             setState(() {
-                              showNotificationCustomSound(_eventEndDate,_title.text.toString(),_description.text.toString());
                               Navigator.pop(context);
                             });
                         }
@@ -339,8 +344,10 @@ class _AddEventScreenState extends State<AddEventScreen> {
     print(data);
 
     if (data=="Success"){
-      _cancelNotification();
-      showNotificationCustomSound(_eventEndDate,_title.text.toString(),_description.text.toString());
+      int i = int.parse(id);
+      await _cancelNotification(i);
+
+      showNotificationCustomSound(_eventEndDate,i,_title.text.toString(),_description.text.toString());
       Fluttertoast.showToast(
           msg: "Cập nhật thành công",
           toastLength: Toast.LENGTH_SHORT,
@@ -365,35 +372,38 @@ class _AddEventScreenState extends State<AddEventScreen> {
   }
 
   Future<void> showNotificationCustomSound(DateTime scheduledNotificationDateTime,
-      String title, String body) async {
+      int id, String title, String body) async {
     const AndroidNotificationDetails androidPlatformChannelSpecifics =
     AndroidNotificationDetails(
       'your other channel id',
       'your other channel name',
       'your other channel description',
+      icon: 'alarm',
       importance: Importance.high,
       priority: Priority.high,
       ticker: 'ticker',
       playSound: true,
-      sound: RawResourceAndroidNotificationSound('tt'),
+      sound: RawResourceAndroidNotificationSound('alert'),
     );
     const IOSNotificationDetails iOSPlatformChannelSpecifics =
-    IOSNotificationDetails(sound: 'xiaomi');
+    IOSNotificationDetails(sound: 'alert');
     const MacOSNotificationDetails macOSPlatformChannelSpecifics =
-    MacOSNotificationDetails(sound: 'xiaomi');
+    MacOSNotificationDetails(sound: 'alert');
     const NotificationDetails platformChannelSpecifics = NotificationDetails(
         android: androidPlatformChannelSpecifics,
         iOS: iOSPlatformChannelSpecifics,
         macOS: macOSPlatformChannelSpecifics);
     await flutterLocalNotificationsPlugin.schedule(
-        0,
+        id,
         title,
         body,
         scheduledNotificationDateTime,
-        platformChannelSpecifics);
+        platformChannelSpecifics,
+        androidAllowWhileIdle: true);
   }
 
-  Future<void> _cancelNotification() async {
-    await flutterLocalNotificationsPlugin.cancel(0);
+  Future<void> _cancelNotification(int id) async {
+//    int id = (idNote==""||idNote=="0")?0:int.parse(idNote);
+    await flutterLocalNotificationsPlugin.cancel(id);
   }
 }

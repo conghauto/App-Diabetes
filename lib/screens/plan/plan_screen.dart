@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:diabetesapp/constants.dart';
 import 'package:diabetesapp/screens/plan/components/add_event.dart';
 import 'package:diabetesapp/screens/plan/components/view_event.dart';
+import 'package:diabetesapp/user_current.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
@@ -70,7 +71,8 @@ class _PlanScreenState extends State<PlanScreen> {
   final String uri = ip + "/api/getNotes.php";
 
   Future<List<EventModel>> fetchEvents() async {
-    var response = await http.get(uri);
+    String url = ip + "/api/getNotes.php?userID="+UserCurrent.userID.toString();
+    var response = await http.get(url);
 
     if (response.statusCode == 200) {
       final items = json.decode(response.body).cast<Map<String, dynamic>>();
@@ -257,7 +259,6 @@ class _PlanScreenState extends State<PlanScreen> {
                                 },
                                 onLongPress: ()async{
                                   setState(() {
-                                    _cancelNotification();
                                     _showMyDialog(event.id);
                                   });
                                 },
@@ -354,6 +355,7 @@ class _PlanScreenState extends State<PlanScreen> {
         Widget continueButton = FlatButton(
           child: Text("Tiếp tục"),
           onPressed: () {
+            _cancelNotification(id);
             deleteItem(id);
           },
         );
@@ -378,7 +380,8 @@ class _PlanScreenState extends State<PlanScreen> {
     return d2;
   }
 
-  Future<void> _cancelNotification() async {
-    await flutterLocalNotificationsPlugin.cancel(0);
+  Future<void> _cancelNotification(String idNote) async {
+    int id = (idNote==""||idNote=="0")?0:int.parse(idNote);
+    await flutterLocalNotificationsPlugin.cancel(id);
   }
 }
