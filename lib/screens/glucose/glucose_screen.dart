@@ -91,13 +91,6 @@ class GlucoseScreenState extends State<GlucoseScreen>{
 //    });
     sortItems();
   }
-//  void loadData() async {
-//    await fetchGlycemics();
-//    await fetchActivities();
-//    await fetchCarbs();
-//    await fetchMedicine();
-//    await fetchWeights();
-//  }
 
   void sortItems()async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -193,20 +186,22 @@ class GlucoseScreenState extends State<GlucoseScreen>{
               }
             });
             listMedicine.forEach((element) {
-              if(element.measureTime.isAfter(startDate)&&element.measureTime.isBefore(endDate))
-                if(element.measureTime.isAfter(startDate)&&element.measureTime.isBefore(endDate))
-                  if(element.typeInsulin==listInsulin[0]){
-                    insulin.fastInsulin+= int.parse(element.amount);
-                  }else if(element.typeInsulin==listInsulin[1]){
-                    insulin.shortInsulin+= int.parse(element.amount);
-                  }else if(element.typeInsulin==listInsulin[2]){
-                    insulin.avgInsulin+= int.parse(element.amount);
-                  }else{
-                    insulin.longInsulin+= int.parse(element.amount);
-                  }
+              if(element.measureTime.isAfter(startDate)&&element.measureTime.isBefore(endDate)) {
+                if (element.typeInsulin == listInsulin[0]) {
+                  insulin.fastInsulin += int.parse(element.amount);
+                }
+                else if (element.typeInsulin == listInsulin[1]) {
+                  insulin.shortInsulin += int.parse(element.amount);
+                } else if (element.typeInsulin == listInsulin[2]) {
+                  insulin.avgInsulin += int.parse(element.amount);
+                } else {
+                  insulin.longInsulin += int.parse(element.amount);
+                }
 
-              listItems.add(element);
+                listItems.add(element);
+              }
             });
+
             listWeights.forEach((element) {
               if(element.measureTime.isAfter(startDate)&&element.measureTime.isBefore(endDate))
                 listItems.add(element);

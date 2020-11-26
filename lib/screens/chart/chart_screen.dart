@@ -91,6 +91,35 @@ class _ChartScreenStateful extends State<ChartScreen>{
         return WeightModel.fromJson(json);
       }).toList();
 
+//    Lấy cân nặng trung bình trong 1 ngày
+      List<DateTime> listDateTest = new List<DateTime>();
+      Map<DateTime,double> listAvgWeight = new Map<DateTime,double>();
+
+      for(int i=0;i<list.length;i++){
+          listDateTest.add(new DateTime.utc(list[i].measureTime.year,list[i].measureTime.month,
+              list[i].measureTime.day));
+      }
+
+      listDateTest = listDateTest.toSet().toList();
+
+      for(int i=0;i<listDateTest.length;i++){
+        List<double> listWeightOfDay = new List<double>();
+        double avg = 0;
+        list.forEach((element) {
+          if(listDateTest[i].year==element.measureTime.year&&
+              listDateTest[i].month==element.measureTime.month&& listDateTest[i].day==element.measureTime.day){
+            avg+=double.parse(element.weight);
+            listWeightOfDay.add(double.parse(element.weight));
+          }
+        });
+
+        if(listWeightOfDay!=null){
+          avg=double.parse((avg/listWeightOfDay.length).toStringAsFixed(2));
+          listAvgWeight[listDateTest[i]]=avg;
+        }
+      }
+
+
       if (list != null) {
         setState(() {
           listWeights = list;
