@@ -312,28 +312,67 @@ class _SelectFilterState extends State<SelectFilter> {
                               children: [
                                 Column(
                                   children: [
-                                    Row(
+                                    Padding(
+                                      padding: const EdgeInsets.only(left: 15,top:10),
+                                      child: Row(
+                                          children: [
+                                            Text("Từ"),
+                                            FlatButton(onPressed: () async {
+                                              await DatePicker.showDatePicker(context,
+                                                showTitleActions: true,
+                                                minTime: DateTime(2020,1,1),
+                                                maxTime: DateTime(2050,1,1),
+                                                locale: LocaleType.vi,
+                                                currentTime: DateTime.now(),
+                                                onChanged: (date){
+
+                                                },
+                                                onConfirm: (date) {
+                                                  setState(() {
+                                                    startDate = date;
+                                                  });
+                                                }
+                                              );
+                                            }, child: Text(
+                                                DateFormat("dd/MM/yyyy").format(
+                                                    startDate),
+                                                style: TextStyle(
+                                                    color: Colors.blue[800],
+                                                    fontFamily: 'Roboto',
+                                                    fontSize: 16)
+                                            ),
+                                            )
+                                          ],
+                                        ),
+                                    ),
+                                  ],
+                                ),
+                                Column(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(left: 10,top:10),
+                                      child: Row(
                                         children: [
-                                          Text("Từ"),
+                                          Text("Đến"),
                                           FlatButton(onPressed: () async {
                                             await DatePicker.showDatePicker(context,
-                                              showTitleActions: true,
-                                              minTime: DateTime(2020,1,1),
-                                              maxTime: DateTime(2050,1,1),
-                                              locale: LocaleType.vi,
-                                              currentTime: DateTime.now(),
-                                              onChanged: (date){
+                                                showTitleActions: true,
+                                                minTime: DateTime(2020,1,1),
+                                                maxTime: DateTime(2050,1,1),
+                                                locale: LocaleType.vi,
+                                                currentTime: DateTime.now(),
+                                                onChanged: (date){
 
-                                              },
-                                              onConfirm: (date) {
-                                                setState(() {
-                                                  startDate = date;
-                                                });
-                                              }
+                                                },
+                                                onConfirm: (date) {
+                                                  setState(() {
+                                                    endDate = date;
+                                                  });
+                                                }
                                             );
                                           }, child: Text(
                                               DateFormat("dd/MM/yyyy").format(
-                                                  startDate),
+                                                  endDate),
                                               style: TextStyle(
                                                   color: Colors.blue[800],
                                                   fontFamily: 'Roboto',
@@ -342,39 +381,6 @@ class _SelectFilterState extends State<SelectFilter> {
                                           )
                                         ],
                                       ),
-                                  ],
-                                ),
-                                Column(
-                                  children: [
-                                    Row(
-                                      children: [
-                                        Text("Đến"),
-                                        FlatButton(onPressed: () async {
-                                          await DatePicker.showDatePicker(context,
-                                              showTitleActions: true,
-                                              minTime: DateTime(2020,1,1),
-                                              maxTime: DateTime(2050,1,1),
-                                              locale: LocaleType.vi,
-                                              currentTime: DateTime.now(),
-                                              onChanged: (date){
-
-                                              },
-                                              onConfirm: (date) {
-                                                setState(() {
-                                                  endDate = date;
-                                                });
-                                              }
-                                          );
-                                        }, child: Text(
-                                            DateFormat("dd/MM/yyyy").format(
-                                                endDate),
-                                            style: TextStyle(
-                                                color: Colors.blue[800],
-                                                fontFamily: 'Roboto',
-                                                fontSize: 16)
-                                        ),
-                                        )
-                                      ],
                                     )
                                   ],
                                 ),
@@ -394,7 +400,7 @@ class _SelectFilterState extends State<SelectFilter> {
                   color: Colors.black,
                 ),
                 Expanded(
-                  flex: 3,
+                  flex: valuesOfDateTime["customDate"] == true?3:3,
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
