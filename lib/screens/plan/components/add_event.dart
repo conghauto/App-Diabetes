@@ -3,24 +3,52 @@ import 'dart:convert';
 import 'package:diabetesapp/constants.dart';
 import 'package:diabetesapp/extensions/format_datetime.dart';
 import 'package:diabetesapp/models/event.dart';
-import 'package:diabetesapp/screens/plan/plan_screen.dart';
+import 'package:diabetesapp/user_current.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:rxdart/subjects.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+FlutterLocalNotificationsPlugin();
+
+/// Streams are created so that app can respond to notification-related events
+/// since the plugin is initialised in the `main` function
+final BehaviorSubject<ReceivedNotification> didReceiveLocalNotificationSubject =
+BehaviorSubject<ReceivedNotification>();
+
+final BehaviorSubject<String> selectNotificationSubject =
+BehaviorSubject<String>();
+
+
+class ReceivedNotification {
+  ReceivedNotification({
+    @required this.id,
+    @required this.title,
+    @required this.body,
+    @required this.payload,
+  });
+
+  final int id;
+  final String title;
+  final String body;
+  final String payload;
+}
 class AddEventScreen extends StatefulWidget {
   static String routeName = "/add_event";
   final EventModel note;
+  final DateTime dateSelected;
 
-  AddEventScreen({Key key, this.note}) : super(key: key);
+  AddEventScreen({Key key, this.note, this.dateSelected}) : super(key: key);
 
   @override
   _AddEventScreenState createState() => _AddEventScreenState();
 }
 
 class _AddEventScreenState extends State<AddEventScreen> {
-  TextStyle style = TextStyle(fontFamily: 'Roboto',fontSize: 20.0);
   TextEditingController _title;
   TextEditingController _description;
   DateTime _eventStartDate;
@@ -28,6 +56,7 @@ class _AddEventScreenState extends State<AddEventScreen> {
   final _formKey = GlobalKey<FormState>();
   final _key = GlobalKey<ScaffoldState>();
   bool processing;
+  int id = 0;
 
   @override
   void initState() {
@@ -39,13 +68,91 @@ class _AddEventScreenState extends State<AddEventScreen> {
       _eventStartDate = widget.note.eventStartDate;
       _eventEndDate = widget.note.eventEndDate;
     }else{
-      _eventStartDate = DateTime.now();
+      _eventStartDate = widget.dateSelected;
       _eventEndDate = DateTime.now();
     }
 
     processing = false;
+    _requestPermissions();
+    _configureDidReceiveLocalNotificationSubject();
+    _configureSelectNotificationSubject();
   }
 
+  void _requestPermissions() {
+    flutterLocalNotificationsPlugin
+        .resolvePlatformSpecificImplementation<
+        IOSFlutterLocalNotificationsPlugin>()
+        ?.requestPermissions(
+      alert: true,
+      badge: true,
+      sound: true,
+    );
+    flutterLocalNotificationsPlugin
+        .resolvePlatformSpecificImplementation<
+        MacOSFlutterLocalNotificationsPlugin>()
+        ?.requestPermissions(
+      alert: true,
+      badge: true,
+      sound: true,
+    );
+  }
+
+  void _configureDidReceiveLocalNotificationSubject() {
+    didReceiveLocalNotificationSubject.stream
+        .listen((ReceivedNotification receivedNotification) async {
+      await showDialog(
+        context: context,
+        builder: (BuildContext context) => CupertinoAlertDialog(
+          title: receivedNotification.title != null
+              ? Text(receivedNotification.title)
+              : null,
+          content: receivedNotification.body != null
+              ? Text(receivedNotification.body)
+              : null,
+          actions: <Widget>[
+            CupertinoDialogAction(
+              isDefaultAction: true,
+              onPressed: () async {
+                Navigator.of(context, rootNavigator: true).pop();
+                await Navigator.push(
+                  context,
+                  MaterialPageRoute<void>(
+                    builder: (BuildContext context) =>
+                    AddEventScreen(
+                      note: widget.note,
+                    )
+                  )
+                );
+              },
+              child: const Text('Ok'),
+            )
+          ],
+        ),
+      );
+    });
+  }
+
+  void _configureSelectNotificationSubject() {
+    selectNotificationSubject.stream.listen((String payload) async {
+      await Navigator.push(
+          context,
+          MaterialPageRoute<void>(
+              builder: (BuildContext context) =>
+                  AddEventScreen(
+                    note: widget.note,
+                  )
+          )
+      );
+    });
+  }
+
+  void dispose() {
+    didReceiveLocalNotificationSubject.close();
+    selectNotificationSubject.close();
+    _title.dispose();
+    _description.dispose();
+    super.dispose();
+  }
 
   void sendData() async {
     var url = ip + "/api/addNote.php";
@@ -54,10 +161,12 @@ class _AddEventScreenState extends State<AddEventScreen> {
       "description": _description.text,
       "eventStartDate": _eventStartDate.toString(),
       "eventEndDate": _eventEndDate.toString(),
+      'userID': UserCurrent.userID.toString(),
     });
 
-    var data = json.decode(response.body);
-    print(data);
+    var data = (json.decode(response.body)).toString();
+
+
     if(data=="Fail"){
       Fluttertoast.showToast(
           msg: "Đã xáy ra lỗi",
@@ -69,6 +178,8 @@ class _AddEventScreenState extends State<AddEventScreen> {
           fontSize: 16.0
       );
     }else {
+      id = int.parse((json.decode(response.body)).toString());
+      showNotificationCustomSound(_eventEndDate,id,_title.text.toString(),_description.text.toString());
       Fluttertoast.showToast(
           msg: "Tạo lịch nhắc thành công",
           toastLength: Toast.LENGTH_SHORT,
@@ -88,7 +199,7 @@ class _AddEventScreenState extends State<AddEventScreen> {
         title: Text(widget.note != null ? "Thay đổi" : "Thêm nhắc nhở",
           style: TextStyle(fontWeight: FontWeight.bold,
               fontSize: 20,
-              color: Colors.orange),
+              color: Color(0XFF444974)),
         ),
         backgroundColor: Colors.black12,
         automaticallyImplyLeading: true,
@@ -107,7 +218,7 @@ class _AddEventScreenState extends State<AddEventScreen> {
                   controller: _title,
                   validator: (value) =>
                   (value.isEmpty) ? "Nhập tên tiêu đề" : null,
-                  style: style,
+                  style: TextStyle(fontFamily: 'Roboto', fontSize: 18),
                   decoration: InputDecoration(
                       labelText: "Tiêu đề",
                       filled: true,
@@ -124,7 +235,7 @@ class _AddEventScreenState extends State<AddEventScreen> {
                   maxLines: 5,
                   validator: (value) =>
                   (value.isEmpty) ? "Nhập nội dung ghi chú" : null,
-                  style: style,
+                  style: TextStyle(fontFamily: 'Roboto', fontSize: 18),
                   decoration: InputDecoration(
                       labelText: "Nội dung",
                       border: OutlineInputBorder(borderRadius: BorderRadius.circular(10))),
@@ -168,9 +279,6 @@ class _AddEventScreenState extends State<AddEventScreen> {
                       _eventEndDate = picked;
                     });
                   }
-//                  setState(() {
-//                    _eventEndDate = picked;
-//                  });
                 },
               ),
 
@@ -194,7 +302,8 @@ class _AddEventScreenState extends State<AddEventScreen> {
                              Navigator.pop(context);
                            });
                         } else {
-                            sendData();
+                            await sendData();
+
                             setState(() {
                               Navigator.pop(context);
                             });
@@ -207,9 +316,8 @@ class _AddEventScreenState extends State<AddEventScreen> {
                       }
                     },
                     child: Text(widget.note != null ? "Cập nhật" : "Lưu",
-                      style: style.copyWith(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold),
+                      style: TextStyle(fontFamily: 'Roboto', fontSize: 18,
+                          fontWeight: FontWeight.bold, color: Colors.white),
                     ),
                   ),
                 ),
@@ -219,13 +327,6 @@ class _AddEventScreenState extends State<AddEventScreen> {
         ),
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    _title.dispose();
-    _description.dispose();
-    super.dispose();
   }
 
   void updateData(String id) async{
@@ -243,6 +344,10 @@ class _AddEventScreenState extends State<AddEventScreen> {
     print(data);
 
     if (data=="Success"){
+      int i = int.parse(id);
+      await _cancelNotification(i);
+
+      showNotificationCustomSound(_eventEndDate,i,_title.text.toString(),_description.text.toString());
       Fluttertoast.showToast(
           msg: "Cập nhật thành công",
           toastLength: Toast.LENGTH_SHORT,
@@ -264,5 +369,41 @@ class _AddEventScreenState extends State<AddEventScreen> {
           fontSize: 16.0
       );
     }
+  }
+
+  Future<void> showNotificationCustomSound(DateTime scheduledNotificationDateTime,
+      int id, String title, String body) async {
+    const AndroidNotificationDetails androidPlatformChannelSpecifics =
+    AndroidNotificationDetails(
+      'your other channel id',
+      'your other channel name',
+      'your other channel description',
+      icon: 'alarm',
+      importance: Importance.high,
+      priority: Priority.high,
+      ticker: 'ticker',
+      playSound: true,
+      sound: RawResourceAndroidNotificationSound('alert'),
+    );
+    const IOSNotificationDetails iOSPlatformChannelSpecifics =
+    IOSNotificationDetails(sound: 'alert');
+    const MacOSNotificationDetails macOSPlatformChannelSpecifics =
+    MacOSNotificationDetails(sound: 'alert');
+    const NotificationDetails platformChannelSpecifics = NotificationDetails(
+        android: androidPlatformChannelSpecifics,
+        iOS: iOSPlatformChannelSpecifics,
+        macOS: macOSPlatformChannelSpecifics);
+    await flutterLocalNotificationsPlugin.schedule(
+        id,
+        title,
+        body,
+        scheduledNotificationDateTime,
+        platformChannelSpecifics,
+        androidAllowWhileIdle: true);
+  }
+
+  Future<void> _cancelNotification(int id) async {
+//    int id = (idNote==""||idNote=="0")?0:int.parse(idNote);
+    await flutterLocalNotificationsPlugin.cancel(id);
   }
 }

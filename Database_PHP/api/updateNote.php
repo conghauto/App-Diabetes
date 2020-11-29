@@ -7,7 +7,7 @@
     $eventStartDate = $_POST['eventStartDate'];
     $eventEndDate = $_POST['eventEndDate'];
 
-    $query = "UPDATE notes SET title='$title', description='$description', eventStartDate='$eventStartDate', eventEndDate='$eventEndDate'  WHERE id='$id'";
+    $query = "UPDATE notes SET title='$title', description='$description', eventStartDate='$eventStartDate', eventEndDate='$eventEndDate' WHERE id='$id'";
     $data= mysqli_query($con,$query);
 
     if ($data!=null) {

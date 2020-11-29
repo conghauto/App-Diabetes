@@ -3,15 +3,20 @@ import 'dart:convert';
 import 'package:diabetesapp/constants.dart';
 import 'package:diabetesapp/screens/plan/components/add_event.dart';
 import 'package:diabetesapp/screens/plan/components/view_event.dart';
+import 'package:diabetesapp/user_current.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:diabetesapp/models/event.dart';
 import 'package:diabetesapp/extensions/format_datetime.dart';
+
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+FlutterLocalNotificationsPlugin();
 
 class PlanScreen extends StatefulWidget {
   static String routeName = "/plan_screen";
@@ -26,7 +31,7 @@ class _PlanScreenState extends State<PlanScreen> {
   SharedPreferences prefs;
   bool processing;
   DateTime _dateSelected;
-  int i=1;
+  int i = 1;
 
   @override
   void initState() {
@@ -42,17 +47,19 @@ class _PlanScreenState extends State<PlanScreen> {
     Map<DateTime, List<EventModel>> data = {};
     allEvents.forEach((event) {
       DateTime date = DateTime(
-          event.eventStartDate.year, event.eventStartDate.month, event.eventStartDate.day, 12);
+          event.eventStartDate.year, event.eventStartDate.month,
+          event.eventStartDate.day, 12);
       if (data[date] == null) data[date] = [];
       data[date].add(event);
     });
     return data;
   }
 
-  List<EventModel> _loadEventOfDate( Map<DateTime, List<EventModel>> data,DateTime date){
-    List<EventModel> events=[];
+  List<EventModel> _loadEventOfDate(Map<DateTime, List<EventModel>> data,
+      DateTime date) {
+    List<EventModel> events = [];
     data.forEach((key, _list) {
-      if(key==date){
+      if (key == date) {
         _list.forEach((element) {
           events.add(element);
         });
@@ -64,7 +71,8 @@ class _PlanScreenState extends State<PlanScreen> {
   final String uri = ip + "/api/getNotes.php";
 
   Future<List<EventModel>> fetchEvents() async {
-    var response = await http.get(uri);
+    String url = ip + "/api/getNotes.php?userID="+UserCurrent.userID.toString();
+    var response = await http.get(url);
 
     if (response.statusCode == 200) {
       final items = json.decode(response.body).cast<Map<String, dynamic>>();
@@ -83,7 +91,7 @@ class _PlanScreenState extends State<PlanScreen> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(8.0,32.0,8.0,24.0),
+      padding: const EdgeInsets.fromLTRB(8.0, 32.0, 8.0, 24.0),
       child: new Scaffold(
         body: FutureBuilder<List<EventModel>>(
             future: fetchEvents(),
@@ -92,7 +100,7 @@ class _PlanScreenState extends State<PlanScreen> {
                 List<EventModel> allEvents = snapshot.data;
                 if (allEvents.isNotEmpty) {
                   _events = _groupEvents(allEvents);
-                  if(processing) {
+                  if (processing) {
                     _dateSelected = convertDateTimeInCurrent();
                   }
                   _selectedEvents = _loadEventOfDate(_events, _dateSelected);
@@ -106,7 +114,7 @@ class _PlanScreenState extends State<PlanScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(0,0,0,32.0),
+                      padding: const EdgeInsets.fromLTRB(0, 0, 0, 32.0),
                       child: TableCalendar(
                         events: _events,
                         initialCalendarFormat: CalendarFormat.month,
@@ -142,9 +150,10 @@ class _PlanScreenState extends State<PlanScreen> {
                         startingDayOfWeek: StartingDayOfWeek.monday,
                         onDaySelected: (day, events, holidays) {
                           setState(() {
-                            processing=false;
+                            processing = false;
                             _selectedEvents = events;
-                            _dateSelected = DateTime(day.year, day.month, day.day, 12);
+                            _dateSelected =
+                                DateTime(day.year, day.month, day.day, 12);
                           });
                         },
 
@@ -158,7 +167,8 @@ class _PlanScreenState extends State<PlanScreen> {
 
                                   borderRadius: BorderRadius.circular(10.0),
                                 ),
-                                child: Text(date.day.toString(), style: TextStyle(
+                                child: Text(
+                                  date.day.toString(), style: TextStyle(
                                     color: Colors.white),),
                               ),
                           todayDayBuilder: (context, date, events) =>
@@ -169,7 +179,8 @@ class _PlanScreenState extends State<PlanScreen> {
                                   color: Colors.orange,
                                   borderRadius: BorderRadius.circular(10.0),
                                 ),
-                                child: Text(date.day.toString(), style: TextStyle(
+                                child: Text(
+                                  date.day.toString(), style: TextStyle(
                                     color: Colors.white),),
                               ),
                           markersBuilder: (context, date, events, holidays) {
@@ -199,7 +210,8 @@ class _PlanScreenState extends State<PlanScreen> {
                                   fontWeight: FontWeight.bold, fontSize: 20,)
                                 ),
                                 subtitle: new Row(children: <Widget>[
-                                  new Padding(padding: EdgeInsets.fromLTRB(5, 20, 0, 0)),
+                                  new Padding(padding: EdgeInsets.fromLTRB(
+                                      5, 20, 0, 0)),
                                   Container(
                                     height: 10.0,
                                     width: 10.0,
@@ -207,21 +219,30 @@ class _PlanScreenState extends State<PlanScreen> {
                                     child: Container(
                                       decoration: BoxDecoration(
                                           color: Colors.green,
-                                          borderRadius: BorderRadius.all(Radius.circular(30.0))),
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(30.0))),
                                     ),
                                   ),
-                                  new Padding(padding: EdgeInsets.fromLTRB(10, 0, 0, 0)),
-                                  new Text("${FormatDateTime.formatDay(event.eventStartDate.day)} th ${event.eventStartDate.month}, ${event.eventStartDate.year} | ${FormatDateTime.formatHour(event.eventStartDate.hour)}:${FormatDateTime.formatMinute(event.eventStartDate.minute)}"),
+                                  new Padding(padding: EdgeInsets.fromLTRB(
+                                      10, 0, 0, 0)),
+                                  new Text("${FormatDateTime.formatDay(
+                                      event.eventEndDate.day)} th ${event
+                                      .eventEndDate.month}, ${event
+                                      .eventEndDate.year} | ${FormatDateTime
+                                      .formatHour(event.eventEndDate
+                                      .hour)}:${FormatDateTime.formatMinute(
+                                      event.eventEndDate.minute)}"),
                                 ]),
-                                trailing: IconButton(
-                                  icon: const Icon(Icons.more_vert_outlined),
-                                  tooltip: 'Xóa',
-                                  onPressed: (){
-                                    setState(() {
-                                      _showMyDialog(event.id);
-                                    });
-                                  },
-                                ),
+//                                trailing: IconButton(
+//                                  icon: const Icon(Icons.more_vert_outlined),
+//                                  tooltip: 'Xóa',
+//                                  onPressed: () {
+//                                    setState(() {
+//                                      _cancelNotification();
+//                                      _showMyDialog(event.id);
+//                                    });
+//                                  },
+//                                ),
                                 onTap: () async {
                                   await Navigator.push(
                                       context,
@@ -236,22 +257,33 @@ class _PlanScreenState extends State<PlanScreen> {
                                     i++;
                                   });
                                 },
+                                onLongPress: ()async{
+                                  setState(() {
+                                    _showMyDialog(event.id);
+                                  });
+                                },
                               ),
-                            )
+                            ),
                         )
                     ),
                   ],
                 ),
               );
             }),
-        floatingActionButton:FloatingActionButton(
-          child: Icon(Icons.add),
-          onPressed: () async {
-            await Navigator.of(context).push(MaterialPageRoute(builder: (context) => AddEventScreen()));
-            setState(() {
-              i=2;
-            });
-          },
+        floatingActionButton: Padding(
+          padding: const EdgeInsets.only(top:20),
+          child: FloatingActionButton(
+            child: Icon(Icons.add),
+            onPressed: () async {
+              await Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => AddEventScreen(
+                    dateSelected: _dateSelected,
+                  )));
+              setState(() {
+                i = 2;
+              });
+            },
+          ),
         ),
       ),
     );
@@ -282,8 +314,8 @@ class _PlanScreenState extends State<PlanScreen> {
     );
   }
 
-  deleteItem(String id) async{
-    var url = ip +"/api/deleteNote.php";
+  deleteItem(String id) async {
+    var url = ip + "/api/deleteNote.php";
 
     final response = await http.post(url, body: {
       "id": id.toString(),
@@ -291,7 +323,7 @@ class _PlanScreenState extends State<PlanScreen> {
 
     var data = json.decode(response.body);
     print(data);
-    if(data!="Success"){
+    if (data != "Success") {
       Fluttertoast.showToast(
           msg: "Đã xáy ra lỗi",
           toastLength: Toast.LENGTH_SHORT,
@@ -316,13 +348,14 @@ class _PlanScreenState extends State<PlanScreen> {
       builder: (BuildContext context) {
         Widget cancelButton = FlatButton(
           child: Text("Hủy bỏ"),
-          onPressed:  () {
+          onPressed: () {
             Navigator.of(context).pop();
           },
         );
         Widget continueButton = FlatButton(
           child: Text("Tiếp tục"),
-          onPressed:  () {
+          onPressed: () {
+            _cancelNotification(id);
             deleteItem(id);
           },
         );
@@ -339,11 +372,16 @@ class _PlanScreenState extends State<PlanScreen> {
     );
   }
 
-  static DateTime convertDateTimeInCurrent(){
+  static DateTime convertDateTimeInCurrent() {
     DateTime d1 = DateTime.now();
     DateTime d2 = DateTime(
         d1.year, d1.month, d1.day, 12);
 
     return d2;
+  }
+
+  Future<void> _cancelNotification(String idNote) async {
+    int id = (idNote==""||idNote=="0")?0:int.parse(idNote);
+    await flutterLocalNotificationsPlugin.cancel(id);
   }
 }
