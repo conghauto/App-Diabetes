@@ -47,7 +47,7 @@ class _ReportScreenState extends State<ReportScreen>{
   DateTime startDate = DateTime.now().subtract(Duration(days: 365));
   DateTime endDate = DateTime.now();
   List _types = ["Tất cả", "Đường huyết", "Hoạt động", "Carbs", "Cân nặng", "Thuốc"];
-
+  DateFormat dateFormat = DateFormat("HH:mm:ss dd-MM-yyyy");
   List<DropdownMenuItem<String>> _dropDownMenuItems;
   String _currentType;
   @override
@@ -505,7 +505,7 @@ class _ReportScreenState extends State<ReportScreen>{
                               (e) => DataRow(
                               cells: <DataCell>[
                                 DataCell(Text(e.weight)),
-                                DataCell(Text(e.measureTime.toString())),
+                                DataCell(Text(dateFormat.format(e.measureTime))),
                               ]
                           )
                       ).toList()
@@ -557,15 +557,15 @@ class _ReportScreenState extends State<ReportScreen>{
                         rows: listGlycemicsTable.map(
                                 (e) => DataRow(
                                 cells: <DataCell>[
-                                  DataCell(Text(e.indexG)),
-                                  DataCell(Text(e.measureTime.toString())),
+                                  DataCell(Text(e.indexG + " mg/dL")),
+                                  DataCell(Text(dateFormat.format(e.measureTime))),
                                 ]
                             )
                         ).toList()
                     ),
                     ListTile(
                       title: Text(
-                        "Đường huyết trung bình: ${averageGlycemic.toStringAsFixed(2)} kg",
+                        "Đường huyết trung bình: ${averageGlycemic.toStringAsFixed(2)} mg/dL",
                         style: TextStyle(
                           fontSize: 15,
                         ),
@@ -619,7 +619,7 @@ class _ReportScreenState extends State<ReportScreen>{
                                 cells: <DataCell>[
                                   DataCell(Text(e.nameActivity.toString())),
                                   DataCell(Text(double.tryParse(e.calo).toStringAsFixed(2))),
-                                  DataCell(Text(e.measureTime.toString())),
+                                  DataCell(Text(dateFormat.format(e.measureTime))),
                                 ]
                             )
                         ).toList()
@@ -672,7 +672,7 @@ class _ReportScreenState extends State<ReportScreen>{
                                 (e) => DataRow(
                                 cells: <DataCell>[
                                   DataCell(Text(e.carb)),
-                                  DataCell(Text(e.measureTime.toString())),
+                                  DataCell(Text(dateFormat.format(e.measureTime))),
                                 ]
                             )
                         ).toList()
@@ -732,7 +732,7 @@ class _ReportScreenState extends State<ReportScreen>{
                                 cells: <DataCell>[
                                   DataCell(Text(e.name)),
                                   DataCell(Text(e.amount + " ${e.unit}")),
-                                  DataCell(Text(e.measureTime.toString())),
+                                  DataCell(Text(dateFormat.format(e.measureTime))),
                                 ]
                             )
                         ).toList()

@@ -1,6 +1,7 @@
 import 'package:diabetesapp/models/filter-service.dart';
 import 'package:diabetesapp/screens/home/home_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
@@ -328,9 +329,21 @@ class _SelectFilterState extends State<SelectFilter> {
 
                                                 },
                                                 onConfirm: (date) {
-                                                  setState(() {
-                                                    startDate = date;
-                                                  });
+                                                  if (date.isAfter(endDate)) {
+                                                    Fluttertoast.showToast(
+                                                        msg: "Ngày bắt đầu không phù hợp",
+                                                        toastLength: Toast.LENGTH_SHORT,
+                                                        gravity: ToastGravity.CENTER,
+                                                        timeInSecForIosWeb: 1,
+                                                        backgroundColor: Colors.red,
+                                                        textColor: Colors.white,
+                                                        fontSize: 16.0
+                                                    );
+                                                  } else {
+                                                    setState(() {
+                                                      startDate = date;
+                                                    });
+                                                  }
                                                 }
                                               );
                                             }, child: Text(
@@ -365,9 +378,21 @@ class _SelectFilterState extends State<SelectFilter> {
 
                                                 },
                                                 onConfirm: (date) {
-                                                  setState(() {
-                                                    endDate = date;
-                                                  });
+                                                  if (date.isBefore(startDate)) {
+                                                    Fluttertoast.showToast(
+                                                        msg: "Ngày kết thúc không phù hợp",
+                                                        toastLength: Toast.LENGTH_SHORT,
+                                                        gravity: ToastGravity.CENTER,
+                                                        timeInSecForIosWeb: 1,
+                                                        backgroundColor: Colors.red,
+                                                        textColor: Colors.white,
+                                                        fontSize: 16.0
+                                                    );
+                                                  } else {
+                                                    setState(() {
+                                                      endDate = date;
+                                                    });
+                                                  }
                                                 }
                                             );
                                           }, child: Text(
