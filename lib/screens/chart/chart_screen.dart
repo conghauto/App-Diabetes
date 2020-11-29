@@ -22,33 +22,33 @@ class ChartScreen extends StatefulWidget{
 }
 class _ChartScreenStateful extends State<ChartScreen>{
   // Glycemic
-  List<GlycemicModel> listGlycemics = new List<GlycemicModel>();
+  Map<DateTime, double> listGlycemics = new Map<DateTime, double>();
   List<TimeSeriesGlycemic> listGlycemicChart = new List<TimeSeriesGlycemic>();
   DateTime startDateGlycemic = DateTime.now().subtract(new Duration(days: 7));
-  DateTime endDateGlycemic = DateTime.now();
+  DateTime endDateGlycemic = DateTime.now().add(new Duration(days: 1));
   String _currentTimeGlycemic;
   double averageGlycemic = 0;
   // Activities
-  List<ActivityModel> listActivity = new List<ActivityModel>();
+  Map<DateTime, double> listActivity = new Map<DateTime, double>();
   List<TimeSeriesGlycemic> listActivityChart = new List<TimeSeriesGlycemic>();
   DateTime startDateActivity = DateTime.now().subtract(new Duration(days: 7));
-  DateTime endDateActivity = DateTime.now();
+  DateTime endDateActivity = DateTime.now().add(new Duration(days: 1));
   String _currentTimeActivity;
   double averageCaloActivity = 0;
   List _types = ["1 tuần", "1 tháng", "1 năm"];
   // Carb
-  List<CarbModel> listCarbs = new List<CarbModel>();
+  Map<DateTime, double> listCarbs = new Map<DateTime, double>();
   List<TimeSeriesGlycemic> listCarbChart = new List<TimeSeriesGlycemic>();
   DateTime startDateCarb = DateTime.now().subtract(new Duration(days: 7));
-  DateTime endDateCarb = DateTime.now();
+  DateTime endDateCarb = DateTime.now().add(new Duration(days: 1));
   String _currentTimeCarb;
   double averageCarbs = 0;
 
   // Weight
-  List<WeightModel> listWeights = new List<WeightModel>();
+  Map<DateTime, double> listWeights = new Map<DateTime, double>();
   List<TimeSeriesGlycemic> listWeightChart = new List<TimeSeriesGlycemic>();
   DateTime startDateWeight = DateTime.now().subtract(new Duration(days: 7));
-  DateTime endDateWeight = DateTime.now();
+  DateTime endDateWeight = DateTime.now().add(new Duration(days: 1));
   String _currentTimeWeight;
   double averageWeight = 0;
 
@@ -95,7 +95,7 @@ class _ChartScreenStateful extends State<ChartScreen>{
           listDateTest.add(new DateTime.utc(list[i].measureTime.year,list[i].measureTime.month,
               list[i].measureTime.day));
       }
-
+      listDateTest.sort((a,b) => a.compareTo(b));
       listDateTest = listDateTest.toSet().toList();
 
       for(int i=0;i<listDateTest.length;i++){
@@ -117,7 +117,7 @@ class _ChartScreenStateful extends State<ChartScreen>{
 
       if (list != null) {
         setState(() {
-          listWeights = list;
+          listWeights = listAvgWeight;
         });
         filterWeight(this.startDateWeight, this.endDateWeight);
       }
@@ -131,12 +131,12 @@ class _ChartScreenStateful extends State<ChartScreen>{
     int count = 0;
     double sum = 0;
     if (listWeights != null) {
-      listWeights.forEach((element) {
-        if(element.measureTime.isAfter(startDate) && element.measureTime.isBefore(endDate)){
+      listWeights.forEach((date, value) {
+        if(date.isAfter(startDate) && date.isBefore(endDate)){
           count++;
           setState(() {
-            listWeightChart.add(new TimeSeriesGlycemic(element.measureTime, double.tryParse(element.weight)));
-            sum += double.tryParse(element.weight);
+            listWeightChart.add(new TimeSeriesGlycemic(date, value));
+            sum += value;
           });
         }
       });
@@ -157,10 +157,36 @@ class _ChartScreenStateful extends State<ChartScreen>{
       List<CarbModel> list= items.map<CarbModel>((json) {
         return CarbModel.fromJson(json);
       }).toList();
+//    Lấy thức ăn trung bình trong 1 ngày
+      List<DateTime> listDateTest = new List<DateTime>();
+      Map<DateTime,double> listAvgCarb = new Map<DateTime,double>();
 
+      for(int i=0;i<list.length;i++){
+        listDateTest.add(new DateTime.utc(list[i].measureTime.year,list[i].measureTime.month,
+            list[i].measureTime.day));
+      }
+      listDateTest.sort((a,b) => a.compareTo(b));
+      listDateTest = listDateTest.toSet().toList();
+
+      for(int i=0;i<listDateTest.length;i++){
+        List<double> listCarbOfDay = new List<double>();
+        double avg = 0;
+        list.forEach((element) {
+          if(listDateTest[i].year==element.measureTime.year&&
+              listDateTest[i].month==element.measureTime.month&& listDateTest[i].day==element.measureTime.day){
+            avg+=double.parse(element.carb);
+            listCarbOfDay.add(double.parse(element.carb));
+          }
+        });
+
+        if(listCarbOfDay!=null){
+          avg=double.parse((avg/listCarbOfDay.length).toStringAsFixed(2));
+          listAvgCarb[listDateTest[i]]=avg;
+        }
+      }
       if (list != null) {
         setState(() {
-          listCarbs = list;
+          listCarbs = listAvgCarb;
         });
         filterCarb(this.startDateCarb, this.endDateCarb);
       }
@@ -174,12 +200,12 @@ class _ChartScreenStateful extends State<ChartScreen>{
     int count = 0;
     double sum = 0;
     if (listCarbs != null) {
-      listCarbs.forEach((element) {
-        if(element.measureTime.isAfter(startDate) && element.measureTime.isBefore(endDate)){
+      listCarbs.forEach((date, value) {
+        if(date.isAfter(startDate) && date.isBefore(endDate)){
           count++;
           setState(() {
-            listCarbChart.add(new TimeSeriesGlycemic(element.measureTime, double.tryParse(element.carb)));
-            sum += double.tryParse(element.carb);
+            listCarbChart.add(new TimeSeriesGlycemic(date, value));
+            sum += value;
           });
         }
       });
@@ -201,10 +227,37 @@ class _ChartScreenStateful extends State<ChartScreen>{
       List<ActivityModel> list= items.map<ActivityModel>((json) {
         return ActivityModel.fromJson(json);
       }).toList();
+      //    Lấy năng lượng tiêu hao trung bình trong 1 ngày
+      List<DateTime> listDateTest = new List<DateTime>();
+      Map<DateTime,double> listAvgCalo = new Map<DateTime,double>();
+
+      for(int i=0;i<list.length;i++){
+        listDateTest.add(new DateTime.utc(list[i].measureTime.year,list[i].measureTime.month,
+            list[i].measureTime.day));
+      }
+      listDateTest.sort((a,b) => a.compareTo(b));
+      listDateTest = listDateTest.toSet().toList();
+
+      for(int i=0;i<listDateTest.length;i++){
+        List<double> listCaloOfDay = new List<double>();
+        double avg = 0;
+        list.forEach((element) {
+          if(listDateTest[i].year==element.measureTime.year&&
+              listDateTest[i].month==element.measureTime.month&& listDateTest[i].day==element.measureTime.day){
+            avg+=double.parse(element.calo);
+            listCaloOfDay.add(double.parse(element.calo));
+          }
+        });
+
+        if(listCaloOfDay!=null){
+          avg=double.parse((avg/listCaloOfDay.length).toStringAsFixed(2));
+          listAvgCalo[listDateTest[i]]=avg;
+        }
+      }
 
       if (list != null) {
         setState(() {
-          listActivity = list;
+          listActivity = listAvgCalo;
         });
         filterActivity(this.startDateGlycemic, this.endDateGlycemic);
       }
@@ -219,12 +272,12 @@ class _ChartScreenStateful extends State<ChartScreen>{
     int count = 0;
     double sum = 0;
     if (listActivity != null) {
-      listActivity.forEach((element) {
-        if(element.measureTime.isAfter(startDate) && element.measureTime.isBefore(endDate)){
+      listActivity.forEach((date, value) {
+        if(date.isAfter(startDate) && date.isBefore(endDate)){
           count++;
-          sum += double.tryParse(element.calo);
+          sum += value;
             setState(() {
-              listActivityChart.add(new TimeSeriesGlycemic(element.measureTime, double.tryParse(element.calo)));
+              listActivityChart.add(new TimeSeriesGlycemic(date, value));
             });
         }
       });
@@ -248,9 +301,36 @@ class _ChartScreenStateful extends State<ChartScreen>{
         return GlycemicModel.fromJson(json);
       }).toList();
 
+      //    Lấy lượng đường huyết trung bình trong 1 ngày
+      List<DateTime> listDateTest = new List<DateTime>();
+      Map<DateTime,double> listAvgGlycemic = new Map<DateTime,double>();
+
+      for(int i=0;i<list.length;i++){
+        listDateTest.add(new DateTime.utc(list[i].measureTime.year,list[i].measureTime.month,
+            list[i].measureTime.day));
+      }
+      listDateTest.sort((a,b) => a.compareTo(b));
+      listDateTest = listDateTest.toSet().toList();
+
+      for(int i=0;i<listDateTest.length;i++){
+        List<double> listGlycemicOfDay = new List<double>();
+        double avg = 0;
+        list.forEach((element) {
+          if(listDateTest[i].year==element.measureTime.year&&
+              listDateTest[i].month==element.measureTime.month&& listDateTest[i].day==element.measureTime.day){
+            avg+=double.parse(element.indexG);
+            listGlycemicOfDay.add(double.parse(element.indexG));
+          }
+        });
+
+        if(listGlycemicOfDay!=null){
+          avg=double.parse((avg/listGlycemicOfDay.length).toStringAsFixed(2));
+          listAvgGlycemic[listDateTest[i]]=avg;
+        }
+      }
       if (list != null) {
         setState(() {
-          listGlycemics = list;
+          listGlycemics = listAvgGlycemic;
         });
         filterGlycemics(this.startDateGlycemic, this.endDateGlycemic);
       }
@@ -264,12 +344,12 @@ class _ChartScreenStateful extends State<ChartScreen>{
     int count = 0;
     double sum = 0;
     if (listGlycemics != null) {
-      listGlycemics.forEach((element) {
-        if(element.measureTime.isAfter(startDate) && element.measureTime.isBefore(endDate)){
+      listGlycemics.forEach((date, value) {
+        if(date.isAfter(startDate) && date.isBefore(endDate)){
           count++;
-          sum+= double.tryParse(element.indexG);
+          sum+= value;
             setState(() {
-              listGlycemicChart.add(new TimeSeriesGlycemic(element.measureTime, double.tryParse(element.indexG)));
+              listGlycemicChart.add(new TimeSeriesGlycemic(date, value));
             });
         }
       });
