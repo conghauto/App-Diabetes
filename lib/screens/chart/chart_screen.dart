@@ -23,18 +23,14 @@ class ChartScreen extends StatefulWidget{
 class _ChartScreenStateful extends State<ChartScreen>{
   // Glycemic
   List<GlycemicModel> listGlycemics = new List<GlycemicModel>();
-  List<TimeSeriesGlycemic> listBeforeMeal = new List<TimeSeriesGlycemic>();
-  List<TimeSeriesGlycemic> listAfterMeal = new List<TimeSeriesGlycemic>();
-  List<TimeSeriesGlycemic> listOthers = new List<TimeSeriesGlycemic>();
+  List<TimeSeriesGlycemic> listGlycemicChart = new List<TimeSeriesGlycemic>();
   DateTime startDateGlycemic = DateTime.now().subtract(new Duration(days: 7));
   DateTime endDateGlycemic = DateTime.now();
   String _currentTimeGlycemic;
   double averageGlycemic = 0;
   // Activities
   List<ActivityModel> listActivity = new List<ActivityModel>();
-  List<TimeSeriesGlycemic> listActivityBeforeMeal = new List<TimeSeriesGlycemic>();
-  List<TimeSeriesGlycemic> listActivityAfterMeal = new List<TimeSeriesGlycemic>();
-  List<TimeSeriesGlycemic> listActivityOthers = new List<TimeSeriesGlycemic>();
+  List<TimeSeriesGlycemic> listActivityChart = new List<TimeSeriesGlycemic>();
   DateTime startDateActivity = DateTime.now().subtract(new Duration(days: 7));
   DateTime endDateActivity = DateTime.now();
   String _currentTimeActivity;
@@ -118,7 +114,6 @@ class _ChartScreenStateful extends State<ChartScreen>{
           listAvgWeight[listDateTest[i]]=avg;
         }
       }
-
 
       if (list != null) {
         setState(() {
@@ -220,9 +215,7 @@ class _ChartScreenStateful extends State<ChartScreen>{
   }
 
   void filterActivity(DateTime startDate, DateTime endDate) {
-    listActivityBeforeMeal = new List();
-    listActivityAfterMeal = new List();
-    listActivityOthers = new List();
+    listActivityChart = new List();
     int count = 0;
     double sum = 0;
     if (listActivity != null) {
@@ -230,21 +223,9 @@ class _ChartScreenStateful extends State<ChartScreen>{
         if(element.measureTime.isAfter(startDate) && element.measureTime.isBefore(endDate)){
           count++;
           sum += double.tryParse(element.calo);
-          if (element.tags.contains("Trước bữa")){
             setState(() {
-              listActivityBeforeMeal.add(new TimeSeriesGlycemic(element.measureTime, double.tryParse(element.calo)));
+              listActivityChart.add(new TimeSeriesGlycemic(element.measureTime, double.tryParse(element.calo)));
             });
-          }
-          if (element.tags.contains("Sau bữa")){
-            setState(() {
-              listActivityAfterMeal.add(new TimeSeriesGlycemic(element.measureTime, double.tryParse(element.calo)));
-            });
-          }
-          if (!element.tags.contains("Trước bữa") && !element.tags.contains("Sau bữa")){
-            setState(() {
-              listActivityOthers.add(new TimeSeriesGlycemic(element.measureTime, double.tryParse(element.calo)));
-            });
-          }
         }
       });
       if (count != 0) {
@@ -279,9 +260,7 @@ class _ChartScreenStateful extends State<ChartScreen>{
     }
   }
   void filterGlycemics(DateTime startDate, DateTime endDate) {
-    listBeforeMeal = new List();
-    listAfterMeal = new List();
-    listOthers = new List();
+    listGlycemicChart = new List();
     int count = 0;
     double sum = 0;
     if (listGlycemics != null) {
@@ -289,21 +268,9 @@ class _ChartScreenStateful extends State<ChartScreen>{
         if(element.measureTime.isAfter(startDate) && element.measureTime.isBefore(endDate)){
           count++;
           sum+= double.tryParse(element.indexG);
-          if (element.tags.contains("Trước bữa")){
             setState(() {
-              listBeforeMeal.add(new TimeSeriesGlycemic(element.measureTime, double.tryParse(element.indexG)));
+              listGlycemicChart.add(new TimeSeriesGlycemic(element.measureTime, double.tryParse(element.indexG)));
             });
-          }
-          if (element.tags.contains("Sau bữa")){
-            setState(() {
-              listAfterMeal.add(new TimeSeriesGlycemic(element.measureTime, double.tryParse(element.indexG)));
-            });
-          }
-          if (!element.tags.contains("Trước bữa") && !element.tags.contains("Sau bữa")){
-            setState(() {
-              listOthers.add(new TimeSeriesGlycemic(element.measureTime, double.tryParse(element.indexG)));
-            });
-          }
         }
       });
       if (count != 0) {
@@ -339,50 +306,22 @@ class _ChartScreenStateful extends State<ChartScreen>{
   List<charts.Series<TimeSeriesGlycemic, DateTime>> _createGlycemicDataTimeSeries() {
     return [
       new charts.Series<TimeSeriesGlycemic, DateTime>(
-        id: 'Trước bữa ăn',
-        colorFn: (_, __) => charts.MaterialPalette.red.shadeDefault,
-        domainFn: (TimeSeriesGlycemic sales, _) => sales.time,
-        measureFn: (TimeSeriesGlycemic sales, _) => sales.data,
-        data: listBeforeMeal,
-      ),
-      new charts.Series<TimeSeriesGlycemic, DateTime>(
-        id: 'Sau bữa ăn',
+        id: 'Đường huyết',
         colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
         domainFn: (TimeSeriesGlycemic sales, _) => sales.time,
         measureFn: (TimeSeriesGlycemic sales, _) => sales.data,
-        data: listAfterMeal,
-      ),
-      new charts.Series<TimeSeriesGlycemic, DateTime>(
-        id: 'Khác',
-        colorFn: (_, __) => charts.MaterialPalette.green.shadeDefault,
-        domainFn: (TimeSeriesGlycemic sales, _) => sales.time,
-        measureFn: (TimeSeriesGlycemic sales, _) => sales.data,
-        data: listOthers,
+        data: listGlycemicChart,
       )
     ];
   }
   List<charts.Series<TimeSeriesGlycemic, DateTime>> _createActivityDataTimeSeries() {
     return [
       new charts.Series<TimeSeriesGlycemic, DateTime>(
-        id: 'Trước bữa ăn',
-        colorFn: (_, __) => charts.MaterialPalette.red.shadeDefault,
-        domainFn: (TimeSeriesGlycemic sales, _) => sales.time,
-        measureFn: (TimeSeriesGlycemic sales, _) => sales.data,
-        data: listActivityBeforeMeal,
-      ),
-      new charts.Series<TimeSeriesGlycemic, DateTime>(
-        id: 'Sau bữa ăn',
+        id: 'Năng lượng tiêu hao',
         colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
         domainFn: (TimeSeriesGlycemic sales, _) => sales.time,
         measureFn: (TimeSeriesGlycemic sales, _) => sales.data,
-        data: listActivityAfterMeal,
-      ),
-      new charts.Series<TimeSeriesGlycemic, DateTime>(
-        id: 'Khác',
-        colorFn: (_, __) => charts.MaterialPalette.green.shadeDefault,
-        domainFn: (TimeSeriesGlycemic sales, _) => sales.time,
-        measureFn: (TimeSeriesGlycemic sales, _) => sales.data,
-        data: listActivityOthers,
+        data: listActivityChart,
       )
     ];
   }
