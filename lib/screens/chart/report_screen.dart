@@ -413,14 +413,26 @@ class _ReportScreenState extends State<ReportScreen>{
 
                               },
                               onConfirm: (date) async {
-                                setState(() {
-                                  endDate = date;
-                                });
-                                await filterWeight(startDate, endDate);
-                                await filterCarb(startDate, endDate);
-                                await filterActivity(startDate, endDate);
-                                await filterGlycemics(startDate, endDate);
-                                await filterMedicine(startDate, endDate);
+                                if (date.isBefore(startDate)) {
+                                  Fluttertoast.showToast(
+                                      msg: "Ngày kết thúc không phù hợp",
+                                      toastLength: Toast.LENGTH_SHORT,
+                                      gravity: ToastGravity.CENTER,
+                                      timeInSecForIosWeb: 1,
+                                      backgroundColor: Colors.red,
+                                      textColor: Colors.white,
+                                      fontSize: 16.0
+                                  );
+                                } else {
+                                  setState(() {
+                                    endDate = date;
+                                  });
+                                  await filterWeight(startDate, endDate);
+                                  await filterCarb(startDate, endDate);
+                                  await filterActivity(startDate, endDate);
+                                  await filterGlycemics(startDate, endDate);
+                                  await filterMedicine(startDate, endDate);
+                                }
                               }
                           );
                         }, child: Text(
