@@ -130,6 +130,7 @@ class _ChartScreenStateful extends State<ChartScreen>{
     listWeightChart = new List();
     int count = 0;
     double sum = 0;
+    averageWeight = 0;
     if (listWeights != null) {
       listWeights.forEach((date, value) {
         if(date.isAfter(startDate) && date.isBefore(endDate)){
@@ -199,6 +200,7 @@ class _ChartScreenStateful extends State<ChartScreen>{
     listCarbChart = new List();
     int count = 0;
     double sum = 0;
+    averageCarbs = 0;
     if (listCarbs != null) {
       listCarbs.forEach((date, value) {
         if(date.isAfter(startDate) && date.isBefore(endDate)){
@@ -271,6 +273,7 @@ class _ChartScreenStateful extends State<ChartScreen>{
     listActivityChart = new List();
     int count = 0;
     double sum = 0;
+    averageCaloActivity = 0;
     if (listActivity != null) {
       listActivity.forEach((date, value) {
         if(date.isAfter(startDate) && date.isBefore(endDate)){
@@ -343,6 +346,7 @@ class _ChartScreenStateful extends State<ChartScreen>{
     listGlycemicChart = new List();
     int count = 0;
     double sum = 0;
+    averageGlycemic = 0;
     if (listGlycemics != null) {
       listGlycemics.forEach((date, value) {
         if(date.isAfter(startDate) && date.isBefore(endDate)){

@@ -1,5 +1,11 @@
-import 'package:diabetesapp/size_config.dart';
+import 'dart:convert';
+
+import 'package:diabetesapp/models/food.dart';
+import 'package:diabetesapp/screens/advice/recommend_screens/food_recipe.dart';
+import 'package:diabetesapp/screens/advice/recommend_screens/shared.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import '../../../constants.dart';
 
 class FoodScreen extends StatefulWidget {
   @override
@@ -7,34 +13,86 @@ class FoodScreen extends StatefulWidget {
 }
 
 class _FoodScreenState extends State<FoodScreen> {
+  List<FoodModel> listFoods = new List();
+
+  @override
+  void initState() {
+    fetchFoods();
+  }
+  Future<void> fetchFoods() async {
+    String url = ip + "/api/getFoods.php";
+    var response = await http.get(url);
+
+    if (response.statusCode == 200) {
+      final items = json.decode(response.body).cast<Map<String, dynamic>>();
+      List<FoodModel> list = items.map<FoodModel>((json) {
+        return FoodModel.fromJson(json);
+      }).toList();
+      if (list != null) {
+        setState(() {
+          listFoods = list;
+        });
+      }
+    }
+    else {
+      throw Exception('Failed to load data.');
+    }
+  }
   @override
   Widget build(BuildContext context) {
-    return _myListView(context);
+    return _myListView(context, listFoods);
   }
 }
 
-Widget _myListView(BuildContext context) {
-
-  // backing data
-  final europeanCountries = ['Albania', 'Andorra', 'Armenia', 'Austria',
-    'Azerbaijan', 'Belarus', 'Belgium', 'Bosnia and Herzegovina', 'Bulgaria',
-    'Croatia', 'Cyprus', 'Czech Republic', 'Denmark', 'Estonia', 'Finland',
-    'France', 'Georgia', 'Germany', 'Greece', 'Hungary', 'Iceland', 'Ireland',
-    'Italy', 'Kazakhstan', 'Kosovo', 'Latvia', 'Liechtenstein', 'Lithuania',
-    'Luxembourg', 'Macedonia', 'Malta', 'Moldova', 'Monaco', 'Montenegro',
-    'Netherlands', 'Norway', 'Poland', 'Portugal', 'Romania', 'Russia',
-    'San Marino', 'Serbia', 'Slovakia', 'Slovenia', 'Spain', 'Sweden',
-    'Switzerland', 'Turkey', 'Ukraine', 'United Kingdom', 'Vatican City'];
+Widget _myListView(BuildContext context, List<FoodModel> data) {
 
   return ListView.builder(
-    itemCount: europeanCountries.length,
+    itemCount: data.length,
     itemBuilder: (context, index) {
-      return Card(
-        child: ListTile(
-          title: Text(europeanCountries[index]),
+      return GestureDetector(
+        onTap: () async {
+          await Navigator.push(context, MaterialPageRoute(builder: (context) => RecipeFood(recipe: data[index])));
+        },
+        child: Container(
+          margin: EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.all(
+              Radius.circular(20),
+            ),
+            boxShadow: [kBoxShadow],
+          ),
+          child: Row(
+            children: [
+
+              Container(
+                height: 160,
+                width: 160,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: NetworkImage(data[index].image),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+              Expanded(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      buildRecipeTitle(data[index].name),
+                      buildRecipeSubTitle(data[index].benefit),
+                    ],
+                  ),
+                ),
+              ),
+
+            ],
+          ),
         ),
       );
     },
   );
-
 }
