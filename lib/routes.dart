@@ -1,6 +1,7 @@
 
 import 'package:diabetesapp/components/sign_in_google.dart';
 import 'package:diabetesapp/screens/advice/recommend_screens/food_recipe.dart';
+import 'package:diabetesapp/screens/advice/recommend_screens/sport_detail.dart';
 import 'package:diabetesapp/screens/chart/report_screen.dart';
 import 'package:diabetesapp/screens/forgot_password/forgot_password.dart';
 import 'package:diabetesapp/screens/glucose/add_log_screen.dart';
@@ -42,4 +43,5 @@ final Map<String, WidgetBuilder> routes= {
   UpdateCarbs.routeName: (context) => UpdateCarbs(),
   UpdateExercise.routeName: (context) => UpdateExercise(),
   RecipeFood.routeName: (context) => RecipeFood(),
+  SportDetail.routeName: (context) => SportDetail()
 };

@@ -1,5 +1,11 @@
-import 'package:diabetesapp/size_config.dart';
+import 'dart:convert';
+
+import 'package:diabetesapp/models/sport.dart';
+import 'package:diabetesapp/screens/advice/recommend_screens/shared.dart';
+import 'package:diabetesapp/screens/advice/recommend_screens/sport_detail.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import '../../../constants.dart';
 
 class ActivityScreen extends StatefulWidget {
   @override
@@ -7,34 +13,85 @@ class ActivityScreen extends StatefulWidget {
 }
 
 class _ActivityScreenState extends State<ActivityScreen> {
+  List<SportModel> listSports = new List();
+
+  @override
+  void initState() {
+    fetchSports();
+  }
+  Future<void> fetchSports() async {
+    String url = ip + "/api/getSports.php";
+    var response = await http.get(url);
+
+    if (response.statusCode == 200) {
+      final items = json.decode(response.body).cast<Map<String, dynamic>>();
+      List<SportModel> list = items.map<SportModel>((json) {
+        return SportModel.fromJson(json);
+      }).toList();
+      if (list != null) {
+        setState(() {
+          listSports = list;
+        });
+      }
+    }
+    else {
+      throw Exception('Failed to load data.');
+    }
+  }
   @override
   Widget build(BuildContext context) {
-    return _myListView(context);
+    return _myListView(context, listSports);
   }
 }
 
-Widget _myListView(BuildContext context) {
-
-  // backing data
-  final europeanCountries = ['Albania', 'Andorra', 'Armenia', 'Austria',
-    'Azerbaijan', 'Belarus', 'Belgium', 'Bosnia and Herzegovina', 'Bulgaria',
-    'Croatia', 'Cyprus', 'Czech Republic', 'Denmark', 'Estonia', 'Finland',
-    'France', 'Georgia', 'Germany', 'Greece', 'Hungary', 'Iceland', 'Ireland',
-    'Italy', 'Kazakhstan', 'Kosovo', 'Latvia', 'Liechtenstein', 'Lithuania',
-    'Luxembourg', 'Macedonia', 'Malta', 'Moldova', 'Monaco', 'Montenegro',
-    'Netherlands', 'Norway', 'Poland', 'Portugal', 'Romania', 'Russia',
-    'San Marino', 'Serbia', 'Slovakia', 'Slovenia', 'Spain', 'Sweden',
-    'Switzerland', 'Turkey', 'Ukraine', 'United Kingdom', 'Vatican City'];
+Widget _myListView(BuildContext context, List<SportModel> data) {
 
   return ListView.builder(
-    itemCount: europeanCountries.length,
+    itemCount: data.length,
     itemBuilder: (context, index) {
-      return Card(
-        child: ListTile(
-          title: Text(europeanCountries[index]),
+      return GestureDetector(
+        onTap: () async {
+          await Navigator.push(context, MaterialPageRoute(builder: (context) => SportDetail(sportModel: data[index])));
+        },
+        child: Container(
+          margin: EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.all(
+              Radius.circular(20),
+            ),
+            boxShadow: [kBoxShadow],
+          ),
+          child: Row(
+            children: [
+
+              Container(
+                height: 160,
+                width: 160,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: NetworkImage(data[index].image),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+              Expanded(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      buildRecipeTitle(data[index].name),
+                      buildRecipeSubTitle(data[index].benefit),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       );
     },
   );
-
 }
