@@ -27,6 +27,7 @@ class _InfoPersonScreenState extends State<InfoPersonScreen> {
 
   String height;
   String weight;
+  String phone;
 
   final List<String> errors = [];
   DateTime selectedDate = DateTime(1950,1,1);
@@ -63,6 +64,7 @@ class _InfoPersonScreenState extends State<InfoPersonScreen> {
       'weight': weight,
       'typeDiabete': _type.toString(),
       'userID': userID.toString(),
+      'phoneRelative': phone,
     });
 
     Navigator.pop(context);
@@ -100,6 +102,7 @@ class _InfoPersonScreenState extends State<InfoPersonScreen> {
 
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
     return new Scaffold(
         body: new Stack(
           children: <Widget>[
@@ -241,6 +244,21 @@ class _InfoPersonScreenState extends State<InfoPersonScreen> {
                             child: Column(
                               children: [
                                 new ListTile(
+                                  title: Text( 'Số điện thoại người thân',
+                                    style: new TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18.0,
+                                    ),
+                                  ),
+                                  subtitle: buildPhoneFormField(),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Card(
+                            child: Column(
+                              children: [
+                                new ListTile(
                                   title: Text( 'Tiểu đường',
                                     style: new TextStyle(
                                       fontWeight: FontWeight.bold,
@@ -359,5 +377,34 @@ class _InfoPersonScreenState extends State<InfoPersonScreen> {
         floatingLabelBehavior: FloatingLabelBehavior.always,
       ),
     );
+  }
+  TextFormField buildPhoneFormField(){
+    return TextFormField(
+      keyboardType: TextInputType.phone,
+      onSaved: (newValue) => phone = newValue,
+      onChanged: (value) {
+        if (value.isNotEmpty){
+          removeError(error: kPhoneNumberNullError);
+        }else if (value.length >= 11){
+          addError(error: kShortPhoneNumberNullError);
+        }
+        return null;
+      },
+      validator: (value){
+        if (value.isEmpty){
+          addError(error: kPhoneNumberNullError);
+          return "";
+        }else if (value.length<10||value.length>=13){
+          addError(error: kShortPhoneNumberNullError);
+          return "";
+        }
+        return null;
+      },
+      decoration:  InputDecoration(
+        hintText: "Nhập số điện thoại người thân",
+        floatingLabelBehavior: FloatingLabelBehavior.always,
+      ),
+    );
+
   }
 }
