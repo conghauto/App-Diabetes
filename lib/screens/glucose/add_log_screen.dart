@@ -1,18 +1,18 @@
-import 'package:diabetesapp/components/custom_surffix_icon.dart';
-import 'package:diabetesapp/constants.dart';
-import 'package:diabetesapp/screens/glucose/glucose_screen.dart';
+import 'dart:convert';
+
 import 'package:diabetesapp/screens/glucose/log_screens/blood_glucoso_screen.dart';
 import 'package:diabetesapp/screens/glucose/log_screens/carbs_screen.dart';
 import 'package:diabetesapp/screens/glucose/log_screens/exercise_screen.dart';
 import 'package:diabetesapp/screens/glucose/log_screens/medicine_screen.dart';
 import 'package:diabetesapp/screens/glucose/log_screens/weight_screen.dart';
 import 'package:diabetesapp/screens/home/home_screen.dart';
-import 'package:diabetesapp/screens/more/components/menu_item.dart';
+import 'package:diabetesapp/widgets/ProgressDialog.dart';
 import 'package:flutter/material.dart';
 import 'package:diabetesapp/extensions/format_datetime.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:http/http.dart' as http;
 
 class AddLogSceen extends StatefulWidget {
   static String routeName = "/add_log_screen";
