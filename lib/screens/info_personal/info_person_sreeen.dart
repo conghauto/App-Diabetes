@@ -142,41 +142,21 @@ class _InfoPersonScreenState extends State<InfoPersonScreen> {
                               ),
                               trailing: Icon(Icons.calendar_today),
                               onTap: ()async{
-//                                final DateTime picked = await showDatePicker(
-//                                  context: context,
-//                                  initialDate: selectedDate,
-//                                  firstDate: DateTime(1950),
-//                                  lastDate: DateTime(2050),
-//                                  initialEntryMode: DatePickerEntryMode.input,
-//                                  helpText: 'NGÀY SINH', // Can be used as title
-//                                  cancelText: 'Hủy bỏ',
-//                                  confirmText: 'Chọn',
-//                                  errorFormatText: 'Nhập ngày hợp lệ',
-//                                  errorInvalidText: 'Ngày không hợp lệ',
-//                                  fieldLabelText: 'Nhập ngày',
-//                                  fieldHintText: 'dd/mm/yyyy',
-//                                );
-//                                if (picked != null && picked != selectedDate)
-//                                  setState(() {
-//                                    selectedDate = picked;
-//                                  });
+                                await DatePicker.showDatePicker(context,
+                                    showTitleActions: true,
+                                    minTime: DateTime(1950,1,1),
+                                    maxTime: DateTime(2050,1,1),
+                                    locale: LocaleType.vi,
+                                    currentTime: selectedDate,
+                                    onChanged: (date){
 
-                                    await DatePicker.showDatePicker(context,
-                                        showTitleActions: true,
-                                        minTime: DateTime(1950,1,1),
-                                        maxTime: DateTime(2050,1,1),
-                                        locale: LocaleType.vi,
-                                        currentTime: selectedDate,
-                                        onChanged: (date){
-
-                                        },
-                                        onConfirm: (date) {
-                                            setState(() {
-                                              selectedDate = date;
-                                            });
-                                        }
-                                    );
-
+                                    },
+                                    onConfirm: (date) {
+                                      setState(() {
+                                        selectedDate = date;
+                                      });
+                                    }
+                                );
                               },
                             ),
                           ),
