@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:diabetesapp/constants.dart';
-import 'package:diabetesapp/screens/more/components/daily_steps_page.dart';
 import 'package:diabetesapp/screens/more/components/update_infor_screen.dart';
 import 'package:diabetesapp/screens/sign_in/sign_in_screen.dart';
 import 'package:diabetesapp/user_current.dart';
@@ -69,13 +68,6 @@ class _BodyState extends State<Body> {
             title: "Thông tin tài khoản",
             press: () {
               Navigator.pushNamed(context, EditProfilePage.routeName);
-            },
-          ),
-          MenuItem(
-            iconSrc: "assets/icons/runner.svg",
-            title: "Hoạt động hằng ngày",
-            press: () {
-              Navigator.pushNamed(context, DailyStepsPage.routeName);
             },
           ),
           MenuItem(

@@ -42,7 +42,7 @@ class _UpdateExerciseState extends State<UpdateExercise> {
     "Sau hoạt động",
   ];
   List<String> selectedReportList = List();
-
+  double value = -1;
   String id = "";
   TextEditingController note;
   TextEditingController timeActivity;
@@ -101,7 +101,42 @@ class _UpdateExerciseState extends State<UpdateExercise> {
     }
     selectedTypeExercise = new TypeExerciseModel(id: '', typeExercise: widget.activityModel.nameActivity, mETs: widget.activityModel.indexMET);
   }
-
+  void updateActivity() async{
+    var url = ip + "/api/updateActivity.php";
+    var response = await http.post(url, body: {
+      'nameActivity': selectedTypeExercise.typeExercise.toString(),
+      'indexMET': selectedTypeExercise.mETs.toString(),
+      'timeActivity': timeActivity.text,
+      'tags': selectedReportList.length==0?"":selectedReportList.toString(),
+      'note': note.text,
+      'measureTime': time.toString(),
+      'id': id,
+      'userID': widget.activityModel.userID
+    });
+    activityModelBack = new ActivityModel(id: id, nameActivity: selectedTypeExercise.typeExercise.toString(), indexMET: selectedTypeExercise.mETs.toString(), timeActivity: timeActivity.text, tags: selectedReportList.length==0?"":selectedReportList.toString(), note: note.text, measureTime: time, calo: widget.activityModel.calo, userID: widget.activityModel.userID, idModel: widget.activityModel.idModel);
+    var data = json.decode(response.body);
+    if(data=="Error"){
+      Fluttertoast.showToast(
+          msg: "Đã xảy ra lỗi",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0
+      );
+    }else{
+      Fluttertoast.showToast(
+          msg: "Cập nhật thành công",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.green,
+          textColor: Colors.white,
+          fontSize: 16.0
+      );
+    }
+  }
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -116,7 +151,7 @@ class _UpdateExerciseState extends State<UpdateExercise> {
               Navigator.pop(context);
             },
           ),
-          title: Text("Update cân nặng")
+          title: Text("Update hoạt động")
       ),
       body: Container(
         child: ListView(
@@ -188,6 +223,7 @@ class _UpdateExerciseState extends State<UpdateExercise> {
                 ),
               ),
               title: TextField(
+                keyboardType: TextInputType.number,
                 controller: timeActivity,
                 onChanged: (value){
                   setState(() {
@@ -302,6 +338,33 @@ class _UpdateExerciseState extends State<UpdateExercise> {
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                 color: Colors.lightBlue,
                 onPressed: () async {
+                  // try {
+                  //   value = double.tryParse(timeActivity.text);
+                  //   if (value <= 0){
+                  //     Fluttertoast.showToast(
+                  //         msg: "Thời gian hoạt động không hợp lệ",
+                  //         toastLength: Toast.LENGTH_SHORT,
+                  //         gravity: ToastGravity.CENTER,
+                  //         timeInSecForIosWeb: 1,
+                  //         backgroundColor: Colors.red,
+                  //         textColor: Colors.white,
+                  //         fontSize: 16.0
+                  //     );
+                  //   } else {
+                  //     await updateActivity();
+                  //     Navigator.pop(context, activityModelBack);
+                  //   }
+                  // } catch (ex){
+                  //   Fluttertoast.showToast(
+                  //       msg: "Thời gian hoạt động không hợp lệ",
+                  //       toastLength: Toast.LENGTH_SHORT,
+                  //       gravity: ToastGravity.CENTER,
+                  //       timeInSecForIosWeb: 1,
+                  //       backgroundColor: Colors.red,
+                  //       textColor: Colors.white,
+                  //       fontSize: 16.0
+                  //   );
+                  // }
                   await updateActivity();
                   Navigator.pop(context, activityModelBack);
                 },
@@ -318,43 +381,6 @@ class _UpdateExerciseState extends State<UpdateExercise> {
         ),
       ),
     );
-  }
-
-  void updateActivity() async{
-    var url = ip + "/api/updateActivity.php";
-    var response = await http.post(url, body: {
-      'nameActivity': selectedTypeExercise.typeExercise.toString(),
-      'indexMET': selectedTypeExercise.mETs.toString(),
-      'timeActivity': timeActivity.text,
-      'tags': selectedReportList.length==0?"":selectedReportList.toString(),
-      'note': note.text,
-      'activityTime': time.toString(),
-      'id': id,
-      'userID': widget.activityModel.userID
-    });
-    activityModelBack = new ActivityModel(id: id, nameActivity: selectedTypeExercise.typeExercise.toString(), indexMET: selectedTypeExercise.mETs.toString(), timeActivity: timeActivity.text, tags: selectedReportList.length==0?"":selectedReportList.toString(), note: note.text, measureTime: time, calo: widget.activityModel.calo, userID: widget.activityModel.userID, idModel: widget.activityModel.idModel);
-    var data = json.decode(response.body);
-    if(data=="Error"){
-      Fluttertoast.showToast(
-          msg: "Đã xảy ra lỗi",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.CENTER,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-          fontSize: 16.0
-      );
-    }else{
-      Fluttertoast.showToast(
-          msg: "Cập nhật thành công",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.CENTER,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.green,
-          textColor: Colors.white,
-          fontSize: 16.0
-      );
-    }
   }
 
   showTypesExercise(context) async{

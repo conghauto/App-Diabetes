@@ -25,6 +25,10 @@ class UpdateCarbs extends StatefulWidget{
 }
 class _UpdateCarbsState extends State<UpdateCarbs> {
   CarbModel carbModelBack;
+  double valueCarb = -1;
+  double valueFat = -1;
+  double valueProtein = -1;
+  double valueCalo = -1;
   TextEditingController carb;
   TextEditingController fat;
   TextEditingController protein;
@@ -334,8 +338,36 @@ class _UpdateCarbsState extends State<UpdateCarbs> {
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                 color: Colors.lightBlue,
                 onPressed: () async {
-                  await updateCarb();
-                  Navigator.pop(context, carbModelBack);
+                  try {
+                    valueCarb = double.tryParse(carb.text);
+                    valueFat = double.tryParse(fat.text);
+                    valueProtein = double.tryParse(protein.text);
+                    valueCalo = double.tryParse(calo.text);
+                    if (valueCarb < 0 || valueFat < 0 || valueProtein < 0 || valueCalo < 0){
+                      Fluttertoast.showToast(
+                          msg: "Giá trị không hợp lệ",
+                          toastLength: Toast.LENGTH_SHORT,
+                          gravity: ToastGravity.CENTER,
+                          timeInSecForIosWeb: 1,
+                          backgroundColor: Colors.red,
+                          textColor: Colors.white,
+                          fontSize: 16.0
+                      );
+                    } else {
+                      await updateCarb();
+                      Navigator.pop(context, carbModelBack);
+                    }
+                  } catch (ex){
+                    Fluttertoast.showToast(
+                        msg: "Giá trị không hợp lệ",
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.CENTER,
+                        timeInSecForIosWeb: 1,
+                        backgroundColor: Colors.red,
+                        textColor: Colors.white,
+                        fontSize: 16.0
+                    );
+                  }
                 },
                 child: Text(
                   "Cập nhật",

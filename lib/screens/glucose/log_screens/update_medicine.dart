@@ -21,6 +21,7 @@ class UpdateMedicine extends StatefulWidget{
 }
 class _UpdateMedicineState extends State<UpdateMedicine> {
   MedicineModel medicineModelBack;
+  double value = 0;
   bool isInsulin = false;
   List<String> listInsulin = ["Tác dụng nhanh", "Tác dụng ngắn", "Tác dụng trung bình", "Tác dụng dài"];
   String typeOfInsulin = "";
@@ -453,8 +454,36 @@ class _UpdateMedicineState extends State<UpdateMedicine> {
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                 color: Colors.lightBlue,
                 onPressed: () async {
-                  await updateMedicine();
-                  Navigator.pop(context, medicineModelBack);
+                  try {
+                    String text = name.text;
+                    text = text.trim();
+                    text = text.replaceAll(" ", "");
+                    value = double.tryParse(amount.text);
+                    if (value <= 0 || text.length <= 0 || text.isEmpty ){
+                      Fluttertoast.showToast(
+                          msg: "Tên hoặc liều lượng không hợp lệ",
+                          toastLength: Toast.LENGTH_SHORT,
+                          gravity: ToastGravity.CENTER,
+                          timeInSecForIosWeb: 1,
+                          backgroundColor: Colors.red,
+                          textColor: Colors.white,
+                          fontSize: 16.0
+                      );
+                    } else {
+                      await updateMedicine();
+                      Navigator.pop(context, medicineModelBack);
+                    }
+                  } catch (ex){
+                    Fluttertoast.showToast(
+                        msg: "Liều lượng không hợp lệ",
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.CENTER,
+                        timeInSecForIosWeb: 1,
+                        backgroundColor: Colors.red,
+                        textColor: Colors.white,
+                        fontSize: 16.0
+                    );
+                  }
                 },
                 child: Text(
                   "Cập nhật",

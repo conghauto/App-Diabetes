@@ -21,6 +21,7 @@ class UpdateBloodGlucoso extends StatefulWidget {
   _UpdateBloodGlucosoState createState() => _UpdateBloodGlucosoState();
 }
 class _UpdateBloodGlucosoState extends State<UpdateBloodGlucoso> {
+  double value = 0;
   GlycemicModel glycemicModelBack;
   TextEditingController indexG;
   String id = "";
@@ -269,8 +270,33 @@ class _UpdateBloodGlucosoState extends State<UpdateBloodGlucoso> {
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                 color: Colors.lightBlue,
                 onPressed: () async {
-                  await updateGlycemic();
-                  Navigator.pop(context, glycemicModelBack);
+                  try {
+                    value = double.tryParse(indexG.text);
+                    if (value <= 0){
+                      Fluttertoast.showToast(
+                          msg: "Giá trị đường huyết không hợp lệ",
+                          toastLength: Toast.LENGTH_SHORT,
+                          gravity: ToastGravity.CENTER,
+                          timeInSecForIosWeb: 1,
+                          backgroundColor: Colors.red,
+                          textColor: Colors.white,
+                          fontSize: 16.0
+                      );
+                    } else {
+                      await updateGlycemic();
+                      Navigator.pop(context, glycemicModelBack);
+                    }
+                  } catch (ex){
+                    Fluttertoast.showToast(
+                        msg: "Giá trị đường huyết không đúng",
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.CENTER,
+                        timeInSecForIosWeb: 1,
+                        backgroundColor: Colors.red,
+                        textColor: Colors.white,
+                        fontSize: 16.0
+                    );
+                  }
                 },
                 child: Text(
                   "Cập nhật",

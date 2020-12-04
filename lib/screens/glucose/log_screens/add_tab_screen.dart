@@ -1,6 +1,7 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class AddNewTab extends StatefulWidget {
   @override
@@ -48,6 +49,21 @@ class _AddNewTabState extends State<AddNewTab> {
 
   void _sendDataBack(BuildContext context) {
     String textToSendBack = textFieldController.text;
-    Navigator.pop(context, textToSendBack);
+    String textCheck = textToSendBack.trim();
+    textCheck = textCheck.replaceAll(" ", "");
+    if (textCheck.isEmpty || textCheck.length <= 0){
+      Fluttertoast.showToast(
+          msg: "Vui lòng nhập giá trị",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0
+      );
+    } else {
+      Navigator.pop(context, textToSendBack);
+    }
+
   }
 }

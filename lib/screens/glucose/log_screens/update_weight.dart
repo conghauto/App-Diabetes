@@ -23,6 +23,7 @@ class UpdateWeight extends StatefulWidget{
 }
 class _UpdateWeightState extends State<UpdateWeight>{
   WeightModel weightModelBack;
+  double value = 0;
   TextEditingController weight;
   TextEditingController note;
   TextEditingController tags;
@@ -247,8 +248,33 @@ class _UpdateWeightState extends State<UpdateWeight>{
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                 color: Colors.lightBlue,
                 onPressed: () async {
-                  await updateWeight();
-                  Navigator.pop(context,weightModelBack);
+                  try {
+                    value = double.tryParse(weight.text);
+                    if (value <= 0){
+                      Fluttertoast.showToast(
+                          msg: "Giá trị cân nặng không hợp lệ",
+                          toastLength: Toast.LENGTH_SHORT,
+                          gravity: ToastGravity.CENTER,
+                          timeInSecForIosWeb: 1,
+                          backgroundColor: Colors.red,
+                          textColor: Colors.white,
+                          fontSize: 16.0
+                      );
+                    } else {
+                      await updateWeight();
+                      Navigator.pop(context, weightModelBack);
+                    }
+                  } catch (ex){
+                    Fluttertoast.showToast(
+                        msg: "Giá trị cân nặng không đúng",
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.CENTER,
+                        timeInSecForIosWeb: 1,
+                        backgroundColor: Colors.red,
+                        textColor: Colors.white,
+                        fontSize: 16.0
+                    );
+                  }
                 },
                 child: Text(
                   "Cập nhật",
