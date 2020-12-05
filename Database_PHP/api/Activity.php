@@ -14,7 +14,7 @@
 
         
         public function updateActivity($id,$nameActivity,$indexMET,$timeActivity,$tags,$note,$measureTime,$kCal){
-            $query = "UPDATE activities SET nameActivity='$nameActivity', indexMET='$indexMET', timeActivity='$timeActivity', tags='$tags', note='$note', measureTime='$measureTime', kCal='$kCal'  WHERE id='$id'";
+            $query = "UPDATE activities SET nameActivity='$nameActivity', indexMET='$indexMET', timeActivity='$timeActivity', tags='$tags', note='$note', measureTime='$measureTime', calo='$kCal'  WHERE id='$id'";
             $result=mysqli_query($this->con, $query);
             return $result;
         }

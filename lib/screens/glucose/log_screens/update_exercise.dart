@@ -338,35 +338,33 @@ class _UpdateExerciseState extends State<UpdateExercise> {
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                 color: Colors.lightBlue,
                 onPressed: () async {
-                  // try {
-                  //   value = double.tryParse(timeActivity.text);
-                  //   if (value <= 0){
-                  //     Fluttertoast.showToast(
-                  //         msg: "Thời gian hoạt động không hợp lệ",
-                  //         toastLength: Toast.LENGTH_SHORT,
-                  //         gravity: ToastGravity.CENTER,
-                  //         timeInSecForIosWeb: 1,
-                  //         backgroundColor: Colors.red,
-                  //         textColor: Colors.white,
-                  //         fontSize: 16.0
-                  //     );
-                  //   } else {
-                  //     await updateActivity();
-                  //     Navigator.pop(context, activityModelBack);
-                  //   }
-                  // } catch (ex){
-                  //   Fluttertoast.showToast(
-                  //       msg: "Thời gian hoạt động không hợp lệ",
-                  //       toastLength: Toast.LENGTH_SHORT,
-                  //       gravity: ToastGravity.CENTER,
-                  //       timeInSecForIosWeb: 1,
-                  //       backgroundColor: Colors.red,
-                  //       textColor: Colors.white,
-                  //       fontSize: 16.0
-                  //   );
-                  // }
-                  await updateActivity();
-                  Navigator.pop(context, activityModelBack);
+                  try {
+                    value = double.tryParse(timeActivity.text);
+                    if (value <= 0){
+                      Fluttertoast.showToast(
+                          msg: "Thời gian hoạt động không hợp lệ",
+                          toastLength: Toast.LENGTH_SHORT,
+                          gravity: ToastGravity.CENTER,
+                          timeInSecForIosWeb: 1,
+                          backgroundColor: Colors.red,
+                          textColor: Colors.white,
+                          fontSize: 16.0
+                      );
+                    } else {
+                      await updateActivity();
+                      Navigator.pop(context, activityModelBack);
+                    }
+                  } catch (ex){
+                    Fluttertoast.showToast(
+                        msg: "Thời gian hoạt động không hợp lệ",
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.CENTER,
+                        timeInSecForIosWeb: 1,
+                        backgroundColor: Colors.red,
+                        textColor: Colors.white,
+                        fontSize: 16.0
+                    );
+                  }
                 },
                 child: Text(
                   "Cập nhật",
