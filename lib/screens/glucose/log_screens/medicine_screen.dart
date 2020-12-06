@@ -45,13 +45,23 @@ class MedicineLogState extends State<MedicineLog> with AutomaticKeepAliveClientM
     });
   }
   void checkCondition(){
-    if (amount.text.length <= 0 || name.text.length <= 0) {
+    try {
+      String text = name.text;
+      text = text.trim();
+      text = text.replaceAll(" ", "");
+      double value = double.tryParse(amount.text);
+      if (value <= 0 || text.length <= 0 || text.isEmpty ){
         setState(() {
           isValid = false;
         });
-    } else {
+      } else {
+        setState(() {
+          isValid = true;
+        });
+      }
+    } catch (ex){
       setState(() {
-        isValid = true;
+        isValid = false;
       });
     }
   }

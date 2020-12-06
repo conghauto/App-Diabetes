@@ -112,13 +112,22 @@ class BloodGlucosoLogState extends State<BloodGlucosoLog> with AutomaticKeepAliv
                     title: TextField(
                       controller: indexG,
                       onChanged: (value){
-                          setState(() {
-                            if(value.isEmpty){
+                        try {
+                          double result = double.tryParse(value);
+                          if (result <= 0){
+                            setState(() {
                               isValid = false;
-                            }else{
+                            });
+                          } else {
+                            setState(() {
                               isValid = true;
-                            }
+                            });
+                          }
+                        } catch (ex){
+                          setState(() {
+                            isValid = false;
                           });
+                        }
                       },
                       textAlign: TextAlign.right,
                       keyboardType: TextInputType.number,

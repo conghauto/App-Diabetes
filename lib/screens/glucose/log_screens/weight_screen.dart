@@ -99,13 +99,22 @@ class WeightLogState extends State<WeightLog> with AutomaticKeepAliveClientMixin
               keyboardType: TextInputType.number,
               controller: weight,
               onChanged: (value){
-                setState(() {
-                  if(value.isEmpty){
-                    isValid = false;
-                  }else{
-                    isValid = true;
+                try {
+                  double result = double.tryParse(value);
+                  if (result <= 0){
+                    setState(() {
+                      isValid = false;
+                    });
+                  } else {
+                    setState(() {
+                      isValid = true;
+                    });
                   }
-                });
+                } catch (ex){
+                  setState(() {
+                    isValid = false;
+                  });
+                }
               },
               textAlign: TextAlign.right,
               decoration: InputDecoration.collapsed(

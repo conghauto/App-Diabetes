@@ -16,7 +16,7 @@ class _AddNewTabState extends State<AddNewTab> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Second screen', style: TextStyle(color: Colors.white),),
+        title: Text('Thêm tag mới', style: TextStyle(color: Colors.white),),
         backgroundColor: Colors.lightBlue,
       ),
       body: Column(

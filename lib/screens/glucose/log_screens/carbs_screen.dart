@@ -42,13 +42,23 @@ class CarbsLogState extends State<CarbsLog> with AutomaticKeepAliveClientMixin{
   }
 
   void checkCondition(){
-    if (carb.text.length <= 0 || calo.text.length <= 0 || fat.text.length <= 0 || protein.text.length <= 0) {
+    try {
+      double valueCarb = double.tryParse(carb.text);
+      double valueFat = double.tryParse(fat.text);
+      double valueProtein = double.tryParse(protein.text);
+      double valueCalo = double.tryParse(calo.text);
+      if (valueCarb < 0 || valueFat < 0 || valueProtein < 0 || valueCalo < 0){
+        setState(() {
+          isValid = false;
+        });
+      } else {
+        setState(() {
+          isValid = true;
+        });
+      }
+    } catch (ex){
       setState(() {
         isValid = false;
-      });
-    } else {
-      setState(() {
-        isValid = true;
       });
     }
   }

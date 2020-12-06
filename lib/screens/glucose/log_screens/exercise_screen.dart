@@ -126,13 +126,22 @@ class ExerciseLogState extends State<ExerciseLog>with AutomaticKeepAliveClientMi
             title: TextField(
               controller: timeActivity,
               onChanged: (value){
-                setState(() {
-                  if(value.isEmpty){
+                try {
+                  double result = double.tryParse(value);
+                  if (result <= 0){
+                    setState(() {
                       isValidTime = false;
-                  }else{
-                      isValidTime =true;
+                    });
+                  } else {
+                    setState(() {
+                      isValidTime = true;
+                    });
                   }
-                });
+                } catch (ex){
+                  setState(() {
+                    isValidTime = false;
+                  });
+                }
               },
               textAlign: TextAlign.right,
               keyboardType: TextInputType.number,
