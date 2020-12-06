@@ -476,7 +476,7 @@ class _ChartScreenStateful extends State<ChartScreen>{
                 ),
                 ListTile(
                   title: Text(
-                    "Carb trung bình: ${averageCarbs.toStringAsFixed(2)}",
+                    "Carb trung bình: ${averageCarbs.toStringAsFixed(2)} g",
                     style: TextStyle(
                       fontSize: 15,
                     ),
@@ -520,7 +520,7 @@ class _ChartScreenStateful extends State<ChartScreen>{
                 ),
                 ListTile(
                   title: Text(
-                    "KCAL sử dụng trung bình: ${averageCaloActivity.toStringAsFixed(2)}",
+                    "Năng lượng tiêu hao trung bình: ${averageCaloActivity.toStringAsFixed(2)} calo",
                     style: TextStyle(
                       fontSize: 15,
                     ),
@@ -564,7 +564,7 @@ class _ChartScreenStateful extends State<ChartScreen>{
                 ),
                 ListTile(
                   title: Text(
-                    "Đường huyết trung bình: ${averageGlycemic.toStringAsFixed(2)}",
+                    "Đường huyết trung bình: ${averageGlycemic.toStringAsFixed(2)} mg/dL",
                     style: TextStyle(
                       fontSize: 15,
                     ),
