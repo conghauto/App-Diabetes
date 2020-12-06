@@ -5,7 +5,6 @@
     $account = new Account($con);
 
     $fullname = $_POST['fullname'];
-    $username = $_POST['username'];
     $email = $_POST['email'];
     $phone = $_POST['phone'];
     $password = $_POST['password'];
@@ -21,7 +20,7 @@
             echo json_encode(("Error"));
         }
     }else{
-        $query = $account->register($fullname,$username,$email,$phone,$password);
+        $query = $account->register($fullname,$email,$phone,$password);
 
         if($query){
             echo json_encode("Success");

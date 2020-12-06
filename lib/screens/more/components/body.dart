@@ -24,7 +24,6 @@ class _BodyState extends State<Body> {
   String _avatar = "";
   String _username = "";
   String _email= "";
-
   void initState()  {
      fetchUser();
   }
@@ -39,19 +38,16 @@ class _BodyState extends State<Body> {
     if (response.statusCode == 200) {
       final items = json.decode(response.body).cast<Map<String, dynamic>>();
       AccountModel inforAccount = AccountModel.fromJson(items[0]);
-      await setInfor(inforAccount);
+      setState(() {
+        _username  = inforAccount.fullname;
+        _email  = inforAccount.email;
+        _avatar = inforAccount.avatar;
+      });
     } else {
       throw Exception('Failed to load data.');
     }
   }
 
-  void setInfor(AccountModel inforAccount){
-    setState(() {
-      _username  = inforAccount.username;
-      _email  = inforAccount.email;
-      _avatar = inforAccount.avatar;
-    });
-  }
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -66,14 +62,28 @@ class _BodyState extends State<Body> {
           SizedBox(height: SizeConfig.defaultSize * 2), //20
           MenuItem(
             iconSrc: "assets/icons/user.svg",
-            title: "Thông tin tài khoản",
-            press: () {
-              Navigator.pushNamed(context, EditProfilePage.routeName);
+            title: "Tài khoản của bạn",
+            press: () async {
+              AccountModel result = await Navigator.push(context, MaterialPageRoute(
+                  builder: (context) => EditProfilePage()
+              ));
+              if (result != null) {
+                setState(() {
+                  this._avatar = result.avatar;
+                  this._email = result.email;
+                  this._username = result.fullname;
+                });
+              }
             },
           ),
           MenuItem(
             iconSrc: "assets/icons/info.svg",
-            title: "Trợ giúp",
+            title: "Thông tin cá nhân",
+            press: () {},
+          ),
+          MenuItem(
+            iconSrc: "assets/icons/info.svg",
+            title: "Thay đổi mật khẩu",
             press: () {},
           ),
           MenuItem(

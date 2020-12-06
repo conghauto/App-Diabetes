@@ -152,9 +152,21 @@ class _InfoPersonScreenState extends State<InfoPersonScreen> {
 
                                     },
                                     onConfirm: (date) {
-                                      setState(() {
-                                        selectedDate = date;
-                                      });
+                                      if (date.isAfter(DateTime.now())){
+                                        Fluttertoast.showToast(
+                                            msg: "Ngày không hợp lệ",
+                                            toastLength: Toast.LENGTH_SHORT,
+                                            gravity: ToastGravity.CENTER,
+                                            timeInSecForIosWeb: 1,
+                                            backgroundColor: Colors.red,
+                                            textColor: Colors.white,
+                                            fontSize: 16.0
+                                        );
+                                      } else {
+                                        setState(() {
+                                          selectedDate = date;
+                                        });
+                                      }
                                     }
                                 );
                               },
@@ -336,11 +348,18 @@ class _InfoPersonScreenState extends State<InfoPersonScreen> {
         return null;
       },
       validator: (value){
-        if (value.isEmpty){
+        try {
+          double result = double.tryParse(value);
+          if (result <= 0){
+            addError(error: kHeightNullError);
+            return "";
+          } else {
+            return null;
+          }
+        } catch (ex){
           addError(error: kHeightNullError);
           return "";
         }
-        return null;
       },
       decoration:  InputDecoration(
         hintText: "Nhập chiều cao của bạn",
@@ -363,11 +382,18 @@ class _InfoPersonScreenState extends State<InfoPersonScreen> {
         return null;
       },
       validator: (value){
-        if (value.isEmpty){
+        try {
+          double result = double.tryParse(value);
+          if (result <= 0){
+            addError(error: kWeightNullError);
+            return "";
+          } else {
+            return null;
+          }
+        } catch (ex){
           addError(error: kWeightNullError);
           return "";
         }
-        return null;
       },
       decoration:  InputDecoration(
         hintText: "Nhập cân nặng của bạn",

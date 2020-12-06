@@ -22,10 +22,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
   AccountModel _account;
   String _imageURL;
   String _avatar;
-  TextEditingController _username;
-  TextEditingController _email;
   TextEditingController _phone;
   TextEditingController _fullName;
+  TextEditingController _email;
 
   PickedFile _imageFile;
   final List<String> errors = [];
@@ -61,10 +60,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
       final items = json.decode(response.body).cast<Map<String, dynamic>>();
       AccountModel inforAccount = AccountModel.fromJson(items[0]);
       setState(() {
-        _username  = TextEditingController(text: inforAccount.username);
         _fullName  = TextEditingController(text: inforAccount.fullname);
-        _email  = TextEditingController(text: inforAccount.email);
         _phone  = TextEditingController(text: inforAccount.phone);
+        _email = TextEditingController(text: inforAccount.email);
         _avatar = inforAccount.avatar;
       });
     } else {
@@ -76,8 +74,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
     final response = await http.post(url, body: {
       "id": UserCurrent.userID.toString(),
       "fullname": _fullName.text,
-      "username": _username.text,
-      "email": _email.text,
       "phone": _phone.text,
       "avatar": _avatar
     });
@@ -104,7 +100,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
           textColor: Colors.white,
           fontSize: 16.0
       );
-      Navigator.pop(context);
+      Navigator.pop(context, new AccountModel(fullname: _fullName.text, email: _email.text, avatar: _avatar, phone: _phone.text, id: "1"));
     }
   }
   @override
@@ -169,8 +165,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
               Form(key: _formKey, child: Column(
                 children: [
                   buildFullNameField(),
-                  buildEmailField(),
-                  buildUsernameField(),
                   buildPhoneField(),
                   FormError(errors: errors),
                   SizedBox(
@@ -295,15 +289,11 @@ class _EditProfilePageState extends State<EditProfilePage> {
         controller: _fullName,
         onSaved: (newValue) => _fullName.text = newValue,
         onChanged: (value) {
-          if (value.isNotEmpty || value == null){
-            removeError(error: kFullNameNullError);
-          }else if (value.length >= 5){
-            addError(error: kInvalidEmailError);
-          }
-          return null;
+
         },
         validator: (value){
-          if (value.isEmpty){
+          value = value.replaceAll(" ", "");
+          if (value.isEmpty || value == null){
             addError(error: kFullNameNullError);
             return "";
           }else if (value.length < 5){
@@ -315,44 +305,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
         decoration: InputDecoration(
             contentPadding: EdgeInsets.only(bottom: 3, left: 15),
             labelText: "Full Name",
-            floatingLabelBehavior: FloatingLabelBehavior.always,
-            hintStyle: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: Colors.black,
-            )),
-      ),
-    );
-  }
-  Widget buildEmailField()
- {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 35.0),
-      child: TextFormField(
-        keyboardType: TextInputType.emailAddress,
-        onSaved: (newValue) => _email.text = newValue,
-        onChanged: (value) {
-          if (value.isNotEmpty || value == null){
-            removeError(error: kEmailNullError);
-          }else if (emailValidatorRegExp.hasMatch(value)){
-            addError(error: kInvalidEmailError);
-          }
-          return null;
-        },
-        validator: (value){
-          if (value.isEmpty){
-            addError(error: kEmailNullError);
-            return "";
-          }else if (!emailValidatorRegExp.hasMatch(value)){
-            addError(error: kInvalidEmailError);
-            return "";
-          }
-          return null;
-        },
-        controller: _email,
-        decoration: InputDecoration(
-            contentPadding: EdgeInsets.only(bottom: 3, left: 15),
-            labelText: "E-mail",
             floatingLabelBehavior: FloatingLabelBehavior.always,
             hintStyle: TextStyle(
               fontSize: 18,
@@ -390,43 +342,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
         decoration: InputDecoration(
             contentPadding: EdgeInsets.only(bottom: 3, left: 15),
             labelText: "Phone",
-            floatingLabelBehavior: FloatingLabelBehavior.always,
-            hintStyle: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: Colors.black,
-            )),
-      ),
-    );
-  }
-  Widget buildUsernameField() {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 35.0),
-      child: TextFormField(
-        keyboardType: TextInputType.text,
-        onSaved: (newValue) => _username.text = newValue,
-        onChanged: (value) {
-          if (value.isNotEmpty || value == null ){
-            removeError(error: kUsernameNullError);
-          }else if (value.length >= 5){
-            addError(error: kShortUsername);
-          }
-          return null;
-        },
-        validator: (value){
-          if (value.isEmpty || value == null){
-            addError(error: kFullNameNullError);
-            return "";
-          }else if (value.length < 5){
-            addError(error: kShortFullName);
-            return "";
-          }
-          return null;
-        },
-        controller: _username,
-        decoration: InputDecoration(
-            contentPadding: EdgeInsets.only(bottom: 3, left: 15),
-            labelText: "Username",
             floatingLabelBehavior: FloatingLabelBehavior.always,
             hintStyle: TextStyle(
               fontSize: 18,

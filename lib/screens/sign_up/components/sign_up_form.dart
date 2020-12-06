@@ -22,9 +22,8 @@ class SignUpForm extends StatefulWidget {
 
 class _SignUpFormState extends State<SignUpForm> {
   final _formKey = GlobalKey<FormState>();
-
+  bool isSecure = true;
   String fullName;
-  String username="";
   String email;
   String phone;
   String password;
@@ -43,7 +42,6 @@ class _SignUpFormState extends State<SignUpForm> {
     var url = ip + "/api/register.php";
     var response = await http.post(url, body: {
       'fullname': fullName,
-      'username': username,
       'email': email,
       'phone': phone,
       'password': password,
@@ -133,7 +131,7 @@ class _SignUpFormState extends State<SignUpForm> {
 
   TextFormField buildPasswordFormField() {
     return TextFormField(
-      obscureText: true,
+      obscureText: isSecure,
       onSaved: (newValue) => password = newValue,
       onChanged: (value) {
         if (value.isNotEmpty) {
@@ -157,7 +155,14 @@ class _SignUpFormState extends State<SignUpForm> {
         labelText: "Mật khẩu",
         hintText: "Nhập mật khẩu",
         floatingLabelBehavior: FloatingLabelBehavior.always,
-        suffixIcon: CustomSurffixIcon(svgIcon: "assets/icons/Lock.svg"),
+        suffixIcon: IconButton(
+          icon: Icon(Icons.remove_red_eye),
+          onPressed: (){
+            setState(() {
+              isSecure = !isSecure;
+            });
+          },
+        ),
       ),
     );
   }
@@ -165,7 +170,9 @@ class _SignUpFormState extends State<SignUpForm> {
   TextFormField buildEmailFormField(){
     return TextFormField(
       keyboardType: TextInputType.emailAddress,
-      onSaved: (newValue) => email = newValue,
+      onSaved: (newValue) => {
+        email = newValue
+      },
       onChanged: (value) {
         if (value.isNotEmpty){
           removeError(error: kEmailNullError);

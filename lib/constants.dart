@@ -27,13 +27,13 @@ const defaultDuration = Duration(milliseconds: 250);
 final RegExp emailValidatorRegExp =
 RegExp(r"^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
 const String kEmailNullError = "Bạn chưa nhập địa chỉ email";
-const String kHeightNullError = "Bạn chưa nhập chiều cao";
-const String kWeightNullError = "Bạn chưa nhập cân nặng";
+const String kHeightNullError = "Chiều cao không hợp lệ";
+const String kWeightNullError = "Cân nặng không hợp lệ";
 const String kInvalidEmailError = "Email không hợp lệ";
 const String kPassNullError = "Bạn chưa nhập mật khẩu";
 const String kShortPassError = "Mật khẩu phải có ít 8 ký tự";
 const String kMatchPassError = "Passwords don't match";
-const String kNamelNullError = "Please Enter your name";
+const String kNamelNullError = "Vui lòng nhập tên";
 const String kPhoneNumberNullError = "Bạn chưa nhập số điện thoại";
 const String kAddressNullError = "Please Enter your address";
 const String kFullNameNullError = "Bạn chưa nhập họ tên";

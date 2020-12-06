@@ -23,6 +23,7 @@ class SignInForm extends StatefulWidget {
 
 class _SignInFormState extends State<SignInForm> {
   final _formKey = GlobalKey<FormState>();
+  bool isSecure = true;
   String email;
   String password;
   final List<String> errors = [];
@@ -99,21 +100,21 @@ class _SignInFormState extends State<SignInForm> {
           SizedBox(height: getProportionateScreenHeight(15)),
           buildPasswordFormField(),
           SizedBox(height: getProportionateScreenHeight(15)),
-          Row(
-            children: [
-              Spacer(),
-              GestureDetector(
-                onTap: () => Navigator.pushReplacementNamed(context, ForgetPassword.routeName),
-                child: Text(
-                  "Quên mật khẩu",
-                  style: TextStyle(
-                    color: Colors.blueAccent,
-                  ),
-                ),
-
-              ),
-            ],
-          ),
+          // Row(
+          //   children: [
+          //     Spacer(),
+          //     GestureDetector(
+          //       onTap: () => Navigator.pushReplacementNamed(context, ForgetPassword.routeName),
+          //       child: Text(
+          //         "Quên mật khẩu",
+          //         style: TextStyle(
+          //           color: Colors.blueAccent,
+          //         ),
+          //       ),
+          //
+          //     ),
+          //   ],
+          // ),
           FormError(errors: errors),
           SizedBox(height: getProportionateScreenHeight(25)),
           DefaultButton(
@@ -133,7 +134,7 @@ class _SignInFormState extends State<SignInForm> {
 
   TextFormField buildPasswordFormField() {
     return TextFormField(
-      obscureText: true,
+      obscureText: isSecure,
       onSaved: (newValue) => password = newValue,
       onChanged: (value) {
         if (value.isNotEmpty) {
@@ -157,7 +158,14 @@ class _SignInFormState extends State<SignInForm> {
         labelText: "Password",
         hintText: "Nhập mật khẩu",
         floatingLabelBehavior: FloatingLabelBehavior.always,
-        suffixIcon: CustomSurffixIcon(svgIcon: "assets/icons/Lock.svg"),
+        suffixIcon: IconButton(
+          icon: Icon(Icons.remove_red_eye),
+          onPressed: (){
+            setState(() {
+              isSecure = !isSecure;
+            });
+          },
+        ),
       ),
     );
   }

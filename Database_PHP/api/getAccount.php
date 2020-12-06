@@ -14,7 +14,6 @@
         array_push($result, new Account(
             $row['id'],
             $row['fullname'],
-            $row['username'],
             $row['email'],
             $row['phone'],
             $row['avatar']
@@ -24,10 +23,9 @@
     echo json_encode($result);
 
     class Account{
-        function Account($id,$fullname,$username,$email,$phone, $avatar){
+        function Account($id,$fullname,$email,$phone, $avatar){
             $this->id=$id;
             $this->fullname=$fullname;
-            $this->username=$username;
             $this->email=$email;
             $this->phone=$phone;
             $this->avatar=$avatar;
