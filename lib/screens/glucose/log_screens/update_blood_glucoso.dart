@@ -12,6 +12,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:diabetesapp/extensions/format_datetime.dart';
 import '../../../size_config.dart';
+import '../../../user_current.dart';
 class UpdateBloodGlucoso extends StatefulWidget {
   UpdateBloodGlucoso({this.glycemicModel});
   static String routeName = "/update_glucoso_screen";
@@ -81,6 +82,8 @@ class _UpdateBloodGlucosoState extends State<UpdateBloodGlucoso> {
       'note': note.text,
       'measureTime': time.toString(),
       'id': id,
+      'fullname': UserCurrent.fullName.toString(),
+      'emailRelative': UserCurrent.emailRelative.toString()
     });
     glycemicModelBack = new GlycemicModel(id: id, indexG: indexG.text, note: note.text, tags: selectedReportList.length==0?"":selectedReportList.toString(), measureTime: time, idModel: widget.glycemicModel.idModel, userID: widget.glycemicModel.userID);
     var data = json.decode(response.body);
