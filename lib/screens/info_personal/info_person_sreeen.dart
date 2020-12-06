@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:http/http.dart' as http;
 
 class InfoPersonScreen extends StatefulWidget {
@@ -27,9 +28,10 @@ class _InfoPersonScreenState extends State<InfoPersonScreen> {
 
   String height;
   String weight;
+  String email;
 
   final List<String> errors = [];
-  DateTime selectedDate = DateTime(1950,1,1);
+  DateTime selectedDate = DateTime(1970,1,1);
 
   @override
   void initState() {
@@ -63,10 +65,10 @@ class _InfoPersonScreenState extends State<InfoPersonScreen> {
       'weight': weight,
       'typeDiabete': _type.toString(),
       'userID': userID.toString(),
+      'emailRelative': email,
     });
-
-    Navigator.pop(context);
     var data = json.decode(response.body);
+
     if(data=="Fail"){
       Fluttertoast.showToast(
           msg: "Đã xảy ra lỗi",
@@ -100,6 +102,7 @@ class _InfoPersonScreenState extends State<InfoPersonScreen> {
 
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
     return new Scaffold(
         body: new Stack(
           children: <Widget>[
@@ -139,24 +142,21 @@ class _InfoPersonScreenState extends State<InfoPersonScreen> {
                               ),
                               trailing: Icon(Icons.calendar_today),
                               onTap: ()async{
-                                final DateTime picked = await showDatePicker(
-                                  context: context,
-                                  initialDate: selectedDate,
-                                  firstDate: DateTime(1950),
-                                  lastDate: DateTime(2050),
-                                  initialEntryMode: DatePickerEntryMode.input,
-                                  helpText: 'NGÀY SINH', // Can be used as title
-                                  cancelText: 'Hủy bỏ',
-                                  confirmText: 'Chọn',
-                                  errorFormatText: 'Nhập ngày hợp lệ',
-                                  errorInvalidText: 'Ngày không hợp lệ',
-                                  fieldLabelText: 'Nhập ngày',
-                                  fieldHintText: 'dd/mm/yyyy',
+                                await DatePicker.showDatePicker(context,
+                                    showTitleActions: true,
+                                    minTime: DateTime(1950,1,1),
+                                    maxTime: DateTime(2050,1,1),
+                                    locale: LocaleType.vi,
+                                    currentTime: selectedDate,
+                                    onChanged: (date){
+
+                                    },
+                                    onConfirm: (date) {
+                                      setState(() {
+                                        selectedDate = date;
+                                      });
+                                    }
                                 );
-                                if (picked != null && picked != selectedDate)
-                                  setState(() {
-                                    selectedDate = picked;
-                                  });
                               },
                             ),
                           ),
@@ -233,6 +233,21 @@ class _InfoPersonScreenState extends State<InfoPersonScreen> {
                                     ),
                                   ),
                                   subtitle: buildWeightFormField(),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Card(
+                            child: Column(
+                              children: [
+                                new ListTile(
+                                  title: Text( 'Email người thân',
+                                    style: new TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18.0,
+                                    ),
+                                  ),
+                                  subtitle: buildEmailFormField(),
                                 ),
                               ],
                             ),
@@ -356,6 +371,34 @@ class _InfoPersonScreenState extends State<InfoPersonScreen> {
       },
       decoration:  InputDecoration(
         hintText: "Nhập cân nặng của bạn",
+        floatingLabelBehavior: FloatingLabelBehavior.always,
+      ),
+    );
+  }
+  TextFormField buildEmailFormField(){
+    return TextFormField(
+      keyboardType: TextInputType.emailAddress,
+      onSaved: (newValue) => email = newValue,
+      onChanged: (value) {
+        if (value.isNotEmpty){
+          removeError(error: kEmailNullError);
+        }else if (emailValidatorRegExp.hasMatch(value)){
+          addError(error: kInvalidEmailError);
+        }
+        return null;
+      },
+      validator: (value){
+        if (value.isEmpty){
+          addError(error: kEmailNullError);
+          return "";
+        }else if (!emailValidatorRegExp.hasMatch(value)){
+          addError(error: kInvalidEmailError);
+          return "";
+        }
+        return null;
+      },
+      decoration:  InputDecoration(
+        hintText: "Nhập email",
         floatingLabelBehavior: FloatingLabelBehavior.always,
       ),
     );

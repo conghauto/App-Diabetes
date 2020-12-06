@@ -83,12 +83,25 @@ class GlucoseScreenState extends State<GlucoseScreen>{
   Insulin insulin = new Insulin(0, 0, 0, 0);
   String str="";
 
+    void sendEmail() async{
+    var urlSendEmail = "https://server-app-diatebes.000webhostapp.com/sendEmail.php";
+    var res = await http.post(urlSendEmail, body: {
+      'fullname': "Tô Công Hậu",
+      'measureTime': "2020/2/2",
+      'indexG': "178",
+      'emailRelative': "16520359@gm.uit.edu.vn",
+    });
+    var data = json.decode(res.body);
+
+    if (data=="Success") {
+      print("Success");
+    } else {
+      print("Fail");
+//        throw Exception('Failed to create album.');
+    }
+  }
   @override
   void initState() {
-
-//    setState(() {
-//      sortItems();
-//    });
     sortItems();
   }
 
@@ -291,7 +304,7 @@ class GlucoseScreenState extends State<GlucoseScreen>{
         listGlycemics.forEach((element) {
           listItems.add(element);
         });
-        listCarbs.forEach((element) {
+        listMedicine.forEach((element) {
           listItems.add(element);
         });
         listCarbs.forEach((element) {

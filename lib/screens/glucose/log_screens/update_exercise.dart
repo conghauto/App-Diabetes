@@ -101,42 +101,6 @@ class _UpdateExerciseState extends State<UpdateExercise> {
     }
     selectedTypeExercise = new TypeExerciseModel(id: '', typeExercise: widget.activityModel.nameActivity, mETs: widget.activityModel.indexMET);
   }
-  void updateActivity() async{
-    var url = ip + "/api/updateActivity.php";
-    var response = await http.post(url, body: {
-      'nameActivity': selectedTypeExercise.typeExercise.toString(),
-      'indexMET': selectedTypeExercise.mETs.toString(),
-      'timeActivity': timeActivity.text,
-      'tags': selectedReportList.length==0?"":selectedReportList.toString(),
-      'note': note.text,
-      'measureTime': time.toString(),
-      'id': id,
-      'userID': widget.activityModel.userID
-    });
-    activityModelBack = new ActivityModel(id: id, nameActivity: selectedTypeExercise.typeExercise.toString(), indexMET: selectedTypeExercise.mETs.toString(), timeActivity: timeActivity.text, tags: selectedReportList.length==0?"":selectedReportList.toString(), note: note.text, measureTime: time, calo: widget.activityModel.calo, userID: widget.activityModel.userID, idModel: widget.activityModel.idModel);
-    var data = json.decode(response.body);
-    if(data=="Error"){
-      Fluttertoast.showToast(
-          msg: "Đã xảy ra lỗi",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.CENTER,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-          fontSize: 16.0
-      );
-    }else{
-      Fluttertoast.showToast(
-          msg: "Cập nhật thành công",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.CENTER,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.green,
-          textColor: Colors.white,
-          fontSize: 16.0
-      );
-    }
-  }
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -379,6 +343,45 @@ class _UpdateExerciseState extends State<UpdateExercise> {
         ),
       ),
     );
+  }
+
+  void updateActivity() async{
+    var url = ip + "/api/updateActivity.php";
+    var response = await http.post(url, body: {
+      'nameActivity': selectedTypeExercise.typeExercise.toString(),
+      'indexMET': selectedTypeExercise.mETs.toString(),
+      'timeActivity': timeActivity.text,
+      'tags': selectedReportList.length==0?"":selectedReportList.toString(),
+      'note': note.text,
+      'measureTime': time.toString(),
+      'id': id,
+      'userID': widget.activityModel.userID
+    });
+    activityModelBack = new ActivityModel(id: id, nameActivity: selectedTypeExercise.typeExercise.toString(),
+        indexMET: selectedTypeExercise.mETs.toString(), timeActivity: timeActivity.text,
+        tags: selectedReportList.length==0?"":selectedReportList.toString(), note: note.text, measureTime: time, calo: widget.activityModel.calo, userID: widget.activityModel.userID, idModel: widget.activityModel.idModel);
+    var data = json.decode(response.body);
+    if(data=="Error"){
+      Fluttertoast.showToast(
+          msg: "Đã xảy ra lỗi",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0
+      );
+    }else{
+      Fluttertoast.showToast(
+          msg: "Cập nhật thành công",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.green,
+          textColor: Colors.white,
+          fontSize: 16.0
+      );
+    }
   }
 
   showTypesExercise(context) async{

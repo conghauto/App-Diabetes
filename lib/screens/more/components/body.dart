@@ -44,6 +44,7 @@ class _BodyState extends State<Body> {
       throw Exception('Failed to load data.');
     }
   }
+
   void setInfor(AccountModel inforAccount){
     setState(() {
       _username  = inforAccount.username;
@@ -87,7 +88,7 @@ class _BodyState extends State<Body> {
               facebookLogout();
               googleLogout();
 
-              Navigator.pushNamed(context, SignInScreen.routeName);
+              Navigator.pushReplacementNamed(context, SignInScreen.routeName);
             },
           ),
         ],

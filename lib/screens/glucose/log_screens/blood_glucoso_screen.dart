@@ -4,6 +4,7 @@ import 'package:diabetesapp/components/choice_chip_widget.dart';
 import 'package:diabetesapp/components/form_error.dart';
 import 'package:diabetesapp/components/multi_choice_chip.dart';
 import 'package:diabetesapp/constants.dart';
+import 'package:diabetesapp/models/account.dart';
 import 'package:diabetesapp/screens/glucose/add_log_screen.dart';
 import 'package:diabetesapp/screens/glucose/glucose_screen.dart';
 import 'package:diabetesapp/screens/glucose/log_screens/add_tab_screen.dart';
@@ -41,7 +42,6 @@ class BloodGlucosoLogState extends State<BloodGlucosoLog> with AutomaticKeepAliv
   }
 
   void addGlycemic()async{
-
     var url = ip + "/api/addGlycemic.php";
     var response = await http.post(url, body: {
       'indexG': indexG.text,
@@ -49,9 +49,12 @@ class BloodGlucosoLogState extends State<BloodGlucosoLog> with AutomaticKeepAliv
       'note': note.text,
       'measureTime': AddLogSceen.time.toString(),
       'userID': UserCurrent.userID.toString(),
+      'fullname': UserCurrent.fullName.toString(),
+      'emailRelative': UserCurrent.emailRelative.toString(),
     });
 
     var data = json.decode(response.body);
+
     if(data=="Error"){
       Fluttertoast.showToast(
           msg: "Đã xảy ra lỗi",
@@ -63,8 +66,9 @@ class BloodGlucosoLogState extends State<BloodGlucosoLog> with AutomaticKeepAliv
           fontSize: 16.0
       );
     }else{
+//      await sendEmail();
       Fluttertoast.showToast(
-          msg: "Thêm đường huyết thành công",
+          msg: "Thêm chỉ số đường huyết thành công",
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.CENTER,
           timeInSecForIosWeb: 1,
@@ -72,7 +76,7 @@ class BloodGlucosoLogState extends State<BloodGlucosoLog> with AutomaticKeepAliv
           textColor: Colors.white,
           fontSize: 16.0
       );
-    }
+   }
   }
 
   List<String> reportList = [
@@ -324,6 +328,24 @@ class BloodGlucosoLogState extends State<BloodGlucosoLog> with AutomaticKeepAliv
         );
       }
     );
+  }
+
+  void sendEmail() async{
+    var urlSendEmail = "https://server-app-diatebes.000webhostapp.com/sendEmail.php";
+    try{
+      var res = await http.post(urlSendEmail, body: {
+        'fullname': "Tô Công Hậu",
+        'measureTime': "2020/2/2",
+        'indexG': "178",
+        'emailRelative': "16520359@gm.uit.edu.vn",
+      });
+      var dt = json.decode(res.body);
+
+      print(dt);
+    } catch (err) {
+      print('Caught error: $err');
+    }
+
   }
 
   @override

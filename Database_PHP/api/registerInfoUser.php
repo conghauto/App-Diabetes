@@ -11,8 +11,9 @@
     $weight = $_POST['weight'];
     $typeDiabete = $_POST['typeDiabete'];
     $userID= $_POST['userID'];
+    $emailRelative= $_POST['emailRelative'];
 
-    $query = $info->registerInfoUser($birthday,$gender,$height,$weight,$typeDiabete,$userID);
+    $query = $info->registerInfoUser($birthday,$gender,$height,$weight,$typeDiabete,$userID,$emailRelative);
 
     if($query){
         echo json_encode("Success");

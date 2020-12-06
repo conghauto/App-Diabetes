@@ -63,8 +63,14 @@ class _SignUpFormState extends State<SignUpForm> {
       );
     }else{
       // Lưu trạng thái đăng nhậpuserID
-      final String userID = await UserCurrent.getUserID(email);
+      String userID = await UserCurrent.getUserID(email);
       SharedPreferences prefs = await SharedPreferences.getInstance();
+      UserCurrent.userID = userID;
+      if(prefs.getString('userID')!=null){
+        prefs.remove('userID');
+        prefs.remove('query');
+      }
+
       prefs.setString('userID', userID);
 
       Navigator.pushNamed(context, InfoPersonScreen.routeName);
