@@ -3,9 +3,9 @@
     include("config.php");
     // include("Note.php");
 
-    $userID = $_GET['userID'];
+    $userID = $_POST['userID'];
 
-    $query="ELECT users.id, fullname, phoneRelative FROM users, personalinfos WHERE users.id = personalinfos.userID AND id='".$userID."' GROUP BY users.id";
+    $query="SELECT * FROM personalinfos WHERE userID = '".$userID."'";
     
     $data= mysqli_query($con,$query);
 
@@ -14,18 +14,26 @@
     while($row=mysqli_fetch_assoc($data)){
         array_push($result,new InfoUser(
             $row['id'],
-            $row['fullname'],
-            $row['phoneRelative'],
+            $row['birthday'],
+            $row['gender'],
+            $row['height'],
+            $row['weight'],
+            $row['typeDiabete'],
+            $row['emailRelative']
         ));
     }
 
     echo json_encode($result);
 
     class InfoUser{
-        function InfoUser($id,$fullname,$phoneRelative){
+        function InfoUser($id,$birthday,$gender, $height,$weight,$typeDiabete,$emailRelative){
             $this->id=$id;
-            $this->fullname=$fullname;
-            $this->phoneRelative=$phoneRelative;
+            $this->birthday=$birthday;
+            $this->gender=$gender;
+            $this->height=$height;
+            $this->weight=$weight;
+            $this->typeDiabete=$typeDiabete;
+            $this->emailRelative=$emailRelative;
         }
     }
 ?>

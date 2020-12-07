@@ -486,6 +486,10 @@ class _ReportScreenState extends State<ReportScreen>{
                       textAlign: TextAlign.center,
                     ),
                   ),
+                  Divider(
+                    height: 1,
+                    color: Colors.black,
+                  ),
                   DataTable(
                       columns: <DataColumn>[
                         DataColumn(
@@ -539,6 +543,10 @@ class _ReportScreenState extends State<ReportScreen>{
                         textAlign: TextAlign.center,
                       ),
                     ),
+                    Divider(
+                      height: 1,
+                      color: Colors.black,
+                    ),
                     DataTable(
                         columns: <DataColumn>[
                           DataColumn(
@@ -591,6 +599,10 @@ class _ReportScreenState extends State<ReportScreen>{
                         ),
                         textAlign: TextAlign.center,
                       ),
+                    ),
+                    Divider(
+                      height: 1,
+                      color: Colors.black,
                     ),
                     DataTable(
                         columns: <DataColumn>[
@@ -653,6 +665,10 @@ class _ReportScreenState extends State<ReportScreen>{
                         textAlign: TextAlign.center,
                       ),
                     ),
+                    Divider(
+                      height: 1,
+                      color: Colors.black,
+                    ),
                     DataTable(
                         columns: <DataColumn>[
                           DataColumn(
@@ -705,6 +721,10 @@ class _ReportScreenState extends State<ReportScreen>{
                         ),
                         textAlign: TextAlign.center,
                       ),
+                    ),
+                    Divider(
+                      height: 1,
+                      color: Colors.black,
                     ),
                     DataTable(
                         columns: <DataColumn>[

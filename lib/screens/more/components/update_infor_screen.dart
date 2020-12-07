@@ -108,7 +108,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: kPrimaryColor,
-        title: Text("Thông tin của bạn"),
+        title: Text("Thông tin tài khoản"),
       ),
       body: Container(
         padding: EdgeInsets.only(left: 16, top: 25, right: 16),
@@ -304,7 +304,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
         },
         decoration: InputDecoration(
             contentPadding: EdgeInsets.only(bottom: 3, left: 15),
-            labelText: "Full Name",
+            labelText: "Họ tên",
             floatingLabelBehavior: FloatingLabelBehavior.always,
             hintStyle: TextStyle(
               fontSize: 18,
@@ -341,7 +341,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
         controller: _phone,
         decoration: InputDecoration(
             contentPadding: EdgeInsets.only(bottom: 3, left: 15),
-            labelText: "Phone",
+            labelText: "Số điện thoại",
             floatingLabelBehavior: FloatingLabelBehavior.always,
             hintStyle: TextStyle(
               fontSize: 18,

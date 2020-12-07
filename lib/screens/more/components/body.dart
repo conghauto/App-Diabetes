@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:diabetesapp/constants.dart';
 import 'package:diabetesapp/screens/more/components/update_infor_screen.dart';
+import 'package:diabetesapp/screens/more/components/update_personal_infor.dart';
 import 'package:diabetesapp/screens/sign_in/sign_in_screen.dart';
 import 'package:diabetesapp/user_current.dart';
 import 'package:flutter/material.dart';
@@ -79,7 +80,11 @@ class _BodyState extends State<Body> {
           MenuItem(
             iconSrc: "assets/icons/info.svg",
             title: "Thông tin cá nhân",
-            press: () {},
+            press: () async{
+              AccountModel result = await Navigator.push(context, MaterialPageRoute(
+                  builder: (context) => EditPersonalInfo()
+              ));
+            },
           ),
           MenuItem(
             iconSrc: "assets/icons/info.svg",
