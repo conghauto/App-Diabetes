@@ -14,7 +14,6 @@ import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:diabetesapp/extensions/format_datetime.dart';
 import '../../../size_config.dart';
 
-
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:rxdart/subjects.dart';
 
@@ -53,10 +52,8 @@ class ContentNotification{
 
 
 class UpdateBloodGlucoso extends StatefulWidget {
-  UpdateBloodGlucoso({this.glycemicModel});
   UpdateBloodGlucoso({Key key, this.glycemicModel}) : super(key: key);
   static String routeName = "/update_glucoso_screen";
-  GlycemicModel glycemicModel;
   final GlycemicModel glycemicModel;
 
   @override
@@ -128,7 +125,6 @@ class _UpdateBloodGlucosoState extends State<UpdateBloodGlucoso> {
       'note': note.text,
       'measureTime': time.toString(),
       'id': id,
-
       'fullname': UserCurrent.fullName.toString(),
       'emailRelative': UserCurrent.emailRelative.toString(),
     });
@@ -149,13 +145,13 @@ class _UpdateBloodGlucosoState extends State<UpdateBloodGlucoso> {
 
       double bloodG = double.parse(indexG.text);
       if(bloodG < 70){
-        showNotification(listNotification[0].title + bloodG.toString()+" mg/dl",listNotification[0].body);
+        showNotificationCustomSound(listNotification[0].title + bloodG.toString()+" mg/dl",listNotification[0].body);
       }else if(bloodG >= 70 && bloodG < 130){
-        showNotification(listNotification[1].title + bloodG.toString()+" mg/dl",listNotification[1].body);
+        showNotificationCustomSound(listNotification[1].title + bloodG.toString()+" mg/dl",listNotification[1].body);
       }else if(bloodG >= 130 && bloodG <= 180){
-        showNotification(listNotification[2].title + bloodG.toString()+" mg/dl",listNotification[2].body);
+        showNotificationCustomSound(listNotification[2].title + bloodG.toString()+" mg/dl",listNotification[2].body);
       }else{
-        showNotification(listNotification[3].title + bloodG.toString()+" mg/dl. Tình trạng TĂNG ĐƯỜNG HUYẾT ",listNotification[3].body);
+        showNotificationCustomSound(listNotification[3].title + bloodG.toString()+" mg/dl. Tình trạng TĂNG ĐƯỜNG HUYẾT ",listNotification[3].body);
       }
 
       Fluttertoast.showToast(
@@ -175,16 +171,16 @@ class _UpdateBloodGlucosoState extends State<UpdateBloodGlucoso> {
     // TODO: implement build
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.redAccent,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.close),
-          tooltip: 'Đóng',
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-        title: Text("Update")
+          backgroundColor: Colors.redAccent,
+          elevation: 0,
+          leading: IconButton(
+            icon: const Icon(Icons.close),
+            tooltip: 'Đóng',
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+          title: Text("Update")
       ),
       body: Container(
         child: ListView(
@@ -454,7 +450,7 @@ class _UpdateBloodGlucosoState extends State<UpdateBloodGlucoso> {
     );
   }
 
-  Future<void> showNotification(String title, String body) async {
+  Future<void> showNotificationCustomSound(String title, String body) async {
     const AndroidNotificationDetails androidPlatformChannelSpecifics =
     AndroidNotificationDetails(
       'your other channel id',

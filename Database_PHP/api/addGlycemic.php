@@ -35,13 +35,13 @@
             if ($result === FALSE) { 
                 echo "Error";
             }else{
-                $id = $con->insert_id;
-                echo json_encode($id);
+                echo json_encode("Success");
             }
             // var_dump($result);
         }else{
-            $id = $con->insert_id;
-            echo json_encode($id);
+            // $id = $con->insert_id;
+            // echo json_encode($id);
+            echo json_encode("Success");
         }
         // echo json_encode("Success");
     }else{

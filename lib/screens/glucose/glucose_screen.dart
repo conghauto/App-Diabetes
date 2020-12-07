@@ -936,10 +936,10 @@ class GlucoseScreenState extends State<GlucoseScreen>{
                                 Padding(
                                   padding: const EdgeInsets.only(left:5.0),
                                   child: Text("Đường huyết hiện tại:    ",
-                                    style: TextStyle(
-                                        fontFamily: 'Roboto',
-                                        color: Colors.white,
-                                        fontSize: 13)
+                                      style: TextStyle(
+                                          fontFamily: 'Roboto',
+                                          color: Colors.white,
+                                          fontSize: 13)
                                   ),
                                 ),
                                 Padding(
@@ -1001,31 +1001,31 @@ class GlucoseScreenState extends State<GlucoseScreen>{
               ),
             ),
             Row(
-               mainAxisAlignment: MainAxisAlignment.end,
-               children: [
-                 FlatButton(
-                   onPressed: () async => {
-                     await Navigator.push(
-                            context,
-                            MaterialPageRoute(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                FlatButton(
+                  onPressed: () async => {
+                    await Navigator.push(
+                        context,
+                        MaterialPageRoute(
                             builder: (_) =>
-                            SelectFilter()))
-                   },
-                   color: Colors.white,
-                   padding: EdgeInsets.all(10.0),
-                   child: Row(
-                     children: [
-                       Text("Hiển thị", style: TextStyle(
-                         fontFamily: 'Roboto',
-                         fontSize: 15,
-                         color: Colors.black,
-                        ),
-                       ),
-                       Icon(Icons.arrow_drop_down),
-                     ],
-                   ),
-                 )
-               ],
+                                SelectFilter()))
+                  },
+                  color: Colors.white,
+                  padding: EdgeInsets.all(10.0),
+                  child: Row(
+                    children: [
+                      Text("Hiển thị", style: TextStyle(
+                        fontFamily: 'Roboto',
+                        fontSize: 15,
+                        color: Colors.black,
+                      ),
+                      ),
+                      Icon(Icons.arrow_drop_down),
+                    ],
+                  ),
+                )
+              ],
             ),
             new Expanded(
                 child: ListView.builder(
@@ -1054,7 +1054,7 @@ class GlucoseScreenState extends State<GlucoseScreen>{
                           longPress: () async {
                             DateTime date = DateTime.now();
                             if(listItems[index].measureTime.year==date.year&&listItems[index].measureTime.month==date.month
-                              &&listItems[index].measureTime.day==date.day){
+                                &&listItems[index].measureTime.day==date.day){
                               currentBG = 0;
                             }
                             await showDeleteConfirm(context, "glucoso", listItems[index].id, index);
@@ -1096,14 +1096,14 @@ class GlucoseScreenState extends State<GlucoseScreen>{
                           indexValue: listItems[index].weight,
                           time: listItems[index].measureTime,
                           press: () async {
-                           final result = await Navigator.push(context, MaterialPageRoute(
+                            final result = await Navigator.push(context, MaterialPageRoute(
                                 builder: (context) => UpdateWeight(weightModel: listItems[index])
                             ));
-                           if (result != null){
-                             setState(() {
-                               listItems[index] = result;
-                             });
-                           }
+                            if (result != null){
+                              setState(() {
+                                listItems[index] = result;
+                              });
+                            }
                           },
                           longPress: () async {
                             await showDeleteConfirm(context, "weight", listItems[index].id, index);

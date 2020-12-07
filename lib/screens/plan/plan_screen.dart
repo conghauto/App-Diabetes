@@ -275,10 +275,17 @@ class _PlanScreenState extends State<PlanScreen> {
           child: FloatingActionButton(
             child: Icon(Icons.add),
             onPressed: () async {
+              setState(() {
+                if(_dateSelected==null){
+                  _dateSelected = DateTime.now();
+                }
+              });
               await Navigator.of(context).push(
                   MaterialPageRoute(builder: (context) => AddEventScreen(
                     dateSelected: _dateSelected,
-                  )));
+                  )
+                  )
+              );
               setState(() {
                 i = 2;
               });
