@@ -52,7 +52,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(fontFamily: 'Roboto'),
-//      initialRoute: InfoPersonScreen.routeName,
+//      initialRoute: SplashScreen.routeName,
       initialRoute: (userID==null)? SplashScreen.routeName:HomeScreen.routeName,
 //      debugShowCheckedModeBanner: false,
       routes: routes,

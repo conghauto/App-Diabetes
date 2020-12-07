@@ -14,13 +14,6 @@ class SelectFilter extends StatefulWidget {
   _SelectFilterState createState() => _SelectFilterState();
 }
 
-//class OptionDate{
-//  final String select;
-//  final int id;
-//
-//  OptionDate(this.select, this.id);
-//}
-
 class OptionType{
   final String select;
   final int id;
@@ -38,13 +31,6 @@ class _SelectFilterState extends State<SelectFilter> {
   @override
   void initState() {
     setState(() {
-//      if(startDate==null){
-//        startDate=new DateTime.now();
-//      }
-//
-//      if(endDate==null){
-//        endDate=(new DateTime.now()).a;
-//      }
       query = new FilterService("", "",
           null, null, 10, 10,
           10, 10, 10, 10);

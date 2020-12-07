@@ -179,7 +179,12 @@ class _AddEventScreenState extends State<AddEventScreen> {
       );
     }else {
       id = int.parse((json.decode(response.body)).toString());
+      showNotificationCustomSound(_eventEndDate,id,_title.text.toString(),_description.text.toString());
       showNotificationCustomSound(_eventStartDate,id,_title.text.toString(),_description.text.toString());
+
+
+
+
       Fluttertoast.showToast(
           msg: "Tạo lịch nhắc thành công",
           toastLength: Toast.LENGTH_SHORT,
@@ -249,12 +254,14 @@ class _AddEventScreenState extends State<AddEventScreen> {
                     style: TextStyle(color: Colors.blue[800])),
                 trailing: Icon(Icons.calendar_today_sharp),
                 onTap: ()async{
+                  DateTime picked = await DatePicker.showDateTimePicker(context, showTitleActions: true, onChanged: (date) {
                     await DatePicker.showDateTimePicker(context,
                         minTime: DateTime(2000,1,1),
                         maxTime: DateTime(2050,1,1),
                         showTitleActions: true, onChanged: (date) {
 //                    print('change $date in time zone ' + date.timeZoneOffset.inHours.toString());
                   }, onConfirm: (date) {
+                    print('confirm $date');
                     if (date.isAfter(_eventEndDate)) {
                       Fluttertoast.showToast(
                           msg: "Ngày bắt đầu không phù hợp",
@@ -272,6 +279,11 @@ class _AddEventScreenState extends State<AddEventScreen> {
                     }
                   }, currentTime: DateTime.now(), locale: LocaleType.vi);
 //                  DateTime picked = await showDatePicker(context: context, initialDate: _eventStartDate, firstDate: DateTime(_eventStartDate.year-5), lastDate: DateTime(_eventStartDate.year+5));
+                  if(picked != null) {
+                    setState(() {
+                      _eventStartDate = picked;
+                    });
+                  }
                 },
               ),
 
@@ -282,11 +294,13 @@ class _AddEventScreenState extends State<AddEventScreen> {
                   style: TextStyle(color: Colors.blue[800])),
                 trailing: Icon(Icons.calendar_today),
                 onTap: ()async{
+                  DateTime picked = await DatePicker.showDateTimePicker(context, showTitleActions: true, onChanged: (date) {
                     await DatePicker.showDateTimePicker(context,
                         minTime: DateTime(2000,1,1),
                         maxTime: DateTime(2050,1,1),
                         showTitleActions: true, onChanged: (date) {
                   }, onConfirm: (date) {
+                    print('confirm $date');
                     if (date.isBefore(_eventStartDate)) {
                       Fluttertoast.showToast(
                           msg: "Ngày kết thúc không phù hợp",
@@ -303,6 +317,11 @@ class _AddEventScreenState extends State<AddEventScreen> {
                       });
                     }
                   }, currentTime: DateTime.now(), locale: LocaleType.vi);
+                  if(picked != null) {
+                    setState(() {
+                      _eventEndDate = picked;
+                    });
+                  }
                 },
               ),
 
@@ -371,6 +390,7 @@ class _AddEventScreenState extends State<AddEventScreen> {
       int i = int.parse(id);
       await _cancelNotification(i);
 
+      showNotificationCustomSound(_eventEndDate,i,_title.text.toString(),_description.text.toString());
       showNotificationCustomSound(_eventStartDate,i,_title.text.toString(),_description.text.toString());
       Fluttertoast.showToast(
           msg: "Cập nhật thành công",

@@ -44,7 +44,7 @@
     $mail->WordWrap = 50;							//Sets word wrapping on the body of the message to a given number of characters
     $mail->IsHTML(true);							//Sets message type to HTML				
     $mail->Subject = "=?UTF-8?B?".base64_encode("THÔNG BÁO CHỈ SỐ ĐƯỜNG NGƯỜI THÂN CỦA BẠN")."?=";				//Sets the Subject of the message
-    $mail->Body = "Hệ thống APP-DIATEBES cảnh báo với bạn rằng.<br> Chỉ số đường của bệnh nhân: ".$fullname.", ngày: ".$formatDate." là: <b style='color:red'>".$indexG." ml/dl</b>, vượt quá giới hạn đảm bảo. <br><br>Bạn cần phải chú ý theo dõi !";
+    $mail->Body = "Hệ thống APP-DIATEBES cảnh báo với bạn rằng.<br> Chỉ số đường của bệnh nhân: ".$fullname.", ngày: ".$formatDate." là: <b style='color:red'>".$indexG." mg/dl</b>, vượt quá giới hạn đảm bảo. <br><br>Bạn cần phải chú ý theo dõi !";
 
     if(!$mail->Send()) {
         echo "Mailer Error:".$mail->ErrorInfo;

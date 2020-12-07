@@ -4,6 +4,7 @@ import 'package:diabetesapp/components/multi_choice_chip.dart';
 import 'package:diabetesapp/constants.dart';
 import 'package:diabetesapp/models/glycemic.dart';
 import 'package:diabetesapp/screens/glucose/log_screens/add_tab_screen.dart';
+import 'package:diabetesapp/user_current.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -12,17 +13,56 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:diabetesapp/extensions/format_datetime.dart';
 import '../../../size_config.dart';
-import '../../../user_current.dart';
+
+
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:rxdart/subjects.dart';
+
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+FlutterLocalNotificationsPlugin();
+
+/// Streams are created so that app can respond to notification-related events
+/// since the plugin is initialised in the `main` function
+final BehaviorSubject<ReceivedNotification> didReceiveLocalNotificationSubject =
+BehaviorSubject<ReceivedNotification>();
+
+final BehaviorSubject<String> selectNotificationSubject =
+BehaviorSubject<String>();
+
+class ReceivedNotification {
+  ReceivedNotification({
+    @required this.id,
+    @required this.title,
+    @required this.body,
+    @required this.payload,
+  });
+
+  final int id;
+  final String title;
+  final String body;
+  final String payload;
+}
+
+class ContentNotification{
+
+  final String title;
+  final String body;
+
+  ContentNotification(this.title, this.body);
+}
+
+
 class UpdateBloodGlucoso extends StatefulWidget {
   UpdateBloodGlucoso({this.glycemicModel});
+  UpdateBloodGlucoso({Key key, this.glycemicModel}) : super(key: key);
   static String routeName = "/update_glucoso_screen";
   GlycemicModel glycemicModel;
+  final GlycemicModel glycemicModel;
 
   @override
   _UpdateBloodGlucosoState createState() => _UpdateBloodGlucosoState();
 }
 class _UpdateBloodGlucosoState extends State<UpdateBloodGlucoso> {
-  double value = 0;
   GlycemicModel glycemicModelBack;
   TextEditingController indexG;
   String id = "";
@@ -41,6 +81,12 @@ class _UpdateBloodGlucosoState extends State<UpdateBloodGlucoso> {
     "Sau hoạt động",
   ];
   List<String> selectedReportList = List();
+  List<ContentNotification> listNotification = [
+    ContentNotification('Đường huyết ','Tình trạng HẠ ĐƯỜNG HUYẾT'),
+    ContentNotification('Đường huyết ','Tình trạng TỐT'),
+    ContentNotification('Đường huyết ','Tình trạng CHẤP NHẬN ĐUỌC'),
+    ContentNotification('Đường huyết ','Chỉ số đã được gửi qua Email người thân của bạn'),
+  ];
 
   @override
   void initState(){
@@ -82,9 +128,11 @@ class _UpdateBloodGlucosoState extends State<UpdateBloodGlucoso> {
       'note': note.text,
       'measureTime': time.toString(),
       'id': id,
+
       'fullname': UserCurrent.fullName.toString(),
-      'emailRelative': UserCurrent.emailRelative.toString()
+      'emailRelative': UserCurrent.emailRelative.toString(),
     });
+
     glycemicModelBack = new GlycemicModel(id: id, indexG: indexG.text, note: note.text, tags: selectedReportList.length==0?"":selectedReportList.toString(), measureTime: time, idModel: widget.glycemicModel.idModel, userID: widget.glycemicModel.userID);
     var data = json.decode(response.body);
     if(data=="Error"){
@@ -98,6 +146,18 @@ class _UpdateBloodGlucosoState extends State<UpdateBloodGlucoso> {
           fontSize: 16.0
       );
     }else{
+
+      double bloodG = double.parse(indexG.text);
+      if(bloodG < 70){
+        showNotification(listNotification[0].title + bloodG.toString()+" mg/dl",listNotification[0].body);
+      }else if(bloodG >= 70 && bloodG < 130){
+        showNotification(listNotification[1].title + bloodG.toString()+" mg/dl",listNotification[1].body);
+      }else if(bloodG >= 130 && bloodG <= 180){
+        showNotification(listNotification[2].title + bloodG.toString()+" mg/dl",listNotification[2].body);
+      }else{
+        showNotification(listNotification[3].title + bloodG.toString()+" mg/dl. Tình trạng TĂNG ĐƯỜNG HUYẾT ",listNotification[3].body);
+      }
+
       Fluttertoast.showToast(
           msg: "Cập nhật đường huyết thành công",
           toastLength: Toast.LENGTH_SHORT,
@@ -273,33 +333,8 @@ class _UpdateBloodGlucosoState extends State<UpdateBloodGlucoso> {
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                 color: Colors.lightBlue,
                 onPressed: () async {
-                  try {
-                    value = double.tryParse(indexG.text);
-                    if (value <= 0){
-                      Fluttertoast.showToast(
-                          msg: "Giá trị đường huyết không hợp lệ",
-                          toastLength: Toast.LENGTH_SHORT,
-                          gravity: ToastGravity.CENTER,
-                          timeInSecForIosWeb: 1,
-                          backgroundColor: Colors.red,
-                          textColor: Colors.white,
-                          fontSize: 16.0
-                      );
-                    } else {
-                      await updateGlycemic();
-                      Navigator.pop(context, glycemicModelBack);
-                    }
-                  } catch (ex){
-                    Fluttertoast.showToast(
-                        msg: "Giá trị đường huyết không đúng",
-                        toastLength: Toast.LENGTH_SHORT,
-                        gravity: ToastGravity.CENTER,
-                        timeInSecForIosWeb: 1,
-                        backgroundColor: Colors.red,
-                        textColor: Colors.white,
-                        fontSize: 16.0
-                    );
-                  }
+                  await updateGlycemic();
+                  Navigator.pop(context, glycemicModelBack);
                 },
                 child: Text(
                   "Cập nhật",
@@ -417,6 +452,35 @@ class _UpdateBloodGlucosoState extends State<UpdateBloodGlucoso> {
           );
         }
     );
+  }
+
+  Future<void> showNotification(String title, String body) async {
+    const AndroidNotificationDetails androidPlatformChannelSpecifics =
+    AndroidNotificationDetails(
+      'your other channel id',
+      'your other channel name',
+      'your other channel description',
+      icon: 'info',
+      importance: Importance.max,
+      priority: Priority.high,
+      ticker: 'ticker',
+      playSound: true,
+      sound: RawResourceAndroidNotificationSound('warning'),
+      color: Colors.yellowAccent,
+    );
+    const IOSNotificationDetails iOSPlatformChannelSpecifics =
+    IOSNotificationDetails(sound: 'warning');
+    const MacOSNotificationDetails macOSPlatformChannelSpecifics =
+    MacOSNotificationDetails(sound: 'warning');
+    const NotificationDetails platformChannelSpecifics = NotificationDetails(
+        android: androidPlatformChannelSpecifics,
+        iOS: iOSPlatformChannelSpecifics,
+        macOS: macOSPlatformChannelSpecifics);
+    await flutterLocalNotificationsPlugin.show(
+        0,
+        title,
+        body,
+        platformChannelSpecifics);
   }
 
 }

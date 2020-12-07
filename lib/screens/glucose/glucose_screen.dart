@@ -72,40 +72,24 @@ class GlucoseScreenState extends State<GlucoseScreen>{
   List<MedicineModel> listMedicine = new List<MedicineModel>();
   List<ActivityModel> listActivities = new List<ActivityModel>();
   List<WeightModel> listWeights = new List<WeightModel>();
-  List<String>query;
+  List<String> query;
   List<String> listInsulin = ["Tác dụng nhanh", "Tác dụng ngắn", "Tác dụng trung bình", "Tác dụng dài"];
 
-  List<double>listIndexGlycemic = new List<double>();
+  List<double> listIndexGlycemic = new List<double>();
 
   IndexGlycemic gly = new IndexGlycemic(0,1000,0);
   IndexFood food = new IndexFood(0,0);
   IndexActivity activity = new IndexActivity(0, 0);
   Insulin insulin = new Insulin(0, 0, 0, 0);
-  String str="";
+  String str = "";
+  double currentBG = 0;
 
-    void sendEmail() async{
-    var urlSendEmail = "https://server-app-diatebes.000webhostapp.com/sendEmail.php";
-    var res = await http.post(urlSendEmail, body: {
-      'fullname': "Tô Công Hậu",
-      'measureTime': "2020/2/2",
-      'indexG': "178",
-      'emailRelative': "16520359@gm.uit.edu.vn",
-    });
-    var data = json.decode(res.body);
-
-    if (data=="Success") {
-      print("Success");
-    } else {
-      print("Fail");
-//        throw Exception('Failed to create album.');
-    }
-  }
   @override
   void initState() {
     sortItems();
   }
 
-  void sortItems()async{
+  void sortItems() async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     query = prefs.getStringList('query');
 
@@ -338,9 +322,13 @@ class GlucoseScreenState extends State<GlucoseScreen>{
       if(list!=null){
         list.sort((b, a) => a.measureTime.compareTo(b.measureTime));
         setState(() {
+          currentBG = double.parse(list[0].indexG.toString());
           list.forEach((element) => listGlycemics.add(element));
         });
+      }else{
+        currentBG = 0;
       }
+
 
     }
     else {
@@ -621,9 +609,6 @@ class GlucoseScreenState extends State<GlucoseScreen>{
         });
         gly.avgG/=listIndexGlycemic.length;
       }
-//        gly.max=16;
-//        gly.avgG=10;
-//        gly.min=1000;
     }
   }
 
@@ -637,291 +622,358 @@ class GlucoseScreenState extends State<GlucoseScreen>{
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 0.0),
               child: new Container(
-                height: 220,
+                height:  currentBG==0?200:215,
                 color: Colors.white,
                 child: new Stack(
                   children: <Widget>[
                     Container(
-                      height: 200,
+                      height: currentBG==0?170:200,
                       color: kPrimaryColor,
                       child: Padding(
-                        padding: const EdgeInsets.only(top: 30.0),
-                        child: Row(
-                          children: <Widget>[
-                            new Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.only(left: 5),
-                                child: new Container(
-                                  height: 200.0,
-                                  decoration: new BoxDecoration(
-                                    borderRadius: new BorderRadius.circular(5.0),
-                                    color: kPrimaryColor,
-                                  ),
-                                  child: new Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: <Widget>[
-                                      Row(
-                                          children: <Widget>[
-                                            new Icon(
-                                              Icons.opacity,
-                                              color: Colors.red,
-                                            ),
-                                            Padding(
-                                              padding: const EdgeInsets.only(left:5),
-                                              child: new Text("BG", style: new TextStyle(color: Colors.white,
-                                                  fontSize: 12, fontWeight: FontWeight.bold)
-                                              ),
-                                            )
-                                          ]
+                        padding: const EdgeInsets.only(top: 15.0),
+                        child: Column(
+                          children: [
+                            Row(
+                              children: <Widget>[
+                                new Expanded(
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(left: 5),
+                                    child: new Container(
+                                      height: 125.0,
+                                      decoration: new BoxDecoration(
+                                        borderRadius: new BorderRadius.circular(5.0),
+                                        color: kPrimaryColor,
                                       ),
-                                      SizedBox(height: 15.0),
-                                      Row(
-                                          children: <Widget>[
-                                            new Text("avg  ",
-                                                style: new TextStyle(color: Colors.blueGrey,
-                                                    fontSize: 12)),
-                                            new Text("- ${str} "+"${gly.avgG==0.0?"":gly.avgG.toStringAsFixed(1)}",
-                                                style: new TextStyle(color: Colors.white,
-                                                  fontSize: 10,
-                                                  fontWeight: FontWeight.bold,
-                                                ),)
-                                          ]
-                                      ),
-                                      SizedBox(height: 5.0),
-                                      Row(
-                                          children: <Widget>[
-                                            new Text("max ",
-                                                style: new TextStyle(color: Colors.blueGrey,
-                                                    fontSize: 12)),
-                                            new Text("- "+"${gly.max==0.0?"":gly.max.toStringAsFixed(1)}",
-                                              style: new TextStyle(color: Colors.white,
-                                                fontSize: 10,
-                                                fontWeight: FontWeight.bold,
-                                              ),)
-                                          ]
-                                      ),
-                                      SizedBox(height: 5.0),
-                                      Row(
-                                          children: <Widget>[
-                                            new Text("min  ",
-                                                style: new TextStyle(color: Colors.blueGrey,
-                                                    fontSize: 12)),
-                                            new Text("- "+"${gly.min==1000.0?"":gly.min.toStringAsFixed(1)}",
-                                              style: new TextStyle(color: Colors.white,
-                                                fontSize: 10,
-                                                fontWeight: FontWeight.bold,
-                                              ),)
-                                          ]
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                            new Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.only(left: 5),
-                                child: new Container(
-                                  height: 200.0,
-                                  decoration: new BoxDecoration(
-                                    borderRadius: new BorderRadius.circular(5.0),
-                                    color: kPrimaryColor,
-                                  ),
-                                  child: new Column(
-//                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: <Widget>[
-                                      Row(
-                                          children: <Widget>[
-                                            Padding(
-                                              padding: const EdgeInsets.only(top:5.0),
-                                              child: new SvgPicture.asset("assets/icons/pill.svg"),
-                                            ),
-                                            Padding(
-                                              padding: const EdgeInsets.only(left:5, top:7),
-                                              child: new Text("Thuốc",style: new TextStyle(color: Colors.white,
-                                                  fontSize: 12, fontWeight: FontWeight.bold)
-                                              ),
-                                            )
-                                          ]
-                                      ),
-                                      SizedBox(height: 20.0),
-                                      Row(
-                                          children: <Widget>[
-                                            new Text("nhanh ",
-                                                style: new TextStyle(color: Colors.blueGrey,
-                                                    fontSize: 12)),
-                                            new Text("- "+"${insulin.fastInsulin==0?"":insulin.fastInsulin.toString()+" viên"} ",
-                                              style: new TextStyle(color: Colors.white,
-                                                fontSize: 10,
-                                                fontWeight: FontWeight.bold,
-                                              ),)
-                                          ]
-                                      ),
-                                      SizedBox(height: 5.0),
-                                      Row(
-                                          children: <Widget>[
-                                            new Text("ngắn ",
-                                                style: new TextStyle(color: Colors.blueGrey,
-                                                    fontSize: 12)),
-                                            new Text("- "+"${insulin.shortInsulin==0?"":insulin.shortInsulin.toString()+" viên"} ",
-                                              style: new TextStyle(color: Colors.white,
-                                                fontSize: 10,
-                                                fontWeight: FontWeight.bold,
-                                              ),)
-                                          ]
-                                      ),
-                                      SizedBox(height: 5.0),
-                                      Row(
-                                          children: <Widget>[
-                                            new Text("tb ",
-                                                style: new TextStyle(color: Colors.blueGrey,
-                                                    fontSize: 12)),
-                                            new Text("- "+"${insulin.avgInsulin==0?"":insulin.avgInsulin.toString()+" viên"} ",
-                                              style: new TextStyle(color: Colors.white,
-                                                fontSize: 10,
-                                                fontWeight: FontWeight.bold,
-                                              ),)
-                                          ]
-                                      ),
-                                      SizedBox(height: 5.0),
-                                      Row(
-                                          children: <Widget>[
-                                            new Text("dài ",
-                                                style: new TextStyle(color: Colors.blueGrey,
-                                                    fontSize: 12)),
-                                            new Text("- "+"${insulin.longInsulin==0?"":insulin.longInsulin.toString()+" viên"} ",
-                                              style: new TextStyle(color: Colors.white,
-                                                fontSize: 10,
-                                                fontWeight: FontWeight.bold,
-                                              ),)
-                                          ]
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                            new Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.only(left: 5),
-                                child: new Container(
-                                  height: 200.0,
-                                  decoration: new BoxDecoration(
-                                    borderRadius: new BorderRadius.circular(5.0),
-                                    color: kPrimaryColor,
-                                  ),
-                                  child: new Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: <Widget>[
-                                      Row(
-                                          children: <Widget>[
-                                            new Icon(
-                                              Icons.local_dining_outlined,
-                                              color: Colors.orange,
-                                            ),
-                                            Padding(
-                                              padding: const EdgeInsets.only(left:5),
-                                              child: new Text("Thức ăn",
-                                                  style: new TextStyle(color: Colors.white,
+                                      child: new Column(
+                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        children: <Widget>[
+                                          Row(
+                                              children: <Widget>[
+                                                new Icon(
+                                                  Icons.opacity,
+                                                  color: Colors.red,
+                                                ),
+                                                Padding(
+                                                  padding: const EdgeInsets.only(left:5),
+                                                  child: new Text("BG", style: new TextStyle(color: Colors.white,
+                                                      fontFamily: 'Roboto',
                                                       fontSize: 12, fontWeight: FontWeight.bold)
-                                              ),
-                                            )
-                                          ]
-                                      ),
-                                      SizedBox(height: 15.0),
-                                      Row(
-                                          children: <Widget>[
-                                            new Text("carbs ",
-                                                style: new TextStyle(color: Colors.blueGrey,
-                                                    fontSize: 12)),
-                                            new Text("- "+"${food.carbs==0.0?"":food.carbs.toStringAsFixed(1)}",
-                                              style: new TextStyle(color: Colors.white,
-                                                fontSize: 10,
-                                                fontWeight: FontWeight.bold,
-                                              ),)
-                                          ]
-                                      ),
-                                      SizedBox(height: 5.0),
-                                      Row(
-                                          children: <Widget>[
-                                            new Text("cal ",
-                                                style: new TextStyle(color: Colors.blueGrey,
-                                                    fontSize: 12)),
-                                            new Text("- "+"${food.cal==0.0?"":food.cal.toStringAsFixed(1)}",
-                                              style: new TextStyle(color: Colors.white,
-                                                  fontSize: 10,
-                                                  fontWeight: FontWeight.bold,
-                                              ),)
-                                          ]
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                            new Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.only(left: 10),
-                                child: new Container(
-                                  height: 200.0,
-                                  decoration: new BoxDecoration(
-                                    borderRadius: new BorderRadius.circular(5.0),
-                                    color: kPrimaryColor,
-                                  ),
-                                  child: new Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: <Widget>[
-                                      Row(
-                                          children: <Widget>[
-                                            new Icon(
-                                              Icons.directions_run,
-                                              color: Colors.greenAccent,
-                                            ),
-                                            Expanded(
-                                                child: Text("Hoạt động",
-                                                    style: new TextStyle(color: Colors.white,
-                                                        fontSize: 12, fontWeight: FontWeight.bold)
+                                                  ),
                                                 )
-                                            )
-                                          ]
+                                              ]
+                                          ),
+                                          SizedBox(height: 15.0),
+                                          Row(
+                                              children: <Widget>[
+                                                new Text("avg  ",
+                                                    style: new TextStyle(color: Colors.blueGrey,fontFamily: 'Roboto',
+                                                        fontSize: 12)),
+                                                new Text("- ${str} "+"${gly.avgG==0.0?"":gly.avgG.toStringAsFixed(1)}",
+                                                  style: new TextStyle(color: Colors.white,
+                                                    fontSize: 10, fontFamily: 'Roboto',
+                                                    fontWeight: FontWeight.bold,
+                                                  ),)
+                                              ]
+                                          ),
+                                          SizedBox(height: 5.0),
+                                          Row(
+                                              children: <Widget>[
+                                                new Text("max ",
+                                                    style: new TextStyle(color: Colors.blueGrey,fontFamily: 'Roboto',
+                                                        fontSize: 12)),
+                                                new Text("- "+"${gly.max==0.0?"":gly.max.toStringAsFixed(1)}",
+                                                  style: new TextStyle(color: Colors.white,
+                                                    fontFamily: 'Roboto',
+                                                    fontSize: 10,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),)
+                                              ]
+                                          ),
+                                          SizedBox(height: 5.0),
+                                          Row(
+                                              children: <Widget>[
+                                                new Text("min  ",
+                                                    style: new TextStyle(color: Colors.blueGrey,
+                                                        fontFamily: 'Roboto',
+                                                        fontSize: 12)),
+                                                new Text("- "+"${gly.min==1000.0?"":gly.min.toStringAsFixed(1)}",
+                                                  style: new TextStyle(color: Colors.white,
+                                                    fontFamily: 'Roboto',
+                                                    fontSize: 10,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),)
+                                              ]
+                                          )
+                                        ],
                                       ),
-                                      SizedBox(height: 15.0),
-                                      Row(
-                                          children: <Widget>[
-                                            new Text("cal   ",
-                                                style: new TextStyle(color: Colors.blueGrey,
-                                                    fontSize: 12)),
-                                            new Text("- "+"${activity.cal==0.0?"":activity.cal.toStringAsFixed(1)}",
-                                              style: new TextStyle(color: Colors.white,
-                                                fontSize: 10,
-                                                fontWeight: FontWeight.bold,
-                                              ),)
-                                          ]
-                                      ),
-                                      SizedBox(height: 5.0),
-                                      Row(
-                                          children: <Widget>[
-                                            new Text("phút ",
-                                                style: new TextStyle(color: Colors.blueGrey, fontSize: 12)
-                                            ),
-                                            new Text("- "+"${activity.time==0.0?"":activity.time.toStringAsFixed(1)}",
-                                              style: new TextStyle(color: Colors.white,
-                                                fontSize: 10,
-                                                fontWeight: FontWeight.bold,
-                                              ),)
-                                          ]
-                                      )
-                                    ],
+                                    ),
                                   ),
                                 ),
-                              ),
+                                new Expanded(
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(left: 5),
+                                    child: new Container(
+                                      height: 125.0,
+                                      decoration: new BoxDecoration(
+                                        borderRadius: new BorderRadius.circular(5.0),
+                                        color: kPrimaryColor,
+                                      ),
+                                      child: new Column(
+//                                    mainAxisAlignment: MainAxisAlignment.start,
+                                        children: <Widget>[
+                                          Row(
+                                              children: <Widget>[
+                                                Padding(
+                                                  padding: const EdgeInsets.only(top:5.0),
+                                                  child: new SvgPicture.asset("assets/icons/pill.svg"),
+                                                ),
+                                                Padding(
+                                                  padding: const EdgeInsets.only(left:5, top:7),
+                                                  child: new Text("Thuốc",style: new TextStyle(color: Colors.white,
+                                                      fontFamily: 'Roboto',
+                                                      fontSize: 12, fontWeight: FontWeight.bold)
+                                                  ),
+                                                )
+                                              ]
+                                          ),
+                                          SizedBox(height: 20.0),
+                                          Row(
+                                              children: <Widget>[
+                                                new Text("nhanh ",
+                                                    style: new TextStyle(color: Colors.blueGrey,
+                                                        fontFamily: 'Roboto',
+                                                        fontSize: 12)),
+                                                new Text("- "+"${insulin.fastInsulin==0?"":insulin.fastInsulin.toString()+" viên"} ",
+                                                  style: new TextStyle(color: Colors.white,
+                                                    fontFamily: 'Roboto',
+                                                    fontSize: 10,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),)
+                                              ]
+                                          ),
+                                          SizedBox(height: 5.0),
+                                          Row(
+                                              children: <Widget>[
+                                                new Text("ngắn ",
+                                                    style: new TextStyle(color: Colors.blueGrey,
+                                                        fontFamily: 'Roboto',
+                                                        fontSize: 12)),
+                                                new Text("- "+"${insulin.shortInsulin==0?"":insulin.shortInsulin.toString()+" viên"} ",
+                                                  style: new TextStyle(color: Colors.white,
+                                                    fontSize: 10,
+                                                    fontFamily: 'Roboto',
+                                                    fontWeight: FontWeight.bold,
+                                                  ),)
+                                              ]
+                                          ),
+                                          SizedBox(height: 5.0),
+                                          Row(
+                                              children: <Widget>[
+                                                new Text("tb ",
+                                                    style: new TextStyle(color: Colors.blueGrey,
+                                                        fontFamily: 'Roboto',
+                                                        fontSize: 12)),
+                                                new Text("- "+"${insulin.avgInsulin==0?"":insulin.avgInsulin.toString()+" viên"} ",
+                                                  style: new TextStyle(color: Colors.white,
+                                                    fontFamily: 'Roboto',
+                                                    fontSize: 10,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),)
+                                              ]
+                                          ),
+                                          SizedBox(height: 5.0),
+                                          Row(
+                                              children: <Widget>[
+                                                new Text("dài ",
+                                                    style: new TextStyle(color: Colors.blueGrey,
+                                                        fontFamily: 'Roboto',
+                                                        fontSize: 12)),
+                                                new Text("- "+"${insulin.longInsulin==0?"":insulin.longInsulin.toString()+" viên"} ",
+                                                  style: new TextStyle(color: Colors.white,
+                                                    fontFamily: 'Roboto',
+                                                    fontSize: 10,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),)
+                                              ]
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                new Expanded(
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(left: 5),
+                                    child: new Container(
+                                      height: 125.0,
+                                      decoration: new BoxDecoration(
+                                        borderRadius: new BorderRadius.circular(5.0),
+                                        color: kPrimaryColor,
+                                      ),
+                                      child: new Column(
+                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        children: <Widget>[
+                                          Row(
+                                              children: <Widget>[
+                                                new Icon(
+                                                  Icons.local_dining_outlined,
+                                                  color: Colors.orange,
+                                                ),
+                                                Padding(
+                                                  padding: const EdgeInsets.only(left:5),
+                                                  child: new Text("Thức ăn",
+                                                      style: new TextStyle(color: Colors.white,
+                                                          fontFamily: 'Roboto',
+                                                          fontSize: 12, fontWeight: FontWeight.bold)
+                                                  ),
+                                                )
+                                              ]
+                                          ),
+                                          SizedBox(height: 15.0),
+                                          Row(
+                                              children: <Widget>[
+                                                new Text("carbs ",
+                                                    style: new TextStyle(color: Colors.blueGrey,
+                                                        fontFamily: 'Roboto',
+                                                        fontSize: 12)),
+                                                new Text("- "+"${food.carbs==0.0?"":food.carbs.toStringAsFixed(1)}",
+                                                  style: new TextStyle(color: Colors.white,
+                                                    fontFamily: 'Roboto',
+                                                    fontSize: 10,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),)
+                                              ]
+                                          ),
+                                          SizedBox(height: 5.0),
+                                          Row(
+                                              children: <Widget>[
+                                                new Text("cal ",
+                                                    style: new TextStyle(color: Colors.blueGrey,
+                                                        fontFamily: 'Roboto',
+                                                        fontSize: 12)),
+                                                new Text("- "+"${food.cal==0.0?"":food.cal.toStringAsFixed(1)}",
+                                                  style: new TextStyle(color: Colors.white,
+                                                    fontFamily: 'Roboto',
+                                                    fontSize: 10,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),)
+                                              ]
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                new Expanded(
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(left: 10),
+                                    child: new Container(
+                                      height: 125.0,
+                                      decoration: new BoxDecoration(
+                                        borderRadius: new BorderRadius.circular(5.0),
+                                        color: kPrimaryColor,
+                                      ),
+                                      child: new Column(
+                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        children: <Widget>[
+                                          Row(
+                                              children: <Widget>[
+                                                new Icon(
+                                                  Icons.directions_run,
+                                                  color: Colors.greenAccent,
+                                                ),
+                                                Expanded(
+                                                    child: Text("Hoạt động",
+                                                        style: new TextStyle(color: Colors.white,
+                                                            fontFamily: 'Roboto',
+                                                            fontSize: 12, fontWeight: FontWeight.bold)
+                                                    )
+                                                )
+                                              ]
+                                          ),
+                                          SizedBox(height: 15.0),
+                                          Row(
+                                              children: <Widget>[
+                                                new Text("cal   ",
+                                                    style: new TextStyle(color: Colors.blueGrey,
+                                                        fontFamily: 'Roboto',
+                                                        fontSize: 12)),
+                                                new Text("- "+"${activity.cal==0.0?"":activity.cal.toStringAsFixed(1)}",
+                                                  style: new TextStyle(color: Colors.white,
+                                                    fontFamily: 'Roboto',
+                                                    fontSize: 10,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),)
+                                              ]
+                                          ),
+                                          SizedBox(height: 5.0),
+                                          Row(
+                                              children: <Widget>[
+                                                new Text("phút ",
+                                                    style: new TextStyle(color: Colors.blueGrey,
+                                                        fontFamily: 'Roboto',
+                                                        fontSize: 12)
+                                                ),
+                                                new Text("- "+"${activity.time==0.0?"":activity.time.toStringAsFixed(1)}",
+                                                  style: new TextStyle(color: Colors.white,
+                                                    fontFamily: 'Roboto',
+                                                    fontSize: 10,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),)
+                                              ]
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
+                            currentBG==0.0?
+                            SizedBox(height: 2,):
+                            Row(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(left:5.0),
+                                  child: Text("Đường huyết hiện tại:    ",
+                                    style: TextStyle(
+                                        fontFamily: 'Roboto',
+                                        color: Colors.white,
+                                        fontSize: 13)
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(top:2.0),
+                                  child: currentBG<70.0?
+                                  Text("HẠ ĐƯỜNG HUYẾT",
+                                      style: TextStyle(color: Colors.red[200],
+                                          fontFamily: 'Roboto',
+                                          fontSize: 13, fontWeight: FontWeight.bold)
+                                  ):currentBG<130.0?
+                                  Text("TỐT",
+                                      style: TextStyle(color: Colors.green,
+                                          fontFamily: 'Roboto',
+                                          fontSize: 13, fontWeight: FontWeight.bold)
+                                  ):currentBG<180.0?
+                                  Text("CHẤP NHẬN ĐƯỢC",
+                                      style: TextStyle(color: Colors.yellowAccent,
+                                          fontFamily: 'Roboto',
+                                          fontSize: 13, fontWeight: FontWeight.bold)
+                                  ):
+                                  Text("TĂNG ĐƯỜNG HUYẾT",
+                                      style: TextStyle(color: Colors.red,
+                                          fontFamily: 'Roboto',
+                                          fontSize: 13, fontWeight: FontWeight.bold)
+                                  ),
+                                )
+                              ],
+                            )
                           ],
                         ),
                       ),
                     ),
                     Positioned(
-                      top: 170,
+                      top:  currentBG==0?150:170,
                       left: (SizeConfig.screenWidth/2-60),
                       child: Center(
                         child: FlatButton(
@@ -937,7 +989,9 @@ class GlucoseScreenState extends State<GlucoseScreen>{
                           },
                           child: Text(
                             "Thêm",
-                            style: TextStyle(fontSize: 18.0),
+                            style: TextStyle(fontSize: 18.0,
+                              color: Colors.black,
+                              fontFamily: 'Roboto',),
                           ),
                         ),
                       ),
@@ -982,7 +1036,7 @@ class GlucoseScreenState extends State<GlucoseScreen>{
                           iconSrc: "assets/icons/glucose.svg",
                           title: "Đường huyết",
                           nameMedicine: "",
-                          unit: "ml/dl",
+                          unit: "mg/dl",
                           indexValue: listItems[index].indexG,
                           time: listItems[index].measureTime,
                           press: () async {
@@ -992,11 +1046,17 @@ class GlucoseScreenState extends State<GlucoseScreen>{
                             if (result != null){
                               setState(() {
                                 listItems[index] = result;
+                                currentBG = double.parse(result.indexG);
                                 loadIndexes(query);
                               });
                             }
                           },
                           longPress: () async {
+                            DateTime date = DateTime.now();
+                            if(listItems[index].measureTime.year==date.year&&listItems[index].measureTime.month==date.month
+                              &&listItems[index].measureTime.day==date.day){
+                              currentBG = 0;
+                            }
                             await showDeleteConfirm(context, "glucoso", listItems[index].id, index);
                           },
                           colorPrimary: Colors.red,
