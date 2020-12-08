@@ -180,7 +180,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                         onPressed: () {
                           Navigator.pop(context);
                         },
-                        child: Text("CANCEL",
+                        child: Text("Hủy",
                             style: TextStyle(
                                 fontSize: 14,
                                 letterSpacing: 2.2,
@@ -199,7 +199,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20)),
                         child: Text(
-                          "SAVE",
+                          "Lưu",
                           style: TextStyle(
                               fontSize: 14,
                               letterSpacing: 2.2,

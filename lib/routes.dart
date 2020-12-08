@@ -13,6 +13,7 @@ import 'package:diabetesapp/screens/glucose/log_screens/update_weight.dart';
 import 'package:diabetesapp/screens/home/home_screen.dart';
 import 'package:diabetesapp/screens/info_personal/info_person_sreeen.dart';
 import 'package:diabetesapp/screens/more/components/update_infor_screen.dart';
+import 'package:diabetesapp/screens/more/components/update_password_screen.dart';
 import 'package:diabetesapp/screens/more/components/update_personal_infor.dart';
 import 'package:diabetesapp/screens/plan/components/add_event.dart';
 import 'package:diabetesapp/screens/more/more_screen.dart';
@@ -43,5 +44,6 @@ final Map<String, WidgetBuilder> routes= {
   UpdateExercise.routeName: (context) => UpdateExercise(),
   RecipeFood.routeName: (context) => RecipeFood(),
   SportDetail.routeName: (context) => SportDetail(),
-  EditPersonalInfo.routeName: (context) => EditPersonalInfo()
+  EditPersonalInfo.routeName: (context) => EditPersonalInfo(),
+  UpdatePassword.routeName: (context) => UpdatePassword()
 };

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:diabetesapp/constants.dart';
 import 'package:diabetesapp/screens/more/components/update_infor_screen.dart';
+import 'package:diabetesapp/screens/more/components/update_password_screen.dart';
 import 'package:diabetesapp/screens/more/components/update_personal_infor.dart';
 import 'package:diabetesapp/screens/sign_in/sign_in_screen.dart';
 import 'package:diabetesapp/user_current.dart';
@@ -87,9 +88,11 @@ class _BodyState extends State<Body> {
             },
           ),
           MenuItem(
-            iconSrc: "assets/icons/info.svg",
+            iconSrc: "assets/icons/Lock.svg",
             title: "Thay đổi mật khẩu",
-            press: () {},
+            press: () async {
+              await Navigator.pushNamed(context, UpdatePassword.routeName);
+            },
           ),
           MenuItem(
             iconSrc: "assets/icons/exit.svg",

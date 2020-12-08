@@ -301,7 +301,7 @@ class _EditPersonalInfoState extends State<EditPersonalInfo> {
                         onPressed: () {
                           Navigator.pop(context);
                         },
-                        child: Text("CANCEL",
+                        child: Text("Hủy",
                             style: TextStyle(
                                 fontSize: 14,
                                 letterSpacing: 2.2,
@@ -320,7 +320,7 @@ class _EditPersonalInfoState extends State<EditPersonalInfo> {
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20)),
                         child: Text(
-                          "SAVE",
+                          "Lưu",
                           style: TextStyle(
                               fontSize: 14,
                               letterSpacing: 2.2,
