@@ -18,7 +18,7 @@
 
     if($query){
         $float_value_of_indexG = floatval($indexG);
-        if($float_value_of_indexG>140){
+        if($float_value_of_indexG>180){
             $url = 'https://server-app-diatebes.000webhostapp.com/sendEmail.php';
             $data = array('fullname' => $fullname, 'measureTime' => $measureTime,'indexG'=>$indexG,'emailRelative'=>$emailRelative);
 
@@ -39,9 +39,11 @@
             }
             // var_dump($result);
         }else{
+            // $id = $con->insert_id;
+            // echo json_encode($id);
             echo json_encode("Success");
         }
-
+        // echo json_encode("Success");
     }else{
         echo json_encode("Error");
     }

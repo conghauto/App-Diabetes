@@ -18,7 +18,7 @@
 
     if($query){
         $float_value_of_indexG = floatval($indexG);
-        if($float_value_of_indexG>140){
+        if($float_value_of_indexG>180){
             $url = 'https://server-app-diatebes.000webhostapp.com/sendEmail.php';
             $data = array('fullname' => $fullname, 'measureTime' => $measureTime,'indexG'=>$indexG,'emailRelative'=>$emailRelative);
 
@@ -32,16 +32,16 @@
             );
             $context  = stream_context_create($options);
             $result = file_get_contents($url, false, $context);
-            if ($result === FALSE) { 
-                echo "Error";
-            }else{
+            if ($result == FALSE) { 
+                echo json_encode("Error");
+            }
+            else{
                 echo json_encode("Success");
             }
             // var_dump($result);
         }else{
             echo json_encode("Success");
         }
-
     }else{
         echo json_encode("Error");
     }

@@ -115,13 +115,13 @@ class _AddEventScreenState extends State<AddEventScreen> {
               onPressed: () async {
                 Navigator.of(context, rootNavigator: true).pop();
                 await Navigator.push(
-                  context,
-                  MaterialPageRoute<void>(
-                    builder: (BuildContext context) =>
-                    AddEventScreen(
-                      note: widget.note,
+                    context,
+                    MaterialPageRoute<void>(
+                        builder: (BuildContext context) =>
+                            AddEventScreen(
+                              note: widget.note,
+                            )
                     )
-                  )
                 );
               },
               child: const Text('Ok'),
@@ -220,9 +220,9 @@ class _AddEventScreenState extends State<AddEventScreen> {
                   (value.isEmpty) ? "Nhập tên tiêu đề" : null,
                   style: TextStyle(fontFamily: 'Roboto', fontSize: 18),
                   decoration: InputDecoration(
-                      labelText: "Tiêu đề",
-                      filled: true,
-                      fillColor: Colors.white,
+                    labelText: "Tiêu đề",
+                    filled: true,
+                    fillColor: Colors.white,
 //                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(10))
                   ),
                 ),
@@ -245,32 +245,32 @@ class _AddEventScreenState extends State<AddEventScreen> {
               ListTile(
                 title: Text("Thời gian bắt đầu"),
                 subtitle: Text(
-                "${FormatDateTime.convertDayOfWeek(_eventStartDate.weekday)}, ${FormatDateTime.formatDay(_eventStartDate.day)} th ${_eventStartDate.month}, ${_eventStartDate.year}  ${FormatDateTime.formatHour(_eventStartDate.hour)}:${FormatDateTime.formatMinute(_eventStartDate.minute)}",
+                    "${FormatDateTime.convertDayOfWeek(_eventStartDate.weekday)}, ${FormatDateTime.formatDay(_eventStartDate.day)} th ${_eventStartDate.month}, ${_eventStartDate.year}  ${FormatDateTime.formatHour(_eventStartDate.hour)}:${FormatDateTime.formatMinute(_eventStartDate.minute)}",
                     style: TextStyle(color: Colors.blue[800])),
                 trailing: Icon(Icons.calendar_today_sharp),
                 onTap: ()async{
-                    await DatePicker.showDateTimePicker(context,
-                        minTime: DateTime(2000,1,1),
-                        maxTime: DateTime(2050,1,1),
-                        showTitleActions: true, onChanged: (date) {
+                  await DatePicker.showDateTimePicker(context,
+                      minTime: DateTime(2000,1,1),
+                      maxTime: DateTime(2050,1,1),
+                      showTitleActions: true, onChanged: (date) {
 //                    print('change $date in time zone ' + date.timeZoneOffset.inHours.toString());
-                  }, onConfirm: (date) {
-                    if (date.isAfter(_eventEndDate)) {
-                      Fluttertoast.showToast(
-                          msg: "Ngày bắt đầu không phù hợp",
-                          toastLength: Toast.LENGTH_SHORT,
-                          gravity: ToastGravity.CENTER,
-                          timeInSecForIosWeb: 1,
-                          backgroundColor: Colors.red,
-                          textColor: Colors.white,
-                          fontSize: 16.0
-                      );
-                    } else {
-                      setState(() {
-                        _eventStartDate = date;
-                      });
-                    }
-                  }, currentTime: DateTime.now(), locale: LocaleType.vi);
+                      }, onConfirm: (date) {
+                        if (date.isAfter(_eventEndDate)) {
+                          Fluttertoast.showToast(
+                              msg: "Ngày bắt đầu không phù hợp",
+                              toastLength: Toast.LENGTH_SHORT,
+                              gravity: ToastGravity.CENTER,
+                              timeInSecForIosWeb: 1,
+                              backgroundColor: Colors.red,
+                              textColor: Colors.white,
+                              fontSize: 16.0
+                          );
+                        } else {
+                          setState(() {
+                            _eventStartDate = date;
+                          });
+                        }
+                      }, currentTime: DateTime.now(), locale: LocaleType.vi);
 //                  DateTime picked = await showDatePicker(context: context, initialDate: _eventStartDate, firstDate: DateTime(_eventStartDate.year-5), lastDate: DateTime(_eventStartDate.year+5));
                 },
               ),
@@ -278,31 +278,31 @@ class _AddEventScreenState extends State<AddEventScreen> {
               ListTile(
                 title: Text("Thời gian kết thúc", style: TextStyle(color: Colors.black),),
                 subtitle: Text(
-                "${FormatDateTime.convertDayOfWeek(_eventEndDate.weekday)}, ${FormatDateTime.formatDay(_eventEndDate.day)} th ${_eventEndDate.month}, ${_eventEndDate.year}  ${FormatDateTime.formatHour(_eventEndDate.hour)}:${FormatDateTime.formatMinute(_eventEndDate.minute)}",
-                  style: TextStyle(color: Colors.blue[800])),
+                    "${FormatDateTime.convertDayOfWeek(_eventEndDate.weekday)}, ${FormatDateTime.formatDay(_eventEndDate.day)} th ${_eventEndDate.month}, ${_eventEndDate.year}  ${FormatDateTime.formatHour(_eventEndDate.hour)}:${FormatDateTime.formatMinute(_eventEndDate.minute)}",
+                    style: TextStyle(color: Colors.blue[800])),
                 trailing: Icon(Icons.calendar_today),
                 onTap: ()async{
-                    await DatePicker.showDateTimePicker(context,
-                        minTime: DateTime(2000,1,1),
-                        maxTime: DateTime(2050,1,1),
-                        showTitleActions: true, onChanged: (date) {
-                  }, onConfirm: (date) {
-                    if (date.isBefore(_eventStartDate)) {
-                      Fluttertoast.showToast(
-                          msg: "Ngày kết thúc không phù hợp",
-                          toastLength: Toast.LENGTH_SHORT,
-                          gravity: ToastGravity.CENTER,
-                          timeInSecForIosWeb: 1,
-                          backgroundColor: Colors.red,
-                          textColor: Colors.white,
-                          fontSize: 16.0
-                      );
-                    }  else {
-                      setState(() {
-                        _eventEndDate = date;
-                      });
-                    }
-                  }, currentTime: DateTime.now(), locale: LocaleType.vi);
+                  await DatePicker.showDateTimePicker(context,
+                      minTime: DateTime(2000,1,1),
+                      maxTime: DateTime(2050,1,1),
+                      showTitleActions: true, onChanged: (date) {
+                      }, onConfirm: (date) {
+                        if (date.isBefore(_eventStartDate)) {
+                          Fluttertoast.showToast(
+                              msg: "Ngày kết thúc không phù hợp",
+                              toastLength: Toast.LENGTH_SHORT,
+                              gravity: ToastGravity.CENTER,
+                              timeInSecForIosWeb: 1,
+                              backgroundColor: Colors.red,
+                              textColor: Colors.white,
+                              fontSize: 16.0
+                          );
+                        }  else {
+                          setState(() {
+                            _eventEndDate = date;
+                          });
+                        }
+                      }, currentTime: DateTime.now(), locale: LocaleType.vi);
                 },
               ),
 
@@ -321,16 +321,16 @@ class _AddEventScreenState extends State<AddEventScreen> {
                         });
 
                         if (widget.note != null) {
-                           updateData(widget.note.id.toString());
-                           setState(() {
-                             Navigator.pop(context);
-                           });
+                          updateData(widget.note.id.toString());
+                          setState(() {
+                            Navigator.pop(context);
+                          });
                         } else {
-                            await sendData();
+                          await sendData();
 
-                            setState(() {
-                              Navigator.pop(context);
-                            });
+                          setState(() {
+                            Navigator.pop(context);
+                          });
                         }
 
                         setState(() {
@@ -407,12 +407,12 @@ class _AddEventScreenState extends State<AddEventScreen> {
       priority: Priority.high,
       ticker: 'ticker',
       playSound: true,
-      sound: RawResourceAndroidNotificationSound('alert'),
+      sound: RawResourceAndroidNotificationSound('warning'),
     );
     const IOSNotificationDetails iOSPlatformChannelSpecifics =
-    IOSNotificationDetails(sound: 'alert');
+    IOSNotificationDetails(sound: 'warning');
     const MacOSNotificationDetails macOSPlatformChannelSpecifics =
-    MacOSNotificationDetails(sound: 'alert');
+    MacOSNotificationDetails(sound: 'warning');
     const NotificationDetails platformChannelSpecifics = NotificationDetails(
         android: androidPlatformChannelSpecifics,
         iOS: iOSPlatformChannelSpecifics,

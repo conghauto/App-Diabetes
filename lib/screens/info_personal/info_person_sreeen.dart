@@ -102,7 +102,6 @@ class _InfoPersonScreenState extends State<InfoPersonScreen> {
 
   @override
   Widget build(BuildContext context) {
-    SizeConfig().init(context);
     return new Scaffold(
         body: new Stack(
           children: <Widget>[

@@ -58,7 +58,6 @@ dependencies:
   intl: ^0.16.1
   shared_preferences: ^0.5.12+2
   flutter_datetime_picker: ^1.4.0
-  flutter_sms: ^2.1.1
 
 dev_dependencies:
   flutter_test:

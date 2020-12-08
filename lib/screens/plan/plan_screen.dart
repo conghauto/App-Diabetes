@@ -202,37 +202,37 @@ class _PlanScreenState extends State<PlanScreen> {
                     ),
                     ..._selectedEvents.map((event) =>
                         Card(
-                            color: Colors.red[50],
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: ListTile(
-                                title: Text(event.title, style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 20,)
-                                ),
-                                subtitle: new Row(children: <Widget>[
-                                  new Padding(padding: EdgeInsets.fromLTRB(
-                                      5, 20, 0, 0)),
-                                  Container(
-                                    height: 10.0,
-                                    width: 10.0,
-                                    color: Colors.green,
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                          color: Colors.green,
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(30.0))),
-                                    ),
+                          color: Colors.red[50],
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: ListTile(
+                              title: Text(event.title, style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 20,)
+                              ),
+                              subtitle: new Row(children: <Widget>[
+                                new Padding(padding: EdgeInsets.fromLTRB(
+                                    5, 20, 0, 0)),
+                                Container(
+                                  height: 10.0,
+                                  width: 10.0,
+                                  color: Colors.green,
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                        color: Colors.green,
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(30.0))),
                                   ),
-                                  new Padding(padding: EdgeInsets.fromLTRB(
-                                      10, 0, 0, 0)),
-                                  new Text("${FormatDateTime.formatDay(
-                                      event.eventEndDate.day)} th ${event
-                                      .eventEndDate.month}, ${event
-                                      .eventEndDate.year} | ${FormatDateTime
-                                      .formatHour(event.eventEndDate
-                                      .hour)}:${FormatDateTime.formatMinute(
-                                      event.eventEndDate.minute)}"),
-                                ]),
+                                ),
+                                new Padding(padding: EdgeInsets.fromLTRB(
+                                    10, 0, 0, 0)),
+                                new Text("${FormatDateTime.formatDay(
+                                    event.eventEndDate.day)} th ${event
+                                    .eventEndDate.month}, ${event
+                                    .eventEndDate.year} | ${FormatDateTime
+                                    .formatHour(event.eventEndDate
+                                    .hour)}:${FormatDateTime.formatMinute(
+                                    event.eventEndDate.minute)}"),
+                              ]),
 //                                trailing: IconButton(
 //                                  icon: const Icon(Icons.more_vert_outlined),
 //                                  tooltip: 'Xóa',
@@ -243,27 +243,27 @@ class _PlanScreenState extends State<PlanScreen> {
 //                                    });
 //                                  },
 //                                ),
-                                onTap: () async {
-                                  await Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (_) =>
-                                              AddEventScreen(
-                                                note: event,
-                                              )
-                                      )
-                                  );
-                                  setState(() {
-                                    i++;
-                                  });
-                                },
-                                onLongPress: ()async{
-                                  setState(() {
-                                    _showMyDialog(event.id);
-                                  });
-                                },
-                              ),
+                              onTap: () async {
+                                await Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (_) =>
+                                            AddEventScreen(
+                                              note: event,
+                                            )
+                                    )
+                                );
+                                setState(() {
+                                  i++;
+                                });
+                              },
+                              onLongPress: ()async{
+                                setState(() {
+                                  _showMyDialog(event.id);
+                                });
+                              },
                             ),
+                          ),
                         )
                     ),
                   ],
@@ -275,10 +275,17 @@ class _PlanScreenState extends State<PlanScreen> {
           child: FloatingActionButton(
             child: Icon(Icons.add),
             onPressed: () async {
+              setState(() {
+                if(_dateSelected==null){
+                  _dateSelected = DateTime.now();
+                }
+              });
               await Navigator.of(context).push(
                   MaterialPageRoute(builder: (context) => AddEventScreen(
                     dateSelected: _dateSelected,
-                  )));
+                  )
+                  )
+              );
               setState(() {
                 i = 2;
               });
