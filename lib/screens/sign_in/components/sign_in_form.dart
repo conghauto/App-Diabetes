@@ -4,6 +4,7 @@ import 'package:diabetesapp/components/custom_surffix_icon.dart';
 import 'package:diabetesapp/components/form_error.dart';
 import 'package:diabetesapp/screens/forgot_password/forgot_password.dart';
 import 'package:diabetesapp/screens/home/home_screen.dart';
+import 'package:diabetesapp/screens/info_personal/info_person_sreeen.dart';
 import 'package:diabetesapp/size_config.dart';
 import 'package:diabetesapp/user_current.dart';
 import 'package:diabetesapp/widgets/ProgressDialog.dart';
@@ -49,9 +50,13 @@ class _SignInFormState extends State<SignInForm> {
       // Lưu trạng thái đăng nhập
       final String userID = await UserCurrent.getUserID(email);
       SharedPreferences prefs = await SharedPreferences.getInstance();
+      if(prefs.getString('userID')!=null){
+        prefs.remove('userID');
+        prefs.remove('query');
+      }
       prefs.setString('userID', userID);
 
-      UserCurrent().init(context);
+      await UserCurrent().init();
 
       Fluttertoast.showToast(
           msg: "Đăng nhập thành công",
@@ -62,7 +67,11 @@ class _SignInFormState extends State<SignInForm> {
           textColor: Colors.white,
           fontSize: 16.0
       );
-      Navigator.pushNamed(context, HomeScreen.routeName);
+      if(UserCurrent.emailRelative==null){
+        Navigator.pushNamed(context, InfoPersonScreen.routeName);
+      }else{
+        Navigator.pushNamed(context, HomeScreen.routeName);
+      }
     }else{
       Fluttertoast.showToast(
           msg: "Email hoặc mật khẩu chưa chính xác",

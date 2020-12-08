@@ -58,15 +58,17 @@ class _SignInGoogleState extends State<SignInGoogle> {
 
       SignInGoogle.isLoggedIn=true;
 
-      var phone=user.phoneNumber==null?"":user.phoneNumber;
-      saveInfoUser(user.displayName,user.email,phone);
-
       // Lưu trạng thái đăng nhập
       final String userID =await UserCurrent.getUserID(user.email);
       SharedPreferences prefs = await SharedPreferences.getInstance();
       prefs.setString('userID', userID);
 
-      UserCurrent().init(context);
+      await UserCurrent().init();
+
+      var phone=user.phoneNumber==null?"":user.phoneNumber;
+      saveInfoUser(user.displayName,user.email,phone);
+
+
     }
   }
 
@@ -85,6 +87,15 @@ class _SignInGoogleState extends State<SignInGoogle> {
     var data = json.decode(response.body);
 
     if(data=="Success"){
+      Fluttertoast.showToast(
+          msg: "Đăng nhập thành công",
+          timeInSecForIosWeb: 1,
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          backgroundColor: Colors.green,
+          textColor: Colors.white,
+          fontSize: 16.0
+      );
       Navigator.pushNamed(context, InfoPersonScreen.routeName);
     }else if(data=="Exist"){
       Fluttertoast.showToast(
@@ -96,7 +107,11 @@ class _SignInGoogleState extends State<SignInGoogle> {
           textColor: Colors.white,
           fontSize: 16.0
       );
-      Navigator.pushNamed(context, HomeScreen.routeName);
+      if(UserCurrent.emailRelative==null){
+        Navigator.pushNamed(context, InfoPersonScreen.routeName);
+      }else{
+        Navigator.pushNamed(context, HomeScreen.routeName);
+      }
     }
     else {
       Fluttertoast.showToast(

@@ -1,5 +1,3 @@
-
-import 'package:diabetesapp/components/sign_in_google.dart';
 import 'package:diabetesapp/routes.dart';
 import 'package:diabetesapp/screens/home/home_screen.dart';
 import 'package:diabetesapp/screens/info_personal/info_person_sreeen.dart';
@@ -24,8 +22,13 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
 
+
+
   SharedPreferences prefs = await SharedPreferences.getInstance();
   var userID = prefs.getString('userID');
+  if (userID!=null){
+    await UserCurrent().init();
+  }
   print(userID);
 
 
@@ -46,14 +49,12 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (userID!=null){
-      UserCurrent().init(context);
-    }
+
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(fontFamily: 'Roboto'),
 //      initialRoute: SplashScreen.routeName,
-      initialRoute: (userID==null)? SplashScreen.routeName:HomeScreen.routeName,
+      initialRoute: (userID!=null&&UserCurrent.emailRelative!=null)? HomeScreen.routeName:SplashScreen.routeName,
 //      debugShowCheckedModeBanner: false,
       routes: routes,
     );

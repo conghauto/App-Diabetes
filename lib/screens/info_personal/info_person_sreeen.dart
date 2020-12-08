@@ -6,6 +6,7 @@ import 'package:diabetesapp/constants.dart';
 import 'package:diabetesapp/models/account.dart';
 import 'package:diabetesapp/screens/home/home_screen.dart';
 import 'package:diabetesapp/size_config.dart';
+import 'package:diabetesapp/user_current.dart';
 import 'package:diabetesapp/widgets/ProgressDialog.dart';
 import 'package:diabetesapp/widgets/default_button.dart';
 import 'package:flutter/material.dart';
@@ -81,6 +82,7 @@ class _InfoPersonScreenState extends State<InfoPersonScreen> {
       );
     }
     else{
+      await UserCurrent().init();
       Navigator.pushNamed(context, HomeScreen.routeName);
     }
 

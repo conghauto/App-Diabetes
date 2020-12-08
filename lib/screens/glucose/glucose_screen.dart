@@ -319,7 +319,7 @@ class GlucoseScreenState extends State<GlucoseScreen>{
         return GlycemicModel.fromJson(json);
       }).toList();
 
-      if(list!=null){
+      if(list!= null && list.length>0){
         list.sort((b, a) => a.measureTime.compareTo(b.measureTime));
         setState(() {
           currentBG = double.parse(list[0].indexG.toString());
@@ -569,8 +569,8 @@ class GlucoseScreenState extends State<GlucoseScreen>{
 
   void loadIndexes(List<String>query)async{
 
-    if(query[0]==""&&query[1]=="customDate"&&query[2]!=""&&query[3]!=""){
-
+    if(query!=null&&query[0]==""&&query[1]=="customDate"&&query[2]!=""&&query[3]!=""){
+      print(query.toString());
       listIndexGlycemic = new List<double>();
       gly = new IndexGlycemic(0, 1000, 0);
       insulin = new Insulin(0, 0, 0, 0);

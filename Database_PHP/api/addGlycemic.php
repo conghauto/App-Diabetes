@@ -33,7 +33,7 @@
             $context  = stream_context_create($options);
             $result = file_get_contents($url, false, $context);
             if ($result === FALSE) { 
-                echo "Error";
+                echo json_encode("Error");
             }else{
                 echo json_encode("Success");
             }
@@ -43,7 +43,6 @@
             // echo json_encode($id);
             echo json_encode("Success");
         }
-        // echo json_encode("Success");
     }else{
         echo json_encode("Error");
     }
