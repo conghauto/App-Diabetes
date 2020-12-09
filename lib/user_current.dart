@@ -11,7 +11,7 @@ class UserCurrent{
   static String userID;
   static String fullName;
   static String emailRelative;
-  void init(BuildContext context) async{
+  Future init() async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     userID = prefs.getString('userID');
 
@@ -62,8 +62,11 @@ class UserCurrent{
 
     if (response.statusCode == 200) {
       final items = json.decode(response.body).cast<Map<String, dynamic>>();
-      InfoRelativeModel inforAccount = InfoRelativeModel.fromJson(items[0]);
-      emailRelative = inforAccount.emailRelative;
+
+      if(items.toString()!="[]") {
+        InfoRelativeModel inforAccount = InfoRelativeModel.fromJson(items[0]);
+        emailRelative = inforAccount.emailRelative;
+      }
     } else {
       throw Exception('Failed to load data.');
     }
