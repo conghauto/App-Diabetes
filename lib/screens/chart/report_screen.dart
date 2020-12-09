@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:diabetesapp/models/account.dart';
 import 'package:diabetesapp/models/activity.dart';
@@ -6,14 +8,19 @@ import 'package:diabetesapp/models/carb.dart';
 import 'package:diabetesapp/models/glycemic.dart';
 import 'package:diabetesapp/models/medicine.dart';
 import 'package:diabetesapp/models/weight.dart';
+import 'package:diabetesapp/screens/chart/pdf_viewer_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
+import 'package:pdf/pdf.dart';
 import '../../constants.dart';
 import '../../user_current.dart';
+import 'package:pdf/widgets.dart' as pdfLib;
+import 'package:path_provider/path_provider.dart';
 class ReportScreen extends StatefulWidget{
   static String routeName = "/report_screen";
   @override
@@ -311,6 +318,185 @@ class _ReportScreenState extends State<ReportScreen>{
     return items;
   }
 
+  generatePdfAndView(context) async {
+    final pdfLib.Document pdf = pdfLib.Document(deflate: zlib.encode);
+    var data = await rootBundle.load("assets/fonts/Roboto-Bold.ttf");
+    var myFont = pdfLib.Font.ttf(data);
+    var myHeaderStyle = pdfLib.TextStyle(font: myFont, fontSize: 40, );
+    var myTitleStyle = pdfLib.TextStyle(font: myFont, fontSize: 30, );
+    var myStyle = pdfLib.TextStyle(font: myFont,);
+    pdf.addPage(
+      pdfLib.MultiPage(
+        pageFormat: PdfPageFormat.a4,
+        build: (context) => [
+          pdfLib.Header(
+            child: pdfLib.Center(
+              child: pdfLib.Column(
+                children: [
+                  pdfLib.Text(
+                      "Báo cáo chỉ số",
+                      style: myHeaderStyle
+                  ),
+                  pdfLib.Text("Thời gian: ${dateFormat.format(new DateTime.now())}", style: myStyle),
+                ]
+              )
+            )
+          ),
+          pdfLib.Row(
+            children: [
+              pdfLib.Text(
+                "Bệnh nhân: ${_name} - Email: ${_email}",
+                style: myStyle
+              ),
+            ]
+          ),
+          pdfLib.Paragraph(text: "Từ ngày: ${dateFormat.format(startDate)} - Đến ngày: ${dateFormat.format(endDate)}", style: myStyle),
+          (isWeight && listWeightsTable.length > 0) ?
+          pdfLib.Container(
+            child: pdfLib.Column(
+              children: [
+                pdfLib.Center(
+                  child: pdfLib.Text(
+                    "Cân nặng",
+                    style: myTitleStyle
+                  )
+                ),
+                pdfLib.Table.fromTextArray(context: context, cellStyle: myStyle, headerStyle: myStyle, data: <List<String>>[
+                  <String>['Cân nặng', 'Thời gian', 'Chú thích'],
+                  ...listWeightsTable.map(
+                          (item) => [item.weight + " kg", dateFormat.format(item.measureTime), item.note.toString()])
+                ]),
+                pdfLib.Divider(height: 1,),
+                pdfLib.Center(
+                    child: pdfLib.Text(
+                        "Cân nặng trung bình: ${averageWeight.toStringAsFixed(2)} kg",
+                        style: myStyle
+                    )
+                ),
+                pdfLib.SizedBox(height: 5,),
+              ]
+            )
+          ) : pdfLib.SizedBox(height: 1,),
+          (isGlycemic && listGlycemicsTable.length > 0) ?
+          pdfLib.Container(
+              child: pdfLib.Column(
+                  children: [
+                    pdfLib.Center(
+                        child: pdfLib.Text(
+                            "Đường huyết",
+                            style: myTitleStyle
+                        )
+                    ),
+                    pdfLib.Table.fromTextArray(context: context, cellStyle: myStyle, headerStyle: myStyle, data: <List<String>>[
+                      <String>['Đường huyết', 'Thời gian', 'Chú thích'],
+                      ...listGlycemicsTable.map(
+                              (item) => [item.indexG + " mg/dL", dateFormat.format(item.measureTime), item.note.toString()])
+                    ]),
+                    pdfLib.Divider(height: 1,),
+                    pdfLib.Center(
+                        child: pdfLib.Text(
+                            "Đường huyết trung bình: ${averageGlycemic.toStringAsFixed(2)} mg/dL",
+                            style: myStyle
+                        )
+                    ),
+                    pdfLib.SizedBox(height: 5,),
+                  ]
+              )
+          ) : pdfLib.SizedBox(height: 1,),
+          (isActivity && listActivityTable.length > 0) ?
+          pdfLib.Container(
+              child: pdfLib.Column(
+                  children: [
+                    pdfLib.Center(
+                        child: pdfLib.Text(
+                            "Thể thao",
+                            style: myTitleStyle
+                        )
+                    ),
+                    pdfLib.Table.fromTextArray(context: context, cellStyle: myStyle, headerStyle: myStyle, data: <List<String>>[
+                      <String>['Hoạt động', 'Thời gian luyện tập', 'Năng lượng tiêu hao', 'Ngày', 'Chú thích'],
+                      ...listActivityTable.map(
+                              (item) => [item.nameActivity, item.timeActivity + " phút", item.calo + " calo", dateFormat.format(item.measureTime), item.note.toString()])
+                    ]),
+                    pdfLib.Divider(height: 1,),
+                    pdfLib.Center(
+                        child: pdfLib.Text(
+                            "Năng lượng tiêu hao trung bình: ${averageActivity.toStringAsFixed(2)} calo",
+                            style: myStyle
+                        )
+                    ),
+                    pdfLib.SizedBox(height: 5,),
+                  ]
+              )
+          ) : pdfLib.SizedBox(height: 1,),
+          (isCarbs && listCarbsTable.length > 0) ?
+          pdfLib.Container(
+              child: pdfLib.Column(
+                  children: [
+                    pdfLib.Center(
+                        child: pdfLib.Text(
+                            "Lượng Carbon Hidrat tiêu thụ",
+                            style: myTitleStyle
+                        )
+                    ),
+                    pdfLib.Table.fromTextArray(context: context, cellStyle: myStyle, headerStyle: myStyle, data: <List<String>>[
+                      <String>['Carbon Hidrat', 'Thời gian', 'Chú thích'],
+                      ...listCarbsTable.map(
+                              (item) => [item.carb + " g", dateFormat.format(item.measureTime), item.note.toString()])
+                    ]),
+                    pdfLib.Divider(height: 1,),
+                    pdfLib.Center(
+                        child: pdfLib.Text(
+                            "Carbon Hidrat trung bình: ${averageCarbs.toStringAsFixed(2)} g",
+                            style: myStyle
+                        )
+                    ),
+                    pdfLib.SizedBox(height: 5,),
+                  ]
+              )
+          ) : pdfLib.SizedBox(height: 1,),
+          (isMedicine && listMedicineTable.length > 0) ?
+          pdfLib.Container(
+              child: pdfLib.Column(
+                  children: [
+                    pdfLib.Center(
+                        child: pdfLib.Text(
+                            "Thuốc",
+                            style: myTitleStyle
+                        )
+                    ),
+                    pdfLib.Table.fromTextArray(context: context, cellStyle: myStyle, headerStyle: myStyle, data: <List<String>>[
+                      <String>['Tên thuốc', 'Liều lượng', 'Thời gian','Chú thích'],
+                      ...listMedicineTable.map(
+                              (item) => [item.name, item.amount + " " + item.unit, dateFormat.format(item.measureTime), item.note.toString()])
+                    ]),
+                    pdfLib.SizedBox(height: 5,),
+                  ]
+              )
+          ) : pdfLib.SizedBox(height: 1,)
+        ],
+      ),
+    );
+    final String dir = (await getExternalStorageDirectory()).path;
+    final String name = "report_${dateFormat.format(startDate)}.pdf";
+    final String path = '$dir/${name}';
+    final File file = File(path);
+    await file.writeAsBytes(pdf.save());
+    Fluttertoast.showToast(
+        msg: "Lưu file thành công",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.green,
+        textColor: Colors.white,
+        fontSize: 16.0
+    );
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => PdfViewerPage(path: path, name: name,),
+      ),
+    );
+  }
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -319,6 +505,11 @@ class _ReportScreenState extends State<ReportScreen>{
         title: Text("Báo Cáo"),
         centerTitle: true,
         backgroundColor: Colors.lightBlueAccent,
+        actions: [
+          IconButton(
+              icon: Icon(Icons.save_alt),
+              onPressed: () => generatePdfAndView(context))
+        ],
       ),
       body: Container(
         margin: EdgeInsets.only(top: 20, left: 10, right: 10),
@@ -761,6 +952,7 @@ class _ReportScreenState extends State<ReportScreen>{
                 )
             ):
             SizedBox(height: 1,),
+
           ],
         ),
       ),

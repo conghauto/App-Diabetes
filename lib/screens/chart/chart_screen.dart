@@ -427,7 +427,7 @@ class _ChartScreenStateful extends State<ChartScreen>{
         children: [
           ListTile(
             title: Text(
-              "REPORT",
+              "Báo cáo",
               style: TextStyle(
                 fontSize: 18,
                 fontFamily: 'RobotoMono',
@@ -436,7 +436,7 @@ class _ChartScreenStateful extends State<ChartScreen>{
               textAlign: TextAlign.right,
             ),
             trailing: IconButton(
-              icon: Icon(Icons.print),
+              icon: Icon(Icons.event_note_outlined),
               onPressed: () async{
                 await Navigator.pushNamed(context, ReportScreen.routeName);
               },

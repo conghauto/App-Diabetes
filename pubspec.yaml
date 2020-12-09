@@ -58,7 +58,9 @@ dependencies:
   intl: ^0.16.1
   shared_preferences: ^0.5.12+2
   flutter_datetime_picker: ^1.4.0
-
+  pdf: ^1.12.0
+  advance_pdf_viewer: ^1.2.1+1
+  flutter_full_pdf_viewer: ^1.0.6
 dev_dependencies:
   flutter_test:
     sdk: flutter
