@@ -15,9 +15,9 @@ class UserCurrent{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     userID = prefs.getString('userID');
 
-    if(userID!=""){
-      getName(userID);
-      getEmailRelative(userID);
+    if(userID!="") {
+      await getName(userID);
+      await getEmailRelative(userID);
     }
 
   }
@@ -39,7 +39,7 @@ class UserCurrent{
     return userID;
   }
 
-  static void getName(String id) async {
+  static Future<void> getName(String id) async {
     String url = ip + "/api/getAccount.php";
     var response = await http.post(url, body: {
       'id': id,
@@ -54,7 +54,7 @@ class UserCurrent{
     }
   }
 
-  static void getEmailRelative(String id) async {
+  static Future<void> getEmailRelative(String id) async {
     String url = ip + "/api/getEmailRelative.php";
     var response = await http.post(url, body: {
       'userID': id,

@@ -83,7 +83,7 @@ class _InfoPersonScreenState extends State<InfoPersonScreen> {
     }
     else{
       await UserCurrent().init();
-      Navigator.pushNamed(context, HomeScreen.routeName);
+      Navigator.pushReplacementNamed(context, HomeScreen.routeName);
     }
 
   }

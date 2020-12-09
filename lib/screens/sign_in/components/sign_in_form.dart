@@ -43,7 +43,6 @@ class _SignInFormState extends State<SignInForm> {
       'password': password,
     });
 
-    Navigator.pop(context);
     var data = json.decode(response.body);
 
     if(data=="Success"){
@@ -68,9 +67,9 @@ class _SignInFormState extends State<SignInForm> {
           fontSize: 16.0
       );
       if(UserCurrent.emailRelative==null){
-        Navigator.pushNamed(context, InfoPersonScreen.routeName);
+        Navigator.pushReplacementNamed(context, InfoPersonScreen.routeName);
       }else{
-        Navigator.pushNamed(context, HomeScreen.routeName);
+        Navigator.pushReplacementNamed(context, HomeScreen.routeName);
       }
     }else{
       Fluttertoast.showToast(
