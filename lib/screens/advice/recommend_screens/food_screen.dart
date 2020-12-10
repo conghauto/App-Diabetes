@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:diabetesapp/models/food-recipe.dart';
 import 'package:diabetesapp/models/food.dart';
 import 'package:diabetesapp/screens/advice/recommend_screens/food_recipe.dart';
 import 'package:diabetesapp/screens/advice/recommend_screens/shared.dart';
@@ -7,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import '../../../constants.dart';
 import '../../../size_config.dart';
+import '../../../user_current.dart';
 
 class FoodScreen extends StatefulWidget {
   @override
@@ -14,16 +16,34 @@ class FoodScreen extends StatefulWidget {
 }
 
 class _FoodScreenState extends State<FoodScreen> {
-  List<FoodModel> listFoods = new List();
-  List<String> categories = ["Tất cả", "Đồ chay", "Canh", "Trái cây", "Món mặn"];
+  List<FoodModel> listFoods;
+  List<String> categories = ["Bữa sáng", "Bữa trưa", "Bữa tối", "Bữa phụ"];
   int selectedIndex = 0;
   @override
   void initState() {
     fetchFoods();
   }
   Future<void> fetchFoods() async {
-    String url = ip + "/api/getFoods.php";
-    var response = await http.get(url);
+    listFoods = new List();
+    String url = ip + "/api/getBreakfast.php";
+    switch(selectedIndex.toString()){
+      case "0":
+        url = ip + "/api/getBreakfast.php";
+        break;
+      case "1":
+        url = ip + "/api/getLunch.php";
+        break;
+      case "2":
+        url = ip + "/api/getDinner.php";
+        break;
+      case "3":
+        url = ip + "/api/getSnack.php";
+        break;
+    }
+
+    var response = await http.post(url, body: {
+      'userID': UserCurrent.userID.toString(),
+    });
 
     if (response.statusCode == 200) {
       final items = json.decode(response.body).cast<Map<String, dynamic>>();
@@ -64,6 +84,7 @@ class _FoodScreenState extends State<FoodScreen> {
       onTap: () {
         setState(() {
           selectedIndex = index;
+          fetchFoods();
         });
       },
       child: Container(
@@ -99,7 +120,7 @@ Widget _myListView(BuildContext context, List<FoodModel> data) {
     itemBuilder: (context, index) {
       return GestureDetector(
         onTap: () async {
-          await Navigator.push(context, MaterialPageRoute(builder: (context) => RecipeFood(recipe: data[index])));
+          await Navigator.push(context, MaterialPageRoute(builder: (context) => RecipeFood(foodModel: data[index])));
         },
         child: Container(
           margin: EdgeInsets.all(16),
@@ -113,9 +134,10 @@ Widget _myListView(BuildContext context, List<FoodModel> data) {
           child: Row(
             children: [
               Container(
-                height: 160,
-                width: 160,
+                height: 150,
+                width: 150,
                 decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(30),
                   image: DecorationImage(
                     image: NetworkImage(data[index].image),
                     fit: BoxFit.cover,
@@ -130,7 +152,8 @@ Widget _myListView(BuildContext context, List<FoodModel> data) {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       buildRecipeTitle(data[index].name),
-                      buildRecipeSubTitle(data[index].benefit),
+                      buildRecipeSubTitle(data[index].amount + " " + data[index].unit),
+                      buildCalories(data[index].calo),
                     ],
                   ),
                 ),

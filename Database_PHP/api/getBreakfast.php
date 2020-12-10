@@ -83,14 +83,16 @@
             $row['carb'],
             $row['cellulose'],
             $row['meal'],
-            $row['stateBG'])    
+            $row['stateBG'],
+            $row['image']
+            )    
         );
     }
 
     echo json_encode($result);
 
     class Food{
-        public function Food($id,$name,$amount,$unit,$calo,$protein,$lipid,$carb,$cellulose,$meal,$stateBG){
+        public function Food($id,$name,$amount,$unit,$calo,$protein,$lipid,$carb,$cellulose,$meal,$stateBG, $image){
             $this->id=$id;
             $this->name=$name;
             $this->amount=$amount;
@@ -102,6 +104,7 @@
             $this->cellulose=$cellulose;
             $this->meal=$meal;
             $this->stateBG=$stateBG;
+            $this->image = $image;
         }
     }
 
