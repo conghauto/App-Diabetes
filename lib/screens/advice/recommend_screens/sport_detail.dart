@@ -26,15 +26,15 @@ class _SportDetailState extends State<SportDetail> {
             Navigator.pop(context);
           },
         ),
-        actions: [
-          Padding(
-            padding: EdgeInsets.only(right: 16),
-            child: Icon(
-              Icons.favorite_border,
-              color: Colors.black,
-            ),
-          ),
-        ],
+        // actions: [
+        //   Padding(
+        //     padding: EdgeInsets.only(right: 16),
+        //     child: Icon(
+        //       Icons.favorite_border,
+        //       color: Colors.black,
+        //     ),
+        //   ),
+        // ],
       ),
       body: SingleChildScrollView(
         physics: BouncingScrollPhysics(),
@@ -47,6 +47,7 @@ class _SportDetailState extends State<SportDetail> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   buildTextTitleVariation1(widget.sportModel.name),
+                  buildTextTitleVariation2('Công dụng', false),
                   buildTextSubTitleVariation1(widget.sportModel.benefit),
                 ],
               ),
@@ -58,6 +59,7 @@ class _SportDetailState extends State<SportDetail> {
               height: 310,
               width: 310,
               decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(30),
                 image: DecorationImage(
                   image: NetworkImage(widget.sportModel.image),
                   fit: BoxFit.fitHeight,

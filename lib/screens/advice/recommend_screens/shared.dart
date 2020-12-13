@@ -82,7 +82,21 @@ buildRecipeSubTitle(String text){
   return Padding(
     padding: EdgeInsets.only(bottom: 16),
     child: Text(
-      text,
+      "Số lượng: " + text,
+      overflow: TextOverflow.ellipsis,
+      style: TextStyle(
+        fontSize: 16,
+        color: Colors.grey[400],
+      ),
+    ),
+  );
+}
+
+buildSportSubTitle(String text){
+  return Padding(
+    padding: EdgeInsets.only(bottom: 16),
+    child: Text(
+       text,
       overflow: TextOverflow.ellipsis,
       style: TextStyle(
         fontSize: 16,
@@ -94,10 +108,10 @@ buildRecipeSubTitle(String text){
 
 buildCalories(String text){
   return Text(
-    text + " kcal",
+    "Năng lượng: " + text + " kcal",
     style: TextStyle(
       fontSize: 16,
-      color: Colors.black,
+      color: Colors.red,
       fontWeight: FontWeight.bold,
     ),
   );

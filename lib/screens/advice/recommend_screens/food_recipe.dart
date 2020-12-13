@@ -16,12 +16,13 @@ class RecipeFood extends StatefulWidget {
   @override
   _RecipeFoodState createState() {
     // TODO: implement createState
-    return new _RecipeFoodState();
+    return new _RecipeFoodState(recipeFood: foodModel);
   }
 }
 class _RecipeFoodState extends State<RecipeFood> {
+  _RecipeFoodState({this.recipeFood});
   FoodRecipeModel foodRecipeModel = new FoodRecipeModel(id: "", name: "", ingredient: "", recipe: "", benefit: "", groupID: "");
-  String id = "1";
+  FoodModel recipeFood;
   @override
   void initState() {
     fetchRecipe();
@@ -29,7 +30,7 @@ class _RecipeFoodState extends State<RecipeFood> {
   fetchRecipe() async {
     String url = ip + "/api/getRecipeByID.php";
     var response = await http.post(url, body: {
-      'groupID': id,
+      'groupID': recipeFood.id,
     });
 
     if (response.statusCode == 200) {
@@ -53,15 +54,15 @@ class _RecipeFoodState extends State<RecipeFood> {
             Navigator.pop(context);
           },
         ),
-        actions: [
-          Padding(
-            padding: EdgeInsets.only(right: 16),
-            child: Icon(
-              Icons.favorite_border,
-              color: Colors.white,
-            ),
-          ),
-        ],
+        // actions: [
+        //   Padding(
+        //     padding: EdgeInsets.only(right: 16),
+        //     child: Icon(
+        //       Icons.favorite_border,
+        //       color: Colors.white,
+        //     ),
+        //   ),
+        // ],
       ),
       body: SingleChildScrollView(
         physics: BouncingScrollPhysics(),
@@ -74,6 +75,7 @@ class _RecipeFoodState extends State<RecipeFood> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   buildTextTitleVariation1(widget.foodModel.name),
+                  buildTextTitleVariation2("Công dụng", false),
                   buildTextSubTitleVariation1(foodRecipeModel.benefit),
                 ],
               ),
@@ -98,13 +100,26 @@ class _RecipeFoodState extends State<RecipeFood> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  buildTextTitleVariation2('Nguyên liệu', false),
-                  buildTextSubTitleVariation1(foodRecipeModel.ingredient),
-
+                  buildTextTitleVariation2("Thành phần dinh dưỡng", false),
+                  buildTextSubTitleVariation1("Chất béo: " + recipeFood.lipid + " g"),
+                  buildTextSubTitleVariation1("Chất xơ: " + recipeFood.cellulose + " g"),
+                  buildTextSubTitleVariation1("Carbon Hydrat: " + recipeFood.carb + " g"),
+                  buildTextSubTitleVariation1("Chất đạm: " + recipeFood.protein + " g"),
+                  (foodRecipeModel.ingredient.length > 0) ?
+                  Column(
+                    children: [
+                      buildTextTitleVariation2('Nguyên liệu', false),
+                      buildTextSubTitleVariation1(foodRecipeModel.ingredient),
+                    ],
+                  ) : SizedBox(height: 1,),
                   SizedBox(height: 16),
-
-                  buildTextTitleVariation2('Cách làm', false),
-                  buildTextSubTitleVariation1(foodRecipeModel.recipe),
+                  (foodRecipeModel.recipe.length > 0) ?
+                  Column(
+                    children: [
+                      buildTextTitleVariation2('Cách làm', false),
+                      buildTextSubTitleVariation1(foodRecipeModel.recipe),
+                    ],
+                  ) : SizedBox(height: 1,)
                 ],
               ),
             ),

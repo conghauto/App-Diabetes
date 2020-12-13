@@ -69,6 +69,7 @@ Widget _myListView(BuildContext context, List<SportModel> data) {
                 height: 160,
                 width: 160,
                 decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(30),
                   image: DecorationImage(
                     image: NetworkImage(data[index].image),
                     fit: BoxFit.cover,
@@ -83,7 +84,7 @@ Widget _myListView(BuildContext context, List<SportModel> data) {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       buildRecipeTitle(data[index].name),
-                      buildRecipeSubTitle(data[index].benefit),
+                      buildSportSubTitle(data[index].benefit),
                     ],
                   ),
                 ),
