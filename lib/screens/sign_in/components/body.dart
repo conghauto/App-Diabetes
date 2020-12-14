@@ -1,3 +1,4 @@
+import 'package:connectivity/connectivity.dart';
 import 'package:diabetesapp/components/no_account_text.dart';
 import 'package:diabetesapp/components/sign_in_facebook.dart';
 import 'package:diabetesapp/components/sign_in_google.dart';
@@ -5,6 +6,7 @@ import 'package:diabetesapp/components/socal_card.dart';
 import 'package:diabetesapp/screens/home/home_screen.dart';
 import 'package:diabetesapp/screens/sign_in/components/sign_in_form.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import '../../../size_config.dart';
 class Body extends StatefulWidget{
   @override
@@ -12,6 +14,25 @@ class Body extends StatefulWidget{
 }
 
 class _BodyState extends State<Body> {
+  @override
+  void initState() {
+    Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
+      if (result == ConnectivityResult.mobile || result == ConnectivityResult.wifi){
+        print(result);
+      } else {
+        print(result);
+        Fluttertoast.showToast(
+            msg: "Vui lòng kiểm tra kết nối Internet",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.CENTER,
+            timeInSecForIosWeb: 10,
+            backgroundColor: Colors.red,
+            textColor: Colors.white,
+            fontSize: 16.0
+        );
+      }
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return SafeArea(
