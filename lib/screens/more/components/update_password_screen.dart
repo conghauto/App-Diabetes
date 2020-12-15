@@ -1,11 +1,15 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:connectivity/connectivity.dart';
 import 'package:diabetesapp/components/form_error.dart';
 import 'package:diabetesapp/user_current.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
+import 'package:progress_dialog/progress_dialog.dart';
 import '../../../constants.dart';
 
 class UpdatePassword extends StatefulWidget {
@@ -25,13 +29,62 @@ class _UpdatePasswordState extends State<UpdatePassword> {
   final List<String> errors = [];
   final _formKey = GlobalKey<FormState>();
 
+  ProgressDialog progressDialog;
+  bool isConnected = true;
+  final Connectivity _connectivity = Connectivity();
+  StreamSubscription<ConnectivityResult> _connectivitySubscription;
   @override
   void initState() {
+    progressDialog = ProgressDialog(context, type: ProgressDialogType.Normal, isDismissible: false);
+    progressDialog.style(message: "Kiểm tra kết nối Internet");
+    initConnectivity();
+    _connectivitySubscription =
+        _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
     _oldPassword  = TextEditingController(text: "");
     _newPassword  = TextEditingController(text: "");
     _confirmPassword = TextEditingController(text: "");
   }
+  @override
+  void dispose() {
+    _connectivitySubscription.cancel();
+    super.dispose();
+  }
 
+  Future<void> initConnectivity() async {
+    ConnectivityResult result;
+    // Platform messages may fail, so we use a try/catch PlatformException.
+    try {
+      result = await _connectivity.checkConnectivity();
+    } on PlatformException catch (e) {
+      print(e.toString());
+    }
+
+    if (!mounted) {
+      return Future.value(null);
+    }
+
+    return _updateConnectionStatus(result);
+  }
+  Future<void> _updateConnectionStatus(ConnectivityResult result) async {
+    if (result == ConnectivityResult.mobile || result == ConnectivityResult.wifi){
+      setState(() {
+        isConnected = true;
+      });
+      checkInternet();
+    } else {
+      setState(() {
+        isConnected = false;
+      });
+      checkInternet();
+    }
+  }
+  void checkInternet(){
+    if (isConnected) {
+      progressDialog.hide();
+    } else {
+      progressDialog.show();
+    }
+  }
   void addError({String error}){
     if(!errors.contains(error))
       setState(() {

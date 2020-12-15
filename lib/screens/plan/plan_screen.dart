@@ -1,12 +1,16 @@
+import 'dart:async';
 import 'dart:convert';
 
+import 'package:connectivity/connectivity.dart';
 import 'package:diabetesapp/constants.dart';
 import 'package:diabetesapp/screens/plan/components/add_event.dart';
 import 'package:diabetesapp/screens/plan/components/view_event.dart';
 import 'package:diabetesapp/user_current.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
+import 'package:progress_dialog/progress_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -32,17 +36,65 @@ class _PlanScreenState extends State<PlanScreen> {
   bool processing;
   DateTime _dateSelected;
   int i = 1;
-
+  ProgressDialog progressDialog;
+  bool isConnected = true;
+  final Connectivity _connectivity = Connectivity();
+  StreamSubscription<ConnectivityResult> _connectivitySubscription;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    progressDialog = ProgressDialog(context, type: ProgressDialogType.Normal, isDismissible: false);
+    progressDialog.style(message: "Kiểm tra kết nối Internet");
+    initConnectivity();
+    _connectivitySubscription =
+        _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
     _calendarController = CalendarController();
     _events = {};
     _selectedEvents = [];
     processing = true;
   }
+  @override
+  void dispose() {
+    _connectivitySubscription.cancel();
+    super.dispose();
+  }
 
+  Future<void> initConnectivity() async {
+    ConnectivityResult result;
+    // Platform messages may fail, so we use a try/catch PlatformException.
+    try {
+      result = await _connectivity.checkConnectivity();
+    } on PlatformException catch (e) {
+      print(e.toString());
+    }
+
+    if (!mounted) {
+      return Future.value(null);
+    }
+
+    return _updateConnectionStatus(result);
+  }
+  Future<void> _updateConnectionStatus(ConnectivityResult result) async {
+    if (result == ConnectivityResult.mobile || result == ConnectivityResult.wifi){
+      setState(() {
+        isConnected = true;
+      });
+      checkInternet();
+    } else {
+      setState(() {
+        isConnected = false;
+      });
+      checkInternet();
+    }
+  }
+  void checkInternet(){
+    if (isConnected) {
+      progressDialog.hide();
+    } else {
+      progressDialog.show();
+    }
+  }
   Map<DateTime, List<EventModel>> _groupEvents(List<EventModel> allEvents) {
     Map<DateTime, List<EventModel>> data = {};
     allEvents.forEach((event) {

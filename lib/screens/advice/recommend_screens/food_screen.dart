@@ -1,11 +1,15 @@
+import 'dart:async';
 import 'dart:convert';
 
+import 'package:connectivity/connectivity.dart';
 import 'package:diabetesapp/models/food-recipe.dart';
 import 'package:diabetesapp/models/food.dart';
 import 'package:diabetesapp/screens/advice/recommend_screens/food_recipe.dart';
 import 'package:diabetesapp/screens/advice/recommend_screens/shared.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
+import 'package:progress_dialog/progress_dialog.dart';
 import '../../../constants.dart';
 import '../../../size_config.dart';
 import '../../../user_current.dart';
@@ -19,9 +23,60 @@ class _FoodScreenState extends State<FoodScreen> {
   List<FoodModel> listFoods;
   List<String> categories = ["Bữa sáng", "Bữa trưa", "Bữa tối", "Bữa phụ"];
   int selectedIndex = 0;
+
+  ProgressDialog progressDialog;
+  bool isConnected = true;
+  final Connectivity _connectivity = Connectivity();
+  StreamSubscription<ConnectivityResult> _connectivitySubscription;
   @override
   void initState() {
+    progressDialog = ProgressDialog(context, type: ProgressDialogType.Normal, isDismissible: false);
+    progressDialog.style(message: "Kiểm tra kết nối Internet");
+    initConnectivity();
+    _connectivitySubscription =
+        _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
     fetchFoods();
+  }
+  @override
+  void dispose() {
+    _connectivitySubscription.cancel();
+    super.dispose();
+  }
+
+  Future<void> initConnectivity() async {
+    ConnectivityResult result;
+    // Platform messages may fail, so we use a try/catch PlatformException.
+    try {
+      result = await _connectivity.checkConnectivity();
+    } on PlatformException catch (e) {
+      print(e.toString());
+    }
+
+    if (!mounted) {
+      return Future.value(null);
+    }
+
+    return _updateConnectionStatus(result);
+  }
+  Future<void> _updateConnectionStatus(ConnectivityResult result) async {
+    if (result == ConnectivityResult.mobile || result == ConnectivityResult.wifi){
+      setState(() {
+        isConnected = true;
+      });
+      checkInternet();
+    } else {
+      setState(() {
+        isConnected = false;
+      });
+      checkInternet();
+    }
+  }
+  void checkInternet(){
+    if (isConnected) {
+      progressDialog.hide();
+    } else {
+      progressDialog.show();
+    }
   }
   Future<void> fetchFoods() async {
     listFoods = new List();
