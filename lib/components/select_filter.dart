@@ -226,7 +226,7 @@ class _SelectFilterState extends State<SelectFilter> {
                           children: <Widget>[
                             Expanded(
                               child: Padding(
-                                padding: const EdgeInsets.only(top: 15.0,left:10.0, bottom: 5.0),
+                                padding: const EdgeInsets.only(top: 4.0,left:10.0, bottom: 5.0),
                                 child: Text('Hiển thị theo ngày',
                                   style: TextStyle(
                                       color: Colors.black,
@@ -239,7 +239,7 @@ class _SelectFilterState extends State<SelectFilter> {
                         ),
                       ),
                       Divider(
-                        height: 5,
+                        height: 2,
                         color: Colors.black,
                       ),
                       Expanded(
@@ -407,7 +407,7 @@ class _SelectFilterState extends State<SelectFilter> {
                   )
                 ),
                 Divider(
-                  height: 5,
+                  height: 2,
                   color: Colors.black,
                 ),
                 Expanded(

@@ -6,23 +6,9 @@ import 'package:diabetesapp/models/event.dart';
 import 'package:diabetesapp/user_current.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:rxdart/subjects.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
-
-final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-FlutterLocalNotificationsPlugin();
-
-/// Streams are created so that app can respond to notification-related events
-/// since the plugin is initialised in the `main` function
-final BehaviorSubject<ReceivedNotification> didReceiveLocalNotificationSubject =
-BehaviorSubject<ReceivedNotification>();
-
-final BehaviorSubject<String> selectNotificationSubject =
-BehaviorSubject<String>();
-
 
 class ReceivedNotification {
   ReceivedNotification({
@@ -69,86 +55,13 @@ class _AddEventScreenState extends State<AddEventScreen> {
       _eventEndDate = widget.note.eventEndDate;
     }else{
       _eventStartDate = widget.dateSelected;
-      _eventEndDate = DateTime.now();
+      _eventEndDate = DateTime.now().add(new Duration(days: 1));
     }
 
     processing = false;
-    _requestPermissions();
-    _configureDidReceiveLocalNotificationSubject();
-    _configureSelectNotificationSubject();
-  }
-
-  void _requestPermissions() {
-    flutterLocalNotificationsPlugin
-        .resolvePlatformSpecificImplementation<
-        IOSFlutterLocalNotificationsPlugin>()
-        ?.requestPermissions(
-      alert: true,
-      badge: true,
-      sound: true,
-    );
-    flutterLocalNotificationsPlugin
-        .resolvePlatformSpecificImplementation<
-        MacOSFlutterLocalNotificationsPlugin>()
-        ?.requestPermissions(
-      alert: true,
-      badge: true,
-      sound: true,
-    );
-  }
-
-  void _configureDidReceiveLocalNotificationSubject() {
-    didReceiveLocalNotificationSubject.stream
-        .listen((ReceivedNotification receivedNotification) async {
-      await showDialog(
-        context: context,
-        builder: (BuildContext context) => CupertinoAlertDialog(
-          title: receivedNotification.title != null
-              ? Text(receivedNotification.title)
-              : null,
-          content: receivedNotification.body != null
-              ? Text(receivedNotification.body)
-              : null,
-          actions: <Widget>[
-            CupertinoDialogAction(
-              isDefaultAction: true,
-              onPressed: () async {
-                Navigator.of(context, rootNavigator: true).pop();
-                await Navigator.push(
-                    context,
-                    MaterialPageRoute<void>(
-                        builder: (BuildContext context) =>
-                            AddEventScreen(
-                              note: widget.note,
-                            )
-                    )
-                );
-              },
-              child: const Text('Ok'),
-            )
-          ],
-        ),
-      );
-    });
-  }
-
-  void _configureSelectNotificationSubject() {
-    selectNotificationSubject.stream.listen((String payload) async {
-      await Navigator.push(
-          context,
-          MaterialPageRoute<void>(
-              builder: (BuildContext context) =>
-                  AddEventScreen(
-                    note: widget.note,
-                  )
-          )
-      );
-    });
   }
 
   void dispose() {
-    didReceiveLocalNotificationSubject.close();
-    selectNotificationSubject.close();
     _title.dispose();
     _description.dispose();
     super.dispose();
@@ -179,7 +92,7 @@ class _AddEventScreenState extends State<AddEventScreen> {
       );
     }else {
       id = int.parse((json.decode(response.body)).toString());
-      showNotificationCustomSound(_eventStartDate,id,_title.text.toString(),_description.text.toString());
+      UserCurrent.showNotificationCustomSound(_eventStartDate,_eventEndDate,id,_title.text.toString(),_description.text.toString());
       Fluttertoast.showToast(
           msg: "Tạo lịch nhắc thành công",
           toastLength: Toast.LENGTH_SHORT,
@@ -369,9 +282,12 @@ class _AddEventScreenState extends State<AddEventScreen> {
 
     if (data=="Success"){
       int i = int.parse(id);
-      await _cancelNotification(i);
+      int difference =  _eventEndDate.difference(_eventStartDate).inDays;
+      for(int i=0;i<difference;i++){
+        await UserCurrent.cancelNotification(i);
+      }
 
-      showNotificationCustomSound(_eventStartDate,i,_title.text.toString(),_description.text.toString());
+      UserCurrent.showNotificationCustomSound(_eventStartDate,_eventEndDate,i,_title.text.toString(),_description.text.toString());
       Fluttertoast.showToast(
           msg: "Cập nhật thành công",
           toastLength: Toast.LENGTH_SHORT,
@@ -393,41 +309,5 @@ class _AddEventScreenState extends State<AddEventScreen> {
           fontSize: 16.0
       );
     }
-  }
-
-  Future<void> showNotificationCustomSound(DateTime scheduledNotificationDateTime,
-      int id, String title, String body) async {
-    const AndroidNotificationDetails androidPlatformChannelSpecifics =
-    AndroidNotificationDetails(
-      'your other channel id',
-      'your other channel name',
-      'your other channel description',
-      icon: 'alarm',
-      importance: Importance.high,
-      priority: Priority.high,
-      ticker: 'ticker',
-      playSound: true,
-      sound: RawResourceAndroidNotificationSound('warning'),
-    );
-    const IOSNotificationDetails iOSPlatformChannelSpecifics =
-    IOSNotificationDetails(sound: 'warning');
-    const MacOSNotificationDetails macOSPlatformChannelSpecifics =
-    MacOSNotificationDetails(sound: 'warning');
-    const NotificationDetails platformChannelSpecifics = NotificationDetails(
-        android: androidPlatformChannelSpecifics,
-        iOS: iOSPlatformChannelSpecifics,
-        macOS: macOSPlatformChannelSpecifics);
-    await flutterLocalNotificationsPlugin.schedule(
-        id,
-        title,
-        body,
-        scheduledNotificationDateTime,
-        platformChannelSpecifics,
-        androidAllowWhileIdle: true);
-  }
-
-  Future<void> _cancelNotification(int id) async {
-//    int id = (idNote==""||idNote=="0")?0:int.parse(idNote);
-    await flutterLocalNotificationsPlugin.cancel(id);
   }
 }

@@ -17,33 +17,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart' as http;
 
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:rxdart/subjects.dart';
-
-final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-FlutterLocalNotificationsPlugin();
-
-/// Streams are created so that app can respond to notification-related events
-/// since the plugin is initialised in the `main` function
-final BehaviorSubject<ReceivedNotification> didReceiveLocalNotificationSubject =
-BehaviorSubject<ReceivedNotification>();
-
-final BehaviorSubject<String> selectNotificationSubject =
-BehaviorSubject<String>();
-
-class ReceivedNotification {
-  ReceivedNotification({
-    @required this.id,
-    @required this.title,
-    @required this.body,
-    @required this.payload,
-  });
-
-  final int id;
-  final String title;
-  final String body;
-  final String payload;
-}
 class BloodGlucosoLog extends StatefulWidget {
   BloodGlucosoLog({ Key key }) : super(key: key);
 
@@ -111,13 +84,13 @@ class BloodGlucosoLogState extends State<BloodGlucosoLog> with AutomaticKeepAliv
     }else{
       double bloodG = double.parse(indexG.text);
       if(bloodG < 70){
-        showNotification(listNotification[0].title + bloodG.toString()+" mg/dl",listNotification[0].body);
+        UserCurrent.showNotification(listNotification[0].title + bloodG.toString()+" mg/dl",listNotification[0].body);
       }else if(bloodG >= 70 && bloodG < 130){
-        showNotification(listNotification[1].title + bloodG.toString()+" mg/dl",listNotification[1].body);
+        UserCurrent.showNotification(listNotification[1].title + bloodG.toString()+" mg/dl",listNotification[1].body);
       }else if(bloodG >= 130 && bloodG <= 180){
-        showNotification(listNotification[2].title + bloodG.toString()+" mg/dl",listNotification[2].body);
+        UserCurrent.showNotification(listNotification[2].title + bloodG.toString()+" mg/dl",listNotification[2].body);
       }else{
-        showNotification(listNotification[3].title + bloodG.toString()+" mg/dl. Tình trạng TĂNG ĐƯỜNG HUYẾT ",listNotification[3].body);
+        UserCurrent.showNotification(listNotification[3].title + bloodG.toString()+" mg/dl. Tình trạng TĂNG ĐƯỜNG HUYẾT ",listNotification[3].body);
       }
 
       Fluttertoast.showToast(
@@ -383,34 +356,6 @@ class BloodGlucosoLogState extends State<BloodGlucosoLog> with AutomaticKeepAliv
     );
   }
 
-  Future<void> showNotification(String title, String body) async {
-    const AndroidNotificationDetails androidPlatformChannelSpecifics =
-    AndroidNotificationDetails(
-      'your other channel id',
-      'your other channel name',
-      'your other channel description',
-      icon: 'info',
-      importance: Importance.high,
-      priority: Priority.high,
-      ticker: 'ticker',
-      playSound: true,
-      sound: RawResourceAndroidNotificationSound('warning'),
-      color: Colors.yellowAccent,
-    );
-    const IOSNotificationDetails iOSPlatformChannelSpecifics =
-    IOSNotificationDetails(sound: 'warning');
-    const MacOSNotificationDetails macOSPlatformChannelSpecifics =
-    MacOSNotificationDetails(sound: 'warning');
-    const NotificationDetails platformChannelSpecifics = NotificationDetails(
-        android: androidPlatformChannelSpecifics,
-        iOS: iOSPlatformChannelSpecifics,
-        macOS: macOSPlatformChannelSpecifics);
-    await flutterLocalNotificationsPlugin.show(
-        0,
-        title,
-        body,
-        platformChannelSpecifics);
-  }
 
   @override
   // TODO: implement wantKeepAlive

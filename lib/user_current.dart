@@ -6,12 +6,16 @@ import 'package:diabetesapp/models/info-relative.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class UserCurrent{
   static String userID;
   static String fullName;
   static String emailRelative;
+  static FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+  FlutterLocalNotificationsPlugin();
   Future init() async{
+
     SharedPreferences prefs = await SharedPreferences.getInstance();
     userID = prefs.getString('userID');
 
@@ -71,4 +75,68 @@ class UserCurrent{
       throw Exception('Failed to load data.');
     }
   }
+
+  static Future<void> showNotification(String title, String body) async {
+    var androidPlatformChannelSpecifics = AndroidNotificationDetails(
+      'your other channel id',
+      'your other channel name',
+      'your other channel description',
+      icon: 'info',
+      ticker: 'ticker',
+      color: Colors.yellowAccent,
+      largeIcon: DrawableResourceAndroidBitmap('flutter_devs'),
+    );
+    var iOSPlatformChannelSpecifics = IOSNotificationDetails();
+    var platformChannelSpecifics = NotificationDetails(
+        androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
+    await UserCurrent.flutterLocalNotificationsPlugin.show(
+      0,
+      title,
+      body,
+      platformChannelSpecifics,
+      payload: 'blood_glucose',
+    );
+  }
+
+  static Future<void> showNotificationCustomSound(DateTime startDate,DateTime endDate,
+      int id, String title, String body) async {
+    int difference = endDate.difference(startDate).inDays;
+    for(int i=0;i<difference;i++){
+      var time = Time(startDate.hour,startDate.minute,startDate.second);
+      var androidPlatformChannelSpecifics = AndroidNotificationDetails(
+        'your other channel id',
+        'your other channel name',
+        'your other channel description',
+        icon: 'info',
+        importance: Importance.Max,
+        priority: Priority.High,
+        ticker: 'ticker',
+        playSound: true,
+        sound: RawResourceAndroidNotificationSound('alert'),
+        color: Colors.yellowAccent,
+        largeIcon: DrawableResourceAndroidBitmap('flutter_devs'),
+      );
+      var iOSPlatformChannelSpecifics = IOSNotificationDetails();
+      var platformChannelSpecifics = NotificationDetails(
+          androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
+      await flutterLocalNotificationsPlugin.showDailyAtTime(
+          id,
+          title,
+          body,
+          time,
+          platformChannelSpecifics,
+          payload: 'note'
+      );
+    }
+  }
+
+  static Future<void> cancelNotification(int id) async {
+    await flutterLocalNotificationsPlugin.cancel(id);
+  }
+
+  static Future<void> cancelNotification1(String idNote) async {
+    int id = (idNote==""||idNote=="0")?0:int.parse(idNote);
+    await flutterLocalNotificationsPlugin.cancel(id);
+  }
+
 }

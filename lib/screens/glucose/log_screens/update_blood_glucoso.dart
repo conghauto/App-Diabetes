@@ -13,34 +13,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:diabetesapp/extensions/format_datetime.dart';
 import '../../../size_config.dart';
-
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:rxdart/subjects.dart';
-
-final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-FlutterLocalNotificationsPlugin();
-
-/// Streams are created so that app can respond to notification-related events
-/// since the plugin is initialised in the `main` function
-final BehaviorSubject<ReceivedNotification> didReceiveLocalNotificationSubject =
-BehaviorSubject<ReceivedNotification>();
-
-final BehaviorSubject<String> selectNotificationSubject =
-BehaviorSubject<String>();
-
-class ReceivedNotification {
-  ReceivedNotification({
-    @required this.id,
-    @required this.title,
-    @required this.body,
-    @required this.payload,
-  });
-
-  final int id;
-  final String title;
-  final String body;
-  final String payload;
-}
+import '../../../user_current.dart';
 
 class ContentNotification{
 
@@ -49,7 +22,6 @@ class ContentNotification{
 
   ContentNotification(this.title, this.body);
 }
-
 
 class UpdateBloodGlucoso extends StatefulWidget {
   UpdateBloodGlucoso({Key key, this.glycemicModel}) : super(key: key);
@@ -145,13 +117,13 @@ class _UpdateBloodGlucosoState extends State<UpdateBloodGlucoso> {
 
       double bloodG = double.parse(indexG.text);
       if(bloodG < 70){
-        showNotificationCustomSound(listNotification[0].title + bloodG.toString()+" mg/dl",listNotification[0].body);
+        UserCurrent.showNotification(listNotification[0].title + bloodG.toString()+" mg/dl",listNotification[0].body);
       }else if(bloodG >= 70 && bloodG < 130){
-        showNotificationCustomSound(listNotification[1].title + bloodG.toString()+" mg/dl",listNotification[1].body);
+        UserCurrent.showNotification(listNotification[1].title + bloodG.toString()+" mg/dl",listNotification[1].body);
       }else if(bloodG >= 130 && bloodG <= 180){
-        showNotificationCustomSound(listNotification[2].title + bloodG.toString()+" mg/dl",listNotification[2].body);
+        UserCurrent.showNotification(listNotification[2].title + bloodG.toString()+" mg/dl",listNotification[2].body);
       }else{
-        showNotificationCustomSound(listNotification[3].title + bloodG.toString()+" mg/dl. Tình trạng TĂNG ĐƯỜNG HUYẾT ",listNotification[3].body);
+        UserCurrent.showNotification(listNotification[3].title + bloodG.toString()+" mg/dl. Tình trạng TĂNG ĐƯỜNG HUYẾT ",listNotification[3].body);
       }
 
       Fluttertoast.showToast(
@@ -448,35 +420,6 @@ class _UpdateBloodGlucosoState extends State<UpdateBloodGlucoso> {
           );
         }
     );
-  }
-
-  Future<void> showNotificationCustomSound(String title, String body) async {
-    const AndroidNotificationDetails androidPlatformChannelSpecifics =
-    AndroidNotificationDetails(
-      'your other channel id',
-      'your other channel name',
-      'your other channel description',
-      icon: 'info',
-      importance: Importance.max,
-      priority: Priority.high,
-      ticker: 'ticker',
-      playSound: true,
-      sound: RawResourceAndroidNotificationSound('warning'),
-      color: Colors.yellowAccent,
-    );
-    const IOSNotificationDetails iOSPlatformChannelSpecifics =
-    IOSNotificationDetails(sound: 'warning');
-    const MacOSNotificationDetails macOSPlatformChannelSpecifics =
-    MacOSNotificationDetails(sound: 'warning');
-    const NotificationDetails platformChannelSpecifics = NotificationDetails(
-        android: androidPlatformChannelSpecifics,
-        iOS: iOSPlatformChannelSpecifics,
-        macOS: macOSPlatformChannelSpecifics);
-    await flutterLocalNotificationsPlugin.show(
-        0,
-        title,
-        body,
-        platformChannelSpecifics);
   }
 
 }

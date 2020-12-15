@@ -13,14 +13,13 @@ import 'package:intl/intl.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:table_calendar/table_calendar.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:diabetesapp/models/event.dart';
 import 'package:diabetesapp/extensions/format_datetime.dart';
 
-final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-FlutterLocalNotificationsPlugin();
+import '../../models/event.dart';
+import '../../user_current.dart';
 
 class PlanScreen extends StatefulWidget {
   static String routeName = "/plan_screen";
@@ -311,7 +310,7 @@ class _PlanScreenState extends State<PlanScreen> {
                               },
                               onLongPress: ()async{
                                 setState(() {
-                                  _showMyDialog(event.id);
+                                  _showMyDialog(event);
                                 });
                               },
                             ),
@@ -400,7 +399,7 @@ class _PlanScreenState extends State<PlanScreen> {
 //    Navigator.pushNamed(context, PlanScreen.routeName);
   }
 
-  Future<void> _showMyDialog(String id) async {
+  Future<void> _showMyDialog(EventModel model) async {
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
@@ -414,8 +413,11 @@ class _PlanScreenState extends State<PlanScreen> {
         Widget continueButton = FlatButton(
           child: Text("Tiếp tục"),
           onPressed: () {
-            _cancelNotification(id);
-            deleteItem(id);
+            int difference =  model.eventEndDate.difference(model.eventStartDate).inDays;
+            for(int i=0;i<difference;i++){
+              UserCurrent.cancelNotification1(model.id);
+            }
+            deleteItem(model.id);
           },
         );
 
@@ -439,8 +441,4 @@ class _PlanScreenState extends State<PlanScreen> {
     return d2;
   }
 
-  Future<void> _cancelNotification(String idNote) async {
-    int id = (idNote==""||idNote=="0")?0:int.parse(idNote);
-    await flutterLocalNotificationsPlugin.cancel(id);
-  }
 }
