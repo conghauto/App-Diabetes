@@ -409,9 +409,11 @@ class ExerciseLogState extends State<ExerciseLog>with AutomaticKeepAliveClientMi
                                       context, MaterialPageRoute(
                                       builder: (context) => AddNewTab())
                                   );
-                                  setState(() {
-                                    reportList.add(result);
-                                  });
+                                  if (result != null) {
+                                    setState(() {
+                                      reportList.add(result);
+                                    });
+                                  }
                                 }
                             )
                           ],

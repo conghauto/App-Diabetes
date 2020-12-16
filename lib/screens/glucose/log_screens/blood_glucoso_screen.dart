@@ -318,9 +318,11 @@ class BloodGlucosoLogState extends State<BloodGlucosoLog> with AutomaticKeepAliv
                                       context, MaterialPageRoute(
                                       builder: (context) => AddNewTab())
                                   );
-                                  setState(() {
-                                    reportList.add(result);
-                                  });
+                                  if (result != null) {
+                                    setState(() {
+                                      reportList.add(result);
+                                    });
+                                  }
                                 }
                             )
                           ],
