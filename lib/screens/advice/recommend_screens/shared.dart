@@ -45,7 +45,7 @@ buildTextSubTitleVariation1(String text){
       style: TextStyle(
         fontSize: 16,
         fontWeight: FontWeight.bold,
-        color: Colors.grey[400],
+        color: Colors.deepOrange[300],
       ),
     ),
   );

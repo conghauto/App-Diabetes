@@ -23,8 +23,10 @@ class OptionType{
 
 class _SelectFilterState extends State<SelectFilter> {
   var tmpArray = [];
-  DateTime startDate = DateTime.now().subtract(new Duration(days:1));
-  DateTime endDate = (new DateTime.now()).add(new Duration(days:1));
+  DateTime today = new DateTime.now();
+  DateTime afterDay = new DateTime.now().add(new Duration(days: 1));
+  DateTime startDate;
+  DateTime endDate;
   FilterService query;
   List<String>listQuery;
 
@@ -35,7 +37,8 @@ class _SelectFilterState extends State<SelectFilter> {
           null, null, 10, 10,
           10, 10, 10, 10);
     });
-
+    startDate = DateTime(today.year,today.month,today.day,0,0,0);
+    endDate = DateTime(afterDay.year,afterDay.month,afterDay.day,0,0,0);
     getListQuery();
   }
 
@@ -327,7 +330,7 @@ class _SelectFilterState extends State<SelectFilter> {
                                                     );
                                                   } else {
                                                     setState(() {
-                                                      startDate = date;
+                                                      startDate = DateTime(date.year,date.month,date.day);
                                                     });
                                                   }
                                                 }
@@ -376,7 +379,7 @@ class _SelectFilterState extends State<SelectFilter> {
                                                     );
                                                   } else {
                                                     setState(() {
-                                                      endDate = date;
+                                                      endDate = DateTime(date.year,date.month,date.day);
                                                     });
                                                   }
                                                 }

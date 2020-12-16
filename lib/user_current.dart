@@ -77,30 +77,53 @@ class UserCurrent{
   }
 
   static Future<void> showNotification(String title, String body) async {
+//    var androidPlatformChannelSpecifics = AndroidNotificationDetails(
+//        'silent channel id',
+//        'silent channel name',
+//        'silent channel description',
+//        playSound: false,
+//        styleInformation: DefaultStyleInformation(true, true));
     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
       'your other channel id',
       'your other channel name',
       'your other channel description',
       icon: 'info',
+      importance: Importance.Max,
+      priority: Priority.High,
       ticker: 'ticker',
+      playSound: true,
+      sound: RawResourceAndroidNotificationSound('warning'),
       color: Colors.yellowAccent,
       largeIcon: DrawableResourceAndroidBitmap('flutter_devs'),
     );
     var iOSPlatformChannelSpecifics = IOSNotificationDetails();
     var platformChannelSpecifics = NotificationDetails(
         androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
-    await UserCurrent.flutterLocalNotificationsPlugin.show(
+    await flutterLocalNotificationsPlugin.show(
       0,
       title,
       body,
       platformChannelSpecifics,
       payload: 'blood_glucose',
     );
+
+//    var androidPlatformChannelSpecifics = AndroidNotificationDetails(
+//        'silent channel id',
+//        'silent channel name',
+//        'silent channel description',
+//        playSound: false,
+//        styleInformation: DefaultStyleInformation(true, true));
+//    var iOSPlatformChannelSpecifics =
+//    IOSNotificationDetails(presentSound: false);
+//    var platformChannelSpecifics = NotificationDetails(
+//        androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
+//    await flutterLocalNotificationsPlugin.show(0, '<b>silent</b> title',
+//        '<b>silent</b> body', platformChannelSpecifics);
   }
 
   static Future<void> showNotificationCustomSound(DateTime startDate,DateTime endDate,
       int id, String title, String body) async {
-    int difference = endDate.difference(startDate).inDays;
+    int difference = startDate.isAfter(DateTime.now())?endDate.difference(startDate).inDays+1:endDate.difference(startDate).inDays;
     for(int i=0;i<difference;i++){
       var time = Time(startDate.hour,startDate.minute,startDate.second);
       var androidPlatformChannelSpecifics = AndroidNotificationDetails(
@@ -112,7 +135,7 @@ class UserCurrent{
         priority: Priority.High,
         ticker: 'ticker',
         playSound: true,
-        sound: RawResourceAndroidNotificationSound('alert'),
+        sound: RawResourceAndroidNotificationSound('warning'),
         color: Colors.yellowAccent,
         largeIcon: DrawableResourceAndroidBitmap('flutter_devs'),
       );

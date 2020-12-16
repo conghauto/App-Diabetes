@@ -49,6 +49,7 @@ class _AdviceScreenStateful extends State<AdviceScreen>with SingleTickerProvider
         ),
         Expanded(
           child: TabBarView(
+            physics: NeverScrollableScrollPhysics(),
             controller: _controller,
             children: [
               FoodScreen(),

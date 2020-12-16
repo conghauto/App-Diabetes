@@ -34,6 +34,7 @@ class _HomeScreenStateful extends State<HomeScreen> {
     return Scaffold(
       body: PageView(
        controller: _pageController,
+        physics: NeverScrollableScrollPhysics(),
        children: _screens,
         onPageChanged: _onPageChanged,
       ),
