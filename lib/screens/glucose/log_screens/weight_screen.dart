@@ -281,9 +281,11 @@ class WeightLogState extends State<WeightLog> with AutomaticKeepAliveClientMixin
                                       context, MaterialPageRoute(
                                       builder: (context) => AddNewTab())
                                   );
-                                  setState(() {
-                                    reportList.add(result);
-                                  });
+                                  if (result != null) {
+                                    setState(() {
+                                      reportList.add(result);
+                                    });
+                                  }
                                 }
                             )
                           ],

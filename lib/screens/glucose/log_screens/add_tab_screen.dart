@@ -16,7 +16,7 @@ class _AddNewTabState extends State<AddNewTab> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Thêm tag mới', style: TextStyle(color: Colors.white),),
+        title: Text('Thêm thẻ mới', style: TextStyle(color: Colors.white),),
         backgroundColor: Colors.lightBlue,
       ),
       body: Column(
@@ -29,7 +29,17 @@ class _AddNewTabState extends State<AddNewTab> {
               style: TextStyle(
                 fontSize: 20,
                 color: Colors.black,
+
               ),
+              decoration: InputDecoration(
+                  contentPadding: EdgeInsets.only(bottom: 3, left: 15),
+                  labelText: "Tên thẻ",
+                  floatingLabelBehavior: FloatingLabelBehavior.always,
+                  hintStyle: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  )),
             ),
           ),
 
