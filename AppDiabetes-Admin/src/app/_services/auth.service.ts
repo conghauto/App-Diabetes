@@ -7,20 +7,21 @@ import {JwtHelperService} from '@auth0/angular-jwt';
   providedIn: 'root'
 })
 export class AuthService {
-  baseUrl = 'http://localhost:5000/api/auth/';
+  baseUrl = 'http://localhost:8080/api/admin';
   jwtHelper = new JwtHelperService();
   decodedToken: any;
 
   constructor(private http: HttpClient) { }
 
   login(model: any){
-    return this.http.post(this.baseUrl + 'admin/login', model).pipe(
-      map((response: any) => {
-        const user = response;
-        if (user){
-          localStorage.setItem('token', user.token);
-          this.decodedToken = this.jwtHelper.decodeToken(user.token);
-          // console.log(this.decodedToken);
+    console.log(model);
+    return this.http.post(`${this.baseUrl}/login.php`, {data: model}).pipe(
+      map((response:any) => {
+        console.log('demo');
+        if (response['token']){
+          localStorage.setItem('token', response['token']);
+          this.decodedToken = this.jwtHelper.decodeToken(response['token']);
+          console.log(this.decodedToken);
         }
       })
     );

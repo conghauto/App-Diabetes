@@ -19,12 +19,14 @@ export class CustomerComponent implements OnInit {
               private alertifyService: AlertifyService, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
-    this.route.data.subscribe(data => {
-      this.users = data.customers.result;
-      this.pagination = data.customers.pagination;
-    });
+    this.loadUsers();
+    console.log(this.users);
+    // this.route.data.subscribe(data => {
+    //   this.users = data.customers.result;
+    //   this.pagination = data.customers.pagination;
+    // });
 
-    this.userParams.name = '';
+    // this.userParams.name = '';
   }
 
   // loadUsers(){
@@ -36,11 +38,9 @@ export class CustomerComponent implements OnInit {
   // }
 
   loadUsers(){
-    this.userService
-      .getUsers(this.pagination.currentPage, this.pagination.itemsPerPage, this.userParams)
-      .subscribe((res: PaginatedResult<User[]>) => {
-        this.users = res.result;
-        this.pagination = res.pagination;
+    this.userService.getUsers()
+      .subscribe((res: User[]) => {
+        this.users = res;
     }, error => {
       this.toastrService.error(error);
     });

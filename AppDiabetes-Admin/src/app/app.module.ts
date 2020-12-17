@@ -38,6 +38,7 @@ import { DetailedOrderComponent } from './order/detailedOrder/detailedOrder.comp
 import { OrdersService } from './_services/orders.service';import { UserListResolver } from './_resolvers/user-list.resolver';
 import { ProductListResolver } from './_resolvers/product-list.resolver';
 import { OrderListResolver } from './_resolvers/order-list.resolver';
+import { FoodComponent } from './food/food.component';
 export function tokenGetter(){
   return localStorage.getItem('token');
 }
@@ -58,7 +59,8 @@ export function tokenGetter(){
     PhotoEditComponent,
     AddProductComponent,
     OrderComponent,
-    DetailedOrderComponent
+    DetailedOrderComponent,
+    FoodComponent
   ],
   imports: [
     BrowserModule,

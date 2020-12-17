@@ -4,7 +4,7 @@
       <li class="breadcrumb-item">
           <a (click)="navigateToHome()">Trang chủ</a>
       </li>
-      <li class="breadcrumb-item active">Sản phẩm</li>
+      <li class="breadcrumb-item active">Món ăn</li>
   </ol>
 
   <!-- DataTables Example -->
@@ -12,11 +12,11 @@
     <div class="card-header row">
       <div class="col-sm-6 mt-1">
         <i class="fas fa-table"></i>
-          Danh sách sản phẩm
+          Danh sách món
       </div>
       <div class="col-sm-4">
-        <form class="form-inline mt-0 mt-md-0" #form="ngForm" (ngSubmit)="loadProducts()">
-          <input name="name" [(ngModel)]="productParams.name" class="form-control-sm mr-sm-2" type="text" placeholder="Nhập tên sản phẩm" aria-label="Search">
+        <form class="form-inline mt-0 mt-md-0" #form="ngForm" (ngSubmit)="loadFoods()">
+          <input name="name" [(ngModel)]="productParams.name" class="form-control-sm mr-sm-2" type="text" placeholder="Nhập tên món ăn" aria-label="Search">
           <button class="btn btn-info btn-sm my-2 my-sm-0" type="submit">Tìm kiếm</button>
         </form>
       </div>
@@ -32,30 +32,37 @@
                 <thead  class="thead-light">
                   <tr>
                       <th>STT</th>
-                      <th>Tên Laptop</th>
-                      <th>Giá</th>
-                      <th>Image</th>
+                      <th>Tên món</th>
                       <th>Số lượng</th>
+                      <th>Calo (kcalo)</th>
+                      <th>Bữa ăn</th>
+                      <th>Đường huyết</th>
+                      <th>Ảnh</th>
                       <th></th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr id="row_1" *ngFor="let product of products, let i=index">
+                  <tr id="row_1" *ngFor="let food of foods, let i=index">
                     <td>{{i+1}}</td>
-                    <td>{{product.name}}</td>
-                    <td style="color: red">{{product.price|currency:'VND'}}</td>
-                    <td><img src="{{product.photoURL}}" alt="{{product.name}}" style="width: 20px;height: 16px;"></td>
-                    <td style="color: blue">{{product.quantity}}</td>
+                    <td>{{food.name}}</td>
+                    <td>{{food.amount}} {{food.unit}}</td>
+                    <td style="color: red">{{food.calo}}</td>
+                    <td style="color: red">{{food.meal}}</td>
+                    <td style="color: blue">{{food.stateBG}}</td>
+                    <td><img src="{{food.image}}" alt="{{food.name}}" style="width: 20px;height: 16px;"></td>
+
                     <td>
-                      <i (click)="deleteProduct(product.idProduct)" class="fas fa-trash-alt fa-sm text-danger"></i>
+                      <!-- <i (click)="deleteProduct(product.idProduct)" class="fas fa-trash-alt fa-sm text-danger"></i> -->
+                      <i  class="fas fa-trash-alt fa-sm text-danger"></i>
                       |
-                      <i [routerLink]="product.idProduct" class="far fa-edit fa-sm text-primary"></i>
+                      <!-- <i [routerLink]="product.idProduct" class="far fa-edit fa-sm text-primary"></i> -->
+                      <i class="far fa-edit fa-sm text-primary"></i>
                     </td>
                   </tr>
                 </tbody>
             </table>
             <br>
-            <div class="d-flex justify-content-center">
+            <!-- <div class="d-flex justify-content-center">
               <pagination [boundaryLinks]="true"
                 [totalItems]="pagination.totalItems"
                 [itemsPerPage]="pagination.itemsPerPage"
@@ -63,7 +70,7 @@
                 (pageChanged)="pageChanged($event)"
                 previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;">
               </pagination>
-            </div>
+            </div> -->
         </div>
     </div>
   </div>

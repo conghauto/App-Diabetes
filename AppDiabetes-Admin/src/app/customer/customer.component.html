@@ -4,7 +4,7 @@
       <li class="breadcrumb-item">
           <a [routerLink]="['admin/home']">Trang chủ</a>
       </li>
-      <li class="breadcrumb-item active">Khách hàng</li>
+      <li class="breadcrumb-item active">Người dùng</li>
   </ol>
 
   <!-- DataTables Example -->
@@ -12,7 +12,7 @@
     <div class="card-header row">
       <div class="col-sm-8 mt-1">
         <i class="fas fa-table"></i>
-          Danh sách khách hàng
+          Danh sách tài khoản
       </div>
       <div class="col-sm-4">
         <form class="form-inline mt-0 mt-md-0" #form="ngForm" (ngSubmit)="loadUsers()">
@@ -27,13 +27,11 @@
                   <thead class="thead-light">
                       <tr>
                           <th>Số TT</th>
-                          <th>Username</th>
                           <th>Họ tên</th>
-                          <th>Ngày sinh</th>
                           <th>Email</th>
                           <th>Số điện thoại</th>
-                          <th>Địa chỉ</th>
                           <th>Ngày tạo</th>
+                          <th>Avatar</th>
 
                           <th></th>
                       </tr>
@@ -41,13 +39,11 @@
                   <tbody>
                     <tr id="row_1" *ngFor="let user of users, let i=index">
                       <td>{{i+1}}</td>
-                      <td>{{user.username}}</td>
                       <td>{{user.fullname}}</td>
-                      <td>{{user.dateOfBirthday| date:'dd-MM-yyyy'}}</td>
                       <td>{{user.email}}</td>
-                      <td>{{user.phoneNumber}}</td>
-                      <td>{{user.address}}</td>
-                      <td>{{user.created| date:'dd-MM-yyyy'}}</td>
+                      <td>{{user.phone}}</td>
+                      <td>{{user.signUpDate| date:'dd-MM-yyyy'}}</td>
+                      <td><img src="{{user.avatar}}" alt="{{user.fullname}}" style="width: 20px;height: 16px;"></td>
                       <td>
                         <i (click)="deleteUser(user.id)" class="fas fa-trash-alt fa-sm text-danger"></i>
                       </td>
@@ -55,7 +51,7 @@
                   </tbody>
               </table>
               <br>
-              <div class="d-flex justify-content-center">
+              <!-- <div class="d-flex justify-content-center">
                 <pagination [boundaryLinks]="true"
                   [totalItems]="pagination.totalItems"
                   [itemsPerPage]="pagination.itemsPerPage"
@@ -63,7 +59,7 @@
                   (pageChanged)="pageChanged($event)"
                   previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;">
                 </pagination>
-              </div>
+              </div> -->
           </div>
       </div>
   </div>

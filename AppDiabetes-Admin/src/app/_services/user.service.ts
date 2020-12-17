@@ -19,27 +19,11 @@ export class UserService {
   // getUsers(): Observable<User[]>{
   //   return this.http.get<User[]>(this.baseUrl + 'users');
   // }
-  getUsers(page?, itemsPerPage?, userParams?): Observable<PaginatedResult<User[]>>{
-    const paginatedResult: PaginatedResult<User[]> = new PaginatedResult<User[]>();
-    let params = new HttpParams();
-
-    if (page != null && itemsPerPage != null){
-      params = params.append('pageNumber', page);
-      params = params.append('pageSize', itemsPerPage);
-    }
-
-    if (userParams != null){
-      params = params.append('name', userParams.name);
-    }
-
-    return this.http.get<User[]>(this.baseUrl + 'users', {observe: 'response', params})
-    .pipe(
-      map(response => {
-        paginatedResult.result = response.body;
-        if (response.headers.get('Pagination') != null){
-          paginatedResult.pagination = JSON.parse(response.headers.get('Pagination'));
-        }
-        return paginatedResult;
+  getUsers(): Observable<User[]>{
+    return this.http.get<User[]>(`${this.baseUrl}admin/getUsers.php`).pipe(
+      map((response) => {
+        this.users = response['data'];
+        return this.users;
       }, err => {
         this.toastrService.error(err);
       })
@@ -47,6 +31,8 @@ export class UserService {
   }
 
   deleteUser(id: number){
-    return this.http.delete(this.baseUrl + 'users/' + id, {});
+    const params = new HttpParams()
+    .set('id', id.toString());
+    return this.http.delete(this.baseUrl + 'admin/deleteUser.php', { params: params });
   }
 }

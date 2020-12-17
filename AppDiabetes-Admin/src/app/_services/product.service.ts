@@ -6,48 +6,59 @@ import { Observable } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { PaginatedResult } from '../_models/Pagination';
 import { map } from 'rxjs/operators';
+import { Food } from '../_models/Food';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProductService {
   baseUrl = environment.apiUrl;
-  product: Product;
+  food: Food;
   id: number;
 
-  products: Product[];
+  foods: Food[];
   constructor(private http: HttpClient, private toastrService: ToastrService) { }
 
-  getProducts(): Observable<Product[]>{
-    return this.http.get<Product[]>(this.baseUrl + 'products/GetAll/');
-  }
 
-  getProductsForAdmin(page?, itemsPerPage?, productParams?): Observable<PaginatedResult<Product[]>>{
-    const paginatedResult: PaginatedResult<Product[]> = new PaginatedResult<Product[]>();
-    let params = new HttpParams();
-
-    if (page != null && itemsPerPage != null){
-      params = params.append('pageNumber', page);
-      params = params.append('pageSize', itemsPerPage);
-    }
-
-    if (productParams != null){
-      params = params.append('name', productParams.name);
-    }
-
-    return this.http.get<Product[]>(this.baseUrl + 'products/ForAdmin', {observe: 'response', params})
-    .pipe(
-      map(response => {
-        paginatedResult.result = response.body;
-        if (response.headers.get('Pagination') != null){
-          paginatedResult.pagination = JSON.parse(response.headers.get('Pagination'));
-        }
-        return paginatedResult;
+  getFoods(): Observable<Food[]>{
+    return this.http.get<Food[]>(`${this.baseUrl}admin/getFoods.php`).pipe(
+      map((response) => {
+        this.foods = response['data'];
+        return this.foods;
       }, err => {
         this.toastrService.error(err);
       })
     );
   }
+
+
+
+  // getProductsForAdmin(page?, itemsPerPage?, productParams?): Observable<PaginatedResult<Product[]>>{
+  //   const paginatedResult: PaginatedResult<Product[]> = new PaginatedResult<Product[]>();
+  //   let params = new HttpParams();
+
+  //   if (page != null && itemsPerPage != null){
+  //     params = params.append('pageNumber', page);
+  //     params = params.append('pageSize', itemsPerPage);
+  //   }
+
+  //   if (productParams != null){
+  //     params = params.append('name', productParams.name);
+  //   }
+
+  //   return this.http.get<Product[]>(this.baseUrl + 'products/ForAdmin', {observe: 'response', params})
+  //   .pipe(
+  //     map(response => {
+  //       paginatedResult.result = response.body;
+  //       if (response.headers.get('Pagination') != null){
+  //         paginatedResult.pagination = JSON.parse(response.headers.get('Pagination'));
+  //       }
+  //       return paginatedResult;
+  //     }, err => {
+  //       this.toastrService.error(err);
+  //     })
+  //   );
+  // }
 
   getProduct(idProduct): Observable<Product>{
     this.id = idProduct;

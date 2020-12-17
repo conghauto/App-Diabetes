@@ -15,7 +15,7 @@ export class ProductListResolver implements Resolve<Product[]>{
               private router: Router, private toastrService: ToastrService){}
 
   resolve(route: ActivatedRouteSnapshot): Observable<Product[]>{
-    return this.productService.getProductsForAdmin(this.pageNumber, this.pageSize).pipe(
+    return this.productService.getFoods().pipe(
       catchError(error => {
         this.toastrService.error('Problem retrieving data');
         this.router.navigate(['admin/home']);

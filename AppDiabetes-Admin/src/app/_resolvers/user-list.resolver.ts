@@ -15,7 +15,7 @@ export class UserListResolver implements Resolve<User[]>{
               private router: Router, private toastrService: ToastrService){}
 
   resolve(route: ActivatedRouteSnapshot): Observable<User[]>{
-    return this.userService.getUsers(this.pageNumber, this.pageSize).pipe(
+    return this.userService.getUsers().pipe(
       catchError(error => {
         this.toastrService.error('Problem retrieving data');
         this.router.navigate(['admin/home']);
