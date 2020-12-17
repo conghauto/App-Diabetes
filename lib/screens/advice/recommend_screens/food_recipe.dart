@@ -5,8 +5,10 @@ import 'package:diabetesapp/models/food.dart';
 import 'package:diabetesapp/screens/advice/recommend_screens/shared.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import '../../../constants.dart';
+import '../../../user_current.dart';
 
 // ignore: must_be_immutable
 class RecipeFood extends StatefulWidget {
@@ -26,6 +28,42 @@ class _RecipeFoodState extends State<RecipeFood> {
   @override
   void initState() {
     fetchRecipe();
+  }
+  void addCarb() async {
+    var url = ip + "/api/addCarb.php";
+    var response = await http.post(url, body: {
+      'carb': recipeFood.carb,
+      'fat': recipeFood.lipid,
+      'protein': recipeFood.protein,
+      'calo': recipeFood.calo,
+      'tags': "",
+      'note': recipeFood.name,
+      'measureTime': DateTime.now().toString(),
+      'userID': UserCurrent.userID.toString(),
+    });
+
+    var data = json.decode(response.body);
+    if(data=="Error"){
+      Fluttertoast.showToast(
+          msg: "Đã xảy ra lỗi",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0
+      );
+    }else{
+      Fluttertoast.showToast(
+          msg: "Thêm thức ăn thành công",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.green,
+          textColor: Colors.white,
+          fontSize: 16.0
+      );
+    }
   }
   fetchRecipe() async {
     String url = ip + "/api/getRecipeByID.php";
@@ -54,15 +92,18 @@ class _RecipeFoodState extends State<RecipeFood> {
             Navigator.pop(context);
           },
         ),
-        // actions: [
-        //   Padding(
-        //     padding: EdgeInsets.only(right: 16),
-        //     child: Icon(
-        //       Icons.favorite_border,
-        //       color: Colors.white,
-        //     ),
-        //   ),
-        // ],
+        actions: [
+          Padding(
+            padding: EdgeInsets.only(right: 16),
+            child: IconButton(
+              onPressed: () => {
+                showAddFood(context)
+              },
+              icon: Icon(Icons.add_box_outlined),
+              color: Colors.white,
+            ),
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         physics: BouncingScrollPhysics(),
@@ -128,5 +169,38 @@ class _RecipeFoodState extends State<RecipeFood> {
       ),
     );
   }
-  
+  showAddFood(BuildContext context) {
+    // set up the buttons
+    Widget cancelButton = FlatButton(
+      child: Text("Hủy"),
+      onPressed: () {
+        Navigator.pop(context);
+      },
+    );
+    Widget continueButton = FlatButton(
+      child: Text("Ok"),
+      onPressed: () async {
+        addCarb();
+        Navigator.pop(context);
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("XÁC NHẬN"),
+      content: Text("Bạn có muốn thêm món ăn vào lịch sử hằng ngày?"),
+      actions: [
+        continueButton,
+        cancelButton
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
 }

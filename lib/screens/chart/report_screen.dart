@@ -416,12 +416,12 @@ class _ReportScreenState extends State<ReportScreen>{
                     pdfLib.Table.fromTextArray(context: context, cellStyle: myStyle, headerStyle: myStyle, data: <List<String>>[
                       <String>['Hoạt động', 'Thời gian luyện tập', 'Năng lượng tiêu hao', 'Ngày', 'Chú thích'],
                       ...listActivityTable.map(
-                              (item) => [item.nameActivity, item.timeActivity + " phút", item.calo + " calo", dateFormat.format(item.measureTime), item.note.toString()])
+                              (item) => [item.nameActivity, item.timeActivity + " phút", item.calo + " kcal", dateFormat.format(item.measureTime), item.note.toString()])
                     ]),
                     pdfLib.Divider(height: 1,),
                     pdfLib.Center(
                         child: pdfLib.Text(
-                            "Năng lượng tiêu hao trung bình: ${averageActivity.toStringAsFixed(2)} calo",
+                            "Năng lượng tiêu hao trung bình: ${averageActivity.toStringAsFixed(2)} kcal",
                             style: myStyle
                         )
                     ),
