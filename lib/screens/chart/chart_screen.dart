@@ -576,7 +576,7 @@ class _ChartScreenStateful extends State<ChartScreen>{
                 ),
                 ListTile(
                   title: Text(
-                    "Năng lượng tiêu hao trung bình: ${averageCaloActivity.toStringAsFixed(2)} calo",
+                    "Năng lượng tiêu hao trung bình: ${averageCaloActivity.toStringAsFixed(2)} kcal",
                     style: TextStyle(
                       fontSize: 15,
                     ),

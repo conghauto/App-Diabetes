@@ -263,7 +263,7 @@ class _UpdateCarbsState extends State<UpdateCarbs> {
                     hintText: "Nhập chỉ số calo"
                 ),
               ),
-              trailing: Text("cal"),
+              trailing: Text("kcal"),
             ),
             Divider(
               height: 5,
