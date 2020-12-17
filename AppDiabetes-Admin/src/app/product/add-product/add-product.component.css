@@ -1,0 +1,38 @@
+form{
+  margin-top: 20px;
+}
+
+h6{
+  margin-left: 15px;
+  font-size: 0.95em;
+}
+
+.isNew {
+  width: 16px;
+  height: 16px;
+  margin-left: 15px;
+  margin-top: 2px;
+}
+
+.inlineRow{
+  margin-left: 0px;
+}
+
+select {
+  background-color: #29ad1a;
+}
+
+select {
+  border-radius: 2px;
+}
+
+/* .styled-select {
+  border: 1px solid;
+  overflow: hidden;
+  width: 135px;
+} */
+
+.styled-select select {
+  width: 149px;
+  margin-top:0px;
+}

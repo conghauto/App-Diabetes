@@ -1,0 +1,31 @@
+<div class="container">
+  <div class="row">
+    <div class="col-5">
+      <form #form="ngForm" autocomplete="off" (submit)="onSubmit(form)">
+        <h4 class="text-danger">Thêm Nhà cung cấp</h4>
+
+        <input type="hidden" name="idManufacturer" [value]="manufacturerService.formData.idManufacturer">
+        <div class="form-group row">
+          <label for="su-nameManufacturer" class="col-sm-5 col-form-label">Tên hãng</label>
+          <div class="col-7">
+            <input type="text" name="name" #name="ngModel" [(ngModel)]="manufacturerService.formData.name"
+              class="form-control" required minlength="2" maxlength="20">
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="status" class="col-sm-5 col-form-label">Trạng thái hoạt động</label>
+          <div class="col-7">
+            <input type="checkbox" id="status" name="status" [(ngModel)]="manufacturerService.formData.isActive">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <button class="btn btn-primary btn-sm"
+            [disabled]="form.invalid" type="submit">Thêm mới</button>
+          <button class="btn btn btn-danger btn-sm" style="margin-left: 10px;"
+            (click)="navigateToPage()" type="button">Quay lại</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

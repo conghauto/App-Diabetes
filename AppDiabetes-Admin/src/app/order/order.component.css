@@ -1,0 +1,19 @@
+.container-fluid ol li a{
+  color:#1d8afe;
+}
+
+.container-fluid ol li a:hover{
+  color:#007bff;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.text-danger:hover{
+  cursor: pointer;
+  color: red;
+}
+
+.text-primary{
+  cursor: pointer;
+  color: blue;
+}

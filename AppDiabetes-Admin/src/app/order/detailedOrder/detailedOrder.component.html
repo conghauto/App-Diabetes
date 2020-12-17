@@ -1,0 +1,49 @@
+
+<div id="all">
+  <div id="content">
+    <div class="container">
+      <div class="row">
+        <div id="basket" class="col-lg-12">
+          <div class="box">
+              <div class="alert alert-danger" *ngIf="listDetails.length == 0" role="alert">Đơn hàng rỗng</div>
+              <div *ngIf="listDetails.length > 0">
+                <h1 style="text-align: center;">Chi tiết đơn đặt hàng</h1>
+                <div class="table-responsive">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th>STT</th>
+                        <th>Mã đơn hàng</th>
+                        <th colspan="2" style="text-align: center;">Sản phẩm</th>
+                        <th>Số lượng đặt</th>
+                        <th>Đơn giá sản phẩm</th>
+                        <th>Thanh toán</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let sel of listDetails, let i = index">
+                        <td>{{i+1}}</td>
+                        <td>{{sel.idOrder}}</td>
+                        <td *ngIf="isMatch(sel.idProduct)"><img src="{{this.photoURL}}" alt="{{this.productName}}"></td>
+                        <td *ngIf="isMatch(sel.idProduct)">{{this.productName}}</td>
+                        <td>{{sel.quantity}}</td>
+                        <td>{{sel.unitPrice |currency:'VND'}}</td>
+                        <td>{{sel.unitPrice*sel.quantity | currency:'VND'}}</td>
+                      </tr>
+                    </tbody>
+                    <tfoot>
+                      <tr>
+                        <th colspan="6">Tổng tiền phải thanh toán:</th>
+                        <th colspan="2"> {{this.totalPayment | currency:'VND'}}</th>
+                      </tr>
+                    </tfoot>
+                  </table>
+                </div>
+          </div>
+          <!-- /.box-->
+        </div>
+        <!-- /.col-lg-9-->
+      </div>
+    </div>
+  </div>
+</div>
