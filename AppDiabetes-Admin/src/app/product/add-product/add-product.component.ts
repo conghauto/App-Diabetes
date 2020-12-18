@@ -20,21 +20,27 @@ export class AddProductComponent implements OnInit {
   @ViewChild('form') form: NgForm;
   food: Food;
 
-  arrMeal: Meal[] = [  
-    {id: 1, nameEng: 'breakfast', nameVi: 'Bữa sáng'},  
-    {id: 2, nameEng: 'lunch', nameVi: 'Bữa trưa'},    
-    {id: 3, nameEng: 'dinner', nameVi: 'Bữa tối'},
-    {id: 4, nameEng: 'snack', nameVi: 'Bữa phụ'}
- ];
+  // arrMeal: Array<Object> = [
+  //   {id: 1, nameVi: 'Bữa sáng', nameEng: 'breakfast'},  
+  //   {id: 2, nameVi: 'Bữa trưa', nameEng: 'lunch'},    
+  //   {id: 3, nameVi: 'Bữa tối', nameEng: 'dinner'},
+  //   {id: 4, nameVi: 'Bữa phụ', nameEng: 'snack'}
+  // ];
 
- arrStateBG: StateBG[] = [  
-  {id: 1, nameEng: 'high', nameVi: 'Đường huyết cao'},  
-  {id: 2, nameEng: 'low', nameVi: 'Đường huyết thấp'},    
-]; ;
+  arrMeal: Array<Object> = [
+    {id: 1, nameVi: 'Bữa sáng'},  
+    {id: 2, nameVi: 'Bữa trưa'},    
+    {id: 3, nameVi: 'Bữa tối'},
+    {id: 4, nameVi: 'Bữa phụ'}
+  ];
 
+  arrStateBG: Array<Object> = [
+    {id: 1, nameVi: 'Đường huyết cao'},  
+    {id: 2, nameVi: 'Đường huyết thấp'},
+  ];
 
- mealSelected: string;
- stateBGSelected: string;
+ mealSelected;
+ stateBGSelected;
   // tslint:disable-next-line: ban-types
 
   @HostListener('window:beforeunload', ['$event'])
@@ -53,11 +59,8 @@ export class AddProductComponent implements OnInit {
 
 
     this.resetForm();
-    
-    this.stateBGSelected = 'high';
-    this.mealSelected = 'breakfast';
-   
-
+    this.mealSelected = 1;
+    this.stateBGSelected = 1;
   }
 
   resetForm(form?: NgForm){
@@ -81,9 +84,10 @@ export class AddProductComponent implements OnInit {
     };
   }
 
+
   addFood(){
-    this.food.meal = this.mealSelected;
-    this.food.stateBG = this.stateBGSelected;
+    this.food.meal = this.mealSelected == 1? "breakfast" : this.mealSelected == 2? "lunch": this.mealSelected == 3? "dinner" : "snack";
+    this.food.stateBG = this.stateBGSelected ==1? "high" : "low";
     console.log(this.food);
     this.productService.addFood(this.food).subscribe( next => {
       this.toastrService.success('Thêm món ăn tin thành công');
@@ -98,15 +102,3 @@ export class AddProductComponent implements OnInit {
     this.router.navigate(['admin/products']);
   }
 }
-
-export interface Meal{  
-  id:number;  
-  nameEng: string;
-  nameVi:string;
-} 
-
-export interface StateBG{  
-  id:number;  
-  nameEng: string;
-  nameVi:string;
-} 

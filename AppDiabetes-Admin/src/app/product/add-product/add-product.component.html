@@ -43,7 +43,7 @@
               <div class="form-group">
                 <h6>Chất béo (gam)</h6>
                 <div class="col-3">
-                  <input type="number" name="amount" [(ngModel)]="food.amount" class="form-control" min="0" required>
+                  <input type="number" name="lipid" [(ngModel)]="food.lipid" class="form-control" min="0" required>
                 </div>
               </div>
 
@@ -67,8 +67,8 @@
                   <!-- <select [(ngModel)]="selectedLevel" (change)="selected()">
                     <option *ngFor="let item of data" [ngValue]="item">{{item.name}}</option>
                   </select> -->
-                    <select name="foodSelected" [(ngModel)]="foodSelected">
-                      <option *ngFor="let item of arrMeal" [ngValue]="item.nameEn">{{item.nameVi}}</option>
+                    <select name="mealSelected" [(ngModel)]="mealSelected">
+                      <option *ngFor="let item of arrMeal" [ngValue]="item.id">{{item.nameVi}}</option>
                     </select>
                 </div>
               </div>
@@ -80,7 +80,7 @@
                     <option *ngFor="let item of data" [ngValue]="item">{{item.name}}</option>
                   </select> -->
                     <select name="stateBGSelected" [(ngModel)]="stateBGSelected">
-                      <option *ngFor="let item of arrStateBG" [ngValue]="item.nameEn">{{item.nameVi}}</option>
+                      <option *ngFor="let item of arrStateBG" [ngValue]="item.id">{{item.nameVi}}</option>
                     </select>
                 </div>
               </div>
