@@ -17,6 +17,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 import 'package:pdf/pdf.dart';
+import 'package:percent_indicator/percent_indicator.dart';
 import '../../constants.dart';
 import '../../user_current.dart';
 import 'package:pdf/widgets.dart' as pdfLib;
@@ -734,6 +735,35 @@ class _ReportScreenState extends State<ReportScreen>{
                         textAlign: TextAlign.center,
                       ),
                     ),
+                    ListTile(
+                      leading: Text(
+                        "Thấp",
+                        style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.yellow
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      title: Text(
+                        "Tốt",
+                        style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.green
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      trailing: Text(
+                        "Cao",
+                        style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.red
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
                     Divider(
                       height: 1,
                       color: Colors.black,
@@ -756,17 +786,29 @@ class _ReportScreenState extends State<ReportScreen>{
                         rows: listGlycemicsTable.map(
                                 (e) => DataRow(
                                 cells: <DataCell>[
-                                  DataCell(Text(e.indexG + " mg/dL")),
+                                  DataCell(
+                                      Text(e.indexG + " mg/dL", style: TextStyle(
+                                        color: (double.tryParse(e.indexG) < 70) ? Colors.yellow : (double.tryParse(e.indexG) > 180) ? Colors.red : Colors.green
+                                      ),
+                                      )
+                                  ),
                                   DataCell(Text(dateFormat.format(e.measureTime))),
                                 ]
                             )
                         ).toList()
                     ),
                     ListTile(
-                      title: Text(
-                        "Đường huyết trung bình: ${averageGlycemic.toStringAsFixed(2)} mg/dL",
+                      leading: Text(
+                        "Đường huyết trung bình: ",
                         style: TextStyle(
                           fontSize: 15,
+                        ),
+                      ),
+                      title: Text(
+                        " ${averageGlycemic.toStringAsFixed(2)} mg/dL",
+                        style: TextStyle(
+                          fontSize: 15,
+                            color: (averageGlycemic < 70) ? Colors.yellow : (averageGlycemic > 180) ? Colors.red : Colors.green
                         ),
                         textAlign: TextAlign.center,
                       ),
