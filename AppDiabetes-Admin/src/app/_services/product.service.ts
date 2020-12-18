@@ -80,9 +80,21 @@ export class ProductService {
       + '/photos/' + id);
   }
 
-  addProduct(data: Product){
-    return this.http.post(this.baseUrl + 'products/add', data);
+  addFood(food: Food): Observable<Food[]> {
+    return this.http.post(`${this.baseUrl}admin/addFood.php`, { data: food })
+      .pipe(map((res) => {
+        this.foods.push(res['data']);
+        return this.foods;
+      }, err => {
+        this.toastrService.error(err);
+      })
+    )
   }
+
+
+  // addFood(data: Food){
+  //   return this.http.post(this.baseUrl + 'admin/addFood.php', data);
+  // }
 
   deleteProduct(id: number){
     return this.http.delete(this.baseUrl + 'products/' + id, {});

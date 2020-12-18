@@ -6,6 +6,7 @@ import { ToastrService } from 'ngx-toastr';
 import { NgForm } from '@angular/forms';
 import { Product } from 'src/app/_models/Product';
 import { Manufacturer } from 'src/app/_models/Manufacturer';
+import { Food } from 'src/app/_models/Food';
 
 @Component({
   selector: 'app-add-product',
@@ -17,11 +18,24 @@ export class AddProductComponent implements OnInit {
   constructor(public productService: ProductService, private route: ActivatedRoute, private router: Router,
               private toastrService: ToastrService, private manufacturerService: ManufacturerService) { }
   @ViewChild('form') form: NgForm;
-  product: Product;
+  food: Food;
 
-  proSelected: any;
+  arrMeal: Meal[] = [  
+    {id: 1, nameEng: 'breakfast', nameVi: 'Bữa sáng'},  
+    {id: 2, nameEng: 'lunch', nameVi: 'Bữa trưa'},    
+    {id: 3, nameEng: 'dinner', nameVi: 'Bữa tối'},
+    {id: 4, nameEng: 'snack', nameVi: 'Bữa phụ'}
+ ];
+
+ arrStateBG: StateBG[] = [  
+  {id: 1, nameEng: 'high', nameVi: 'Đường huyết cao'},  
+  {id: 2, nameEng: 'low', nameVi: 'Đường huyết thấp'},    
+]; ;
+
+
+ mealSelected: string;
+ stateBGSelected: string;
   // tslint:disable-next-line: ban-types
-  manufacturers: Manufacturer[];
 
   @HostListener('window:beforeunload', ['$event'])
     unloadNotify($event: any){
@@ -31,14 +45,19 @@ export class AddProductComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.manufacturerService.getManufacturers().subscribe(data => {
-        this.manufacturers = data.result;
-      }, err => {
-        this.toastrService.error(err);
-    });
+    // this.manufacturerService.getManufacturers().subscribe(data => {
+    //     this.manufacturers = data.result;
+    //   }, err => {
+    //     this.toastrService.error(err);
+    // });
 
-    this.proSelected = 1;
+
     this.resetForm();
+    
+    this.stateBGSelected = 'high';
+    this.mealSelected = 'breakfast';
+   
+
   }
 
   resetForm(form?: NgForm){
@@ -46,22 +65,28 @@ export class AddProductComponent implements OnInit {
       form.resetForm();
     }
 
-    this.product = {
-      idProduct: 0,
+    this.food = {
+      id: 0,
       name: '',
-      price: 0,
-      introduction: '',
-      quantity: 0,
-      isNew: false,
-      description: '',
-      idManufacturer: 1
+      amount: 0,
+      unit: '',
+      calo: 0,
+      protein: 0,
+      lipid: 0,
+      carb: 0,
+      cellulose: 0,
+      meal: 'breakfast',
+      stateBG: 'high',
+      image: ''
     };
   }
 
-  addProduct(){
-    this.product.idManufacturer = this.proSelected;
-    this.productService.addProduct(this.product).subscribe( next => {
-      this.toastrService.success('Thêm sản phẩm tin thành công');
+  addFood(){
+    this.food.meal = this.mealSelected;
+    this.food.stateBG = this.stateBGSelected;
+    console.log(this.food);
+    this.productService.addFood(this.food).subscribe( next => {
+      this.toastrService.success('Thêm món ăn tin thành công');
       this.form.reset();
     }, err => {
     this.toastrService.error(err);
@@ -73,3 +98,15 @@ export class AddProductComponent implements OnInit {
     this.router.navigate(['admin/products']);
   }
 }
+
+export interface Meal{  
+  id:number;  
+  nameEng: string;
+  nameVi:string;
+} 
+
+export interface StateBG{  
+  id:number;  
+  nameEng: string;
+  nameVi:string;
+} 

@@ -19,7 +19,7 @@ h6{
 }
 
 select {
-  background-color: #29ad1a;
+  background-color: #a0abcc;
 }
 
 select {
@@ -34,5 +34,6 @@ select {
 
 .styled-select select {
   width: 149px;
+  height: 30px;
   margin-top:0px;
 }

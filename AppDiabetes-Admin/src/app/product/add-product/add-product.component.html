@@ -4,60 +4,94 @@
       <div class="tab-panel">
         <tabset class="product-tabset">
           <tab heading="Thông tin">
-            <form #form="ngForm" (ngSubmit)="addProduct()">
+            <form #form="ngForm" (ngSubmit)="addFood()">
               <div class="form-group">
-                <h6>Tên sản phẩm</h6>
+                <h6>Tên món ăn</h6>
                 <div class="col-4">
-                  <input type="text" name="name" [(ngModel)]="product.name" class="form-control" required>
-                </div>
-              </div>
-
-              <div class="form-group">
-                <h6>Giá</h6>
-                <div class="col-3">
-                  <input type="number" name="price" [(ngModel)]="product.price" class="form-control" min="0" required>
-                </div>
-              </div>
-
-              <div class="form-group">
-                <h6>Giới thiệu</h6>
-                <div class="col-10">
-                  <textarea rows="4" name="introduction" [(ngModel)]="product.introduction" class="form-control"></textarea>
+                  <input type="text" name="name" [(ngModel)]="food.name" class="form-control" required>
                 </div>
               </div>
 
               <div class="form-group">
                 <h6>Số lượng</h6>
                 <div class="col-3">
-                  <input type="number" name="quantity" [(ngModel)]="product.quantity" class="form-control" min="0" required>
-                </div>
-              </div>
-
-              <div class="form-group row inlineRow">
-                <h6>Mới</h6>
-                <div class="col-4">
-                  <input type="checkbox" name="isNew" [(ngModel)]="product.isNew" class="form-control isNew" required>
+                  <input type="number" name="amount" [(ngModel)]="food.amount" class="form-control" min="0" required>
                 </div>
               </div>
 
               <div class="form-group">
-                <h6>Mô tả</h6>
-                <div class="col-10">
-                  <textarea rows="4" name="description" [(ngModel)]="product.description" class="form-control"></textarea>
+                <h6>Đơn vị</h6>
+                <div class="col-3">
+                  <input type="text" name="unit" [(ngModel)]="food.unit" class="form-control" required>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <h6>Lượng calo (kcalo)</h6>
+                <div class="col-3">
+                  <input type="number" name="calo" [(ngModel)]="food.calo" class="form-control" min="0" required>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <h6>Chất đạm (gam)</h6>
+                <div class="col-3">
+                  <input type="number" name="protein" [(ngModel)]="food.protein" class="form-control" min="0" required>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <h6>Chất béo (gam)</h6>
+                <div class="col-3">
+                  <input type="number" name="amount" [(ngModel)]="food.amount" class="form-control" min="0" required>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <h6>Tinh bột (gam)</h6>
+                <div class="col-3">
+                  <input type="number" name="carb" [(ngModel)]="food.carb" class="form-control" min="0" required>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <h6>Chất xơ (gam)</h6>
+                <div class="col-3">
+                  <input type="number" name="cellulose" [(ngModel)]="food.cellulose" class="form-control" min="0" required>
                 </div>
               </div>
 
               <div class="form-group row mt-4 inlineRow">
-                <h6 style="margin-top:3px;">Hãng sản xuất</h6>
+                <h6 style="margin-top:3px;">Bữa ăn</h6>
                 <div class="ml-5 styled-select">
                   <!-- <select [(ngModel)]="selectedLevel" (change)="selected()">
                     <option *ngFor="let item of data" [ngValue]="item">{{item.name}}</option>
                   </select> -->
-                    <select name="proSelected" [(ngModel)]="proSelected">
-                      <option *ngFor="let item of manufacturers" [ngValue]="item.idManufacturer">{{item.name}}</option>
+                    <select name="foodSelected" [(ngModel)]="foodSelected">
+                      <option *ngFor="let item of arrMeal" [ngValue]="item.nameEn">{{item.nameVi}}</option>
                     </select>
                 </div>
               </div>
+
+              <div class="form-group row mt-4 inlineRow">
+                <h6 style="margin-top:5px;">Món ăn phù hợp với lượng đường huyết</h6>
+                <div class="ml-5 styled-select">
+                  <!-- <select [(ngModel)]="selectedLevel" (change)="selected()">
+                    <option *ngFor="let item of data" [ngValue]="item">{{item.name}}</option>
+                  </select> -->
+                    <select name="stateBGSelected" [(ngModel)]="stateBGSelected">
+                      <option *ngFor="let item of arrStateBG" [ngValue]="item.nameEn">{{item.nameVi}}</option>
+                    </select>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <h6>Hình ảnh</h6>
+                <div class="col-4">
+                  <input type="text" name="image" [(ngModel)]="food.image" class="form-control" required>
+                </div>
+              </div>
+
 
               <div class="form-group mt-5 ml-3">
                 <button class="btn btn-primary btn-sm"
@@ -67,9 +101,9 @@
               </div>
             </form>
           </tab>
-          <tab heading="Photos">
-            <div *ngIf="product.idProduct>0">
-              <app-photo-edit [photos]="product.photos"></app-photo-edit>
+          <tab heading="Công thức">
+            <div *ngIf="food.id>0">
+              <!-- <app-photo-edit [photos]="product.photos"></app-photo-edit> -->
             </div>
           </tab>
         </tabset>
