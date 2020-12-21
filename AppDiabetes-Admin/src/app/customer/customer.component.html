@@ -16,7 +16,7 @@
       </div>
       <div class="col-sm-4">
         <form class="form-inline mt-0 mt-md-0" #form="ngForm" (ngSubmit)="loadUsers()">
-          <input name="name" [(ngModel)]="userParams.name" class="form-control-sm mr-sm-2" type="text" placeholder="Nhập tên nhà cung cấp" aria-label="Search">
+          <input name="name" [(ngModel)]="userParams.name" class="form-control-sm mr-sm-2" type="text" placeholder="Nhập tên người dùng" aria-label="Search">
           <button class="btn btn-info btn-sm my-2 my-sm-0" type="submit">Tìm kiếm</button>
         </form>
       </div>
@@ -43,7 +43,13 @@
                       <td>{{user.email}}</td>
                       <td>{{user.phone}}</td>
                       <td>{{user.signUpDate| date:'dd-MM-yyyy'}}</td>
-                      <td><img src="{{user.avatar}}" alt="{{user.fullname}}" style="width: 20px;height: 16px;"></td>
+                      <td>
+                        <div [ngSwitch]="user.avatar">
+                          <div *ngSwitchCase="null">Chưa cập nhật ảnh đại diện</div>
+                          <div *ngSwitchCase="''">Chưa cập nhật ảnh đại diện</div>
+                          <div *ngSwitchDefault><img src="{{user.avatar}}" style="width: 50px;height: 50px;"></div>
+                        </div>
+                      </td>
                       <td>
                         <i (click)="deleteUser(user.id)" class="fas fa-trash-alt fa-sm text-danger"></i>
                       </td>

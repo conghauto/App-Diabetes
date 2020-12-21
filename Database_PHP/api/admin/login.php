@@ -21,7 +21,7 @@
         // $password = $_POST['password'];
 
         $username = mysqli_real_escape_string($con, trim($request->data->username));
-        $password = mysqli_real_escape_string($con, (int)$request->data->password);
+        $password = mysqli_real_escape_string($con, trim($request->data->password));
    
         $key = "key";
         $issued_at = time();

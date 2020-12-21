@@ -34,7 +34,7 @@
                       <th>STT</th>
                       <th>Tên món</th>
                       <th>Số lượng</th>
-                      <th>Calo (kcalo)</th>
+                      <th>Calo </th>
                       <th>Bữa ăn</th>
                       <th>Đường huyết</th>
                       <th>Ảnh</th>
@@ -44,19 +44,27 @@
                 <tbody>
                   <tr id="row_1" *ngFor="let food of foods, let i=index">
                     <td>{{i+1}}</td>
-                    <td>{{food.name}}</td>
+                    <td><a [routerLink]="['recipe/', food.id]">{{food.name}}</a></td>
                     <td>{{food.amount}} {{food.unit}}</td>
                     <td style="color: red">{{food.calo}}</td>
-                    <td style="color: red">{{food.meal}}</td>
-                    <td style="color: blue">{{food.stateBG}}</td>
+                    <td style="color: red">
+                      <h5 *ngIf="food.meal === 'breakfast'"> Bữa sáng</h5>
+                      <h5 *ngIf="food.meal === 'lunch'"> Bữa trưa</h5>
+                      <h5 *ngIf="food.meal === 'dinner'"> Bữa tối</h5>
+                      <h5 *ngIf="food.meal === 'snack'"> Bữa phụ</h5>
+                    </td>
+                    <td style="color: blue">
+                      <h5 *ngIf="food.stateBG === 'high'"> Đường huyết cao</h5>
+                      <h5 *ngIf="food.stateBG === 'low'"> Đường huyết thấp</h5>
+                      <h5 *ngIf="food.stateBG === 'medium'"> Đường huyết trung bình</h5>
+                    </td>
                     <td><img src="{{food.image}}" alt="{{food.name}}" style="width: 20px;height: 16px;"></td>
 
                     <td>
-                      <!-- <i (click)="deleteProduct(product.idProduct)" class="fas fa-trash-alt fa-sm text-danger"></i> -->
-                      <i  class="fas fa-trash-alt fa-sm text-danger"></i>
+                      <i (click)="deleteFood(food.id)" class="fas fa-trash-alt fa-sm text-danger"></i>
                       |
                       <!-- <i [routerLink]="product.idProduct" class="far fa-edit fa-sm text-primary"></i> -->
-                      <i class="far fa-edit fa-sm text-primary"></i>
+                      <a [routerLink]="['edit/', food.id]"><i class="far fa-edit fa-sm text-primary"></i></a>
                     </td>
                   </tr>
                 </tbody>

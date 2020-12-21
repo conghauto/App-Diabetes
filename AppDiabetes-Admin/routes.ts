@@ -3,7 +3,6 @@ import { LoginComponent } from 'src/app/login/login.component';
 import { HomeComponent } from 'src/app/home/home.component';
 import { ProductComponent } from 'src/app/product/product.component';
 import { ManufacturerComponent } from 'src/app/manufacturer/manufacturer.component';
-import { OrderComponent } from 'src/app/order/order.component';
 import { CustomerComponent } from 'src/app/customer/customer.component';
 import { TemplateComponent } from 'src/app/template/template.component';
 import { AuthGuard } from 'src/app/_guards/auth.guard';
@@ -17,8 +16,10 @@ import { AddProductComponent } from 'src/app/product/add-product/add-product.com
 import { EditProductComponent } from 'src/app/product/edit-product/edit-product.component';
 import { UserListResolver } from 'src/app/_resolvers/user-list.resolver';
 import { ProductListResolver } from 'src/app/_resolvers/product-list.resolver';
-import { DetailedOrderComponent } from 'src/app/order/detailedOrder/detailedOrder.component';
 import { OrderListResolver } from 'src/app/_resolvers/order-list.resolver';
+import { DetailProductComponent } from 'src/app/product/detail-product/detail-product.component';
+import { UpdateRecipeComponent } from 'src/app/product/update-recipe/update-recipe.component';
+import { AddRecipeComponent } from 'src/app/product/add-recipe/add-recipe.component';
 const childRoutes: Routes = [
   {
     path: '',
@@ -29,11 +30,11 @@ const childRoutes: Routes = [
       { path: 'products', component: ProductComponent,
         resolve: {products: ProductListResolver}},
       { path: 'products/add', component: AddProductComponent},
-      { path: 'products/:id', component: EditProductComponent,
-          resolve: {product: ProductEditResolver}, canDeactivate: [PreventUnsavedChanges]},
-      { path: 'orders', component: OrderComponent,
-          resolve: {orders: OrderListResolver}},
-      { path: 'orders/detail/:idOrder', component: DetailedOrderComponent},
+      { path: 'products/recipe/:id', component: DetailProductComponent,
+          resolve: {product: ProductEditResolver}},
+      { path: 'products/recipe/:id/add', component: AddRecipeComponent},
+      { path: 'products/recipe/:id/update/:idRecipe', component: UpdateRecipeComponent},
+      { path: 'products/edit/:idFood', component: EditProductComponent},
       { path: 'customers', component: CustomerComponent,
           resolve: {customers: UserListResolver}},
       { path: 'manufacturers', component: ManufacturerComponent,

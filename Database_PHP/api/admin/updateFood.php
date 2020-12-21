@@ -23,6 +23,7 @@
 
         
       // Sanitize.
+      $id = mysqli_real_escape_string($con, trim($request->data->id));
       $name = mysqli_real_escape_string($con, trim($request->data->name));
       $amount = mysqli_real_escape_string($con, (int)$request->data->amount);
       $unit = mysqli_real_escape_string($con, trim($request->data->unit));
@@ -37,26 +38,12 @@
         
     
       // Store.
-      $sql = "INSERT INTO `foods`(`id`, `name`, `amount`, `unit`, `calo`, `protein`, `lipid`, `carb`, `cellulose`, `meal`, `stateBG`, `image`) VALUES (null,'{$name}','{$amount}','{$unit}','{$calo}','{$protein}','{$lipid}','{$carb}','{$cellulose}','{$meal}','{$stateBG}','{$image}')";
+      $sql = "UPDATE foods SET name = '$name', amount = '$amount', unit = '$unit', `calo` = '$calo', `protein` = '$protein', `lipid` = '$lipid', `carb` = '$carb', `cellulose` = '$cellulose', `meal` = '$meal', `stateBG` = '$stateBG', `image` = '$image' WHERE id = '$id'";
     
       if(mysqli_query($con,$sql))
       {
-        http_response_code(201);
-        $food = [
-          'name' => $name,
-          'amount' => $amount,
-          'unit' => $unit,
-          'calo' => $calo,
-          'protein' => $protein,
-          'lipid' => $lipid,
-          'carb' => $carb,
-          'cellulose' => $cellulose,
-          'meal' => $meal,
-          'stateBG' => $stateBG,
-          'image' => $image,
-          'id'    => mysqli_insert_id($con)
-        ];
-        echo json_encode(['data'=>$food]);
+        http_response_code(200);
+        echo json_encode("Update food thanh cong");
       }
       else
       {

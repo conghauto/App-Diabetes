@@ -21,27 +21,28 @@ export class AddProductComponent implements OnInit {
   food: Food;
 
   // arrMeal: Array<Object> = [
-  //   {id: 1, nameVi: 'Bữa sáng', nameEng: 'breakfast'},  
-  //   {id: 2, nameVi: 'Bữa trưa', nameEng: 'lunch'},    
+  //   {id: 1, nameVi: 'Bữa sáng', nameEng: 'breakfast'},
+  //   {id: 2, nameVi: 'Bữa trưa', nameEng: 'lunch'},
   //   {id: 3, nameVi: 'Bữa tối', nameEng: 'dinner'},
   //   {id: 4, nameVi: 'Bữa phụ', nameEng: 'snack'}
   // ];
 
   arrMeal: Array<Object> = [
-    {id: 1, nameVi: 'Bữa sáng'},  
-    {id: 2, nameVi: 'Bữa trưa'},    
+    {id: 1, nameVi: 'Bữa sáng'},
+    {id: 2, nameVi: 'Bữa trưa'},
     {id: 3, nameVi: 'Bữa tối'},
     {id: 4, nameVi: 'Bữa phụ'}
   ];
 
   arrStateBG: Array<Object> = [
-    {id: 1, nameVi: 'Đường huyết cao'},  
+    {id: 1, nameVi: 'Đường huyết cao'},
     {id: 2, nameVi: 'Đường huyết thấp'},
   ];
 
- mealSelected;
- stateBGSelected;
+ mealSelected: 1;
+ stateBGSelected: 1;
   // tslint:disable-next-line: ban-types
+
 
   @HostListener('window:beforeunload', ['$event'])
     unloadNotify($event: any){
@@ -57,10 +58,9 @@ export class AddProductComponent implements OnInit {
     //     this.toastrService.error(err);
     // });
 
-
-    this.resetForm();
     this.mealSelected = 1;
     this.stateBGSelected = 1;
+    this.resetForm();
   }
 
   resetForm(form?: NgForm){
@@ -87,12 +87,13 @@ export class AddProductComponent implements OnInit {
 
   addFood(){
     this.food.meal = this.mealSelected == 1? "breakfast" : this.mealSelected == 2? "lunch": this.mealSelected == 3? "dinner" : "snack";
-    this.food.stateBG = this.stateBGSelected ==1? "high" : "low";
+    this.food.stateBG = this.stateBGSelected == 1? "high" : "low";
     console.log(this.food);
     this.productService.addFood(this.food).subscribe( next => {
-      this.toastrService.success('Thêm món ăn tin thành công');
-      this.form.reset();
+      this.toastrService.success('Thêm món ăn thành công');
+      this.navigateToPage();
     }, err => {
+      console.log(err);
     this.toastrService.error(err);
   });
 

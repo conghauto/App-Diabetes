@@ -12,4 +12,3 @@ export class Food {
     stateBG: string;
     image: string;
   }
-  

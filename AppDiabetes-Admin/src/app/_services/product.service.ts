@@ -31,75 +31,23 @@ export class ProductService {
     );
   }
 
-
-
-  // getProductsForAdmin(page?, itemsPerPage?, productParams?): Observable<PaginatedResult<Product[]>>{
-  //   const paginatedResult: PaginatedResult<Product[]> = new PaginatedResult<Product[]>();
-  //   let params = new HttpParams();
-
-  //   if (page != null && itemsPerPage != null){
-  //     params = params.append('pageNumber', page);
-  //     params = params.append('pageSize', itemsPerPage);
-  //   }
-
-  //   if (productParams != null){
-  //     params = params.append('name', productParams.name);
-  //   }
-
-  //   return this.http.get<Product[]>(this.baseUrl + 'products/ForAdmin', {observe: 'response', params})
-  //   .pipe(
-  //     map(response => {
-  //       paginatedResult.result = response.body;
-  //       if (response.headers.get('Pagination') != null){
-  //         paginatedResult.pagination = JSON.parse(response.headers.get('Pagination'));
-  //       }
-  //       return paginatedResult;
-  //     }, err => {
-  //       this.toastrService.error(err);
-  //     })
-  //   );
-  // }
-
   getProduct(idProduct): Observable<Product>{
     this.id = idProduct;
     return this.http.get<Product>(this.baseUrl + 'products/' + idProduct);
   }
 
-  updateProduct(id: number, product: Product){
-    this.id = id;
-    return this.http.put(this.baseUrl + 'products/' + id, product);
-  }
-
-  setMain(idProduct: number, id: number){
-    return this.http.post(this.baseUrl + 'products/' + idProduct
-      + '/photos/' + id + '/setMain', {});
-  }
-
-  deletePhoto(idProduct: number, id: number){
-    return this.http.delete(this.baseUrl + 'products/' + idProduct
-      + '/photos/' + id);
-  }
-
-  addFood(food: Food): Observable<Food[]> {
-    return this.http.post(`${this.baseUrl}admin/addFood.php`, { data: food })
-      .pipe(map((res) => {
-        this.foods.push(res['data']);
-        return this.foods;
-      }, err => {
-        this.toastrService.error(err);
-      })
-    )
+  addFood(food: Food){
+    return this.http.post(`${this.baseUrl}admin/addFood.php`, { data: food });
   }
 
 
-  // addFood(data: Food){
-  //   return this.http.post(this.baseUrl + 'admin/addFood.php', data);
-  // }
-
-  deleteProduct(id: number){
-    return this.http.delete(this.baseUrl + 'products/' + id, {});
+  deleteFood(id: number){
+    const params = new HttpParams()
+    .set('id', id.toString());
+    return this.http.delete(this.baseUrl + 'admin/deleteFood.php', { params: params });
   }
-  getAllProducts(): Observable<Product[]>{
-    return this.http.get<Product[]>(this.baseUrl + 'products/GetAll/');
+
+  updateFood(updatedFood: Food){
+    return this.http.post(`${this.baseUrl}admin/updateFood.php`, { data: updatedFood });
   }
 }

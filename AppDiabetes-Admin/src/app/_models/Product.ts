@@ -1,4 +1,3 @@
-import { DecimalPipe } from '@angular/common';
 import { Photo } from './Photo';
 
 export class Product {

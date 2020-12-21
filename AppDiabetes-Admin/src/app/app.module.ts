@@ -16,7 +16,6 @@ import { LoginComponent } from './login/login.component';
 import { AuthService } from './_services/auth.service';
 import { HomeComponent } from './home/home.component';
 import { ErrorInterceptorProvider } from './_services/error.inteceptor';
-import { OrderComponent } from './order/order.component';
 import { ProductComponent } from './product/product.component';
 import { ManufacturerComponent } from './manufacturer/manufacturer.component';
 import { CustomerComponent } from './customer/customer.component';
@@ -30,14 +29,16 @@ import { ManufacturerEditResolver } from './_resolvers/manufacturer-edit.resolve
 import { ProductService } from './_services/product.service';
 import { ProductEditResolver } from './_resolvers/product-edit.resolver';
 import { PreventUnsavedChanges } from './_guards/prevent-unsaved-changes.guard';
-import { PhotoEditComponent } from './product/photo-edit/photo-edit.component';
 import { AddProductComponent } from './product/add-product/add-product.component';
 import { EditProductComponent } from './product/edit-product/edit-product.component';
 import { UserService } from './_services/user.service';
-import { DetailedOrderComponent } from './order/detailedOrder/detailedOrder.component';
 import { OrdersService } from './_services/orders.service';import { UserListResolver } from './_resolvers/user-list.resolver';
 import { ProductListResolver } from './_resolvers/product-list.resolver';
 import { OrderListResolver } from './_resolvers/order-list.resolver';
+import { CommonModule } from '@angular/common';
+import { DetailProductComponent } from './product/detail-product/detail-product.component';
+import { UpdateRecipeComponent } from './product/update-recipe/update-recipe.component';
+import { AddRecipeComponent } from './product/add-recipe/add-recipe.component';
 export function tokenGetter(){
   return localStorage.getItem('token');
 }
@@ -47,7 +48,6 @@ export function tokenGetter(){
     AppComponent,
     LoginComponent,
     HomeComponent,
-    OrderComponent,
     ProductComponent,
     ManufacturerComponent,
     CustomerComponent,
@@ -55,12 +55,13 @@ export function tokenGetter(){
     AddManufacturerComponent,
     UpdateManufacturerComponent,
     EditProductComponent,
-    PhotoEditComponent,
     AddProductComponent,
-    OrderComponent,
-    DetailedOrderComponent,
+    DetailProductComponent,
+    UpdateRecipeComponent,
+    AddRecipeComponent
   ],
   imports: [
+    CommonModule,
     BrowserModule,
     HttpClientModule,
     FormsModule,

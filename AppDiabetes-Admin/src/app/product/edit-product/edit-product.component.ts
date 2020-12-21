@@ -3,9 +3,8 @@ import { Product } from 'src/app/_models/Product';
 import { ProductService } from 'src/app/_services/product.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { Manufacturer } from 'src/app/_models/Manufacturer';
-import { ManufacturerService } from 'src/app/_services/manufacturer.service';
 import { NgForm } from '@angular/forms';
+import { Food } from 'src/app/_models/Food';
 
 @Component({
   selector: 'app-edit-product',
@@ -14,42 +13,56 @@ import { NgForm } from '@angular/forms';
 })
 export class EditProductComponent implements OnInit {
   constructor(private productService: ProductService, private route: ActivatedRoute, private router: Router,
-              private toastrService: ToastrService, private manufacturerService: ManufacturerService) { }
+              private toastrService: ToastrService) { }
   @ViewChild('form') form: NgForm;
-  product: Product;
+  food: Food;
+  foods: Food[];
+  idFood: any;
+  arrMeal: Array<Object> = [
+    {id: 1, nameVi: 'Bữa sáng'},
+    {id: 2, nameVi: 'Bữa trưa'},
+    {id: 3, nameVi: 'Bữa tối'},
+    {id: 4, nameVi: 'Bữa phụ'}
+  ];
 
-  proSelected: any;
-  // tslint:disable-next-line: ban-types
-  manufacturers: Manufacturer[];
+  arrStateBG: Array<Object> = [
+    {id: 1, nameVi: 'Đường huyết cao'},
+    {id: 2, nameVi: 'Đường huyết thấp'},
+  ];
 
-  @HostListener('window:beforeunload', ['$event'])
-  unloadNotify($event: any){
-    if  (this.form.dirty){
-      $event.returnValue = true;
-    }
-  }
+  mealSelected: any;
+  stateBGSelected: any;
 
   ngOnInit(): void {
-    this.route.data.subscribe(data => {
-      this.product = data.product;
-      this.proSelected = this.product.idManufacturer;
-    });
-
-    this.manufacturerService.getManufacturers().subscribe(data => {
-      this.manufacturers = data.result;
-    }, err => {
-      this.toastrService.error(err);
-    });
-
-
-
+    this.mealSelected = 1;
+    this.stateBGSelected = 1;
+    this.route.paramMap.subscribe(params => this.idFood = params.get('idFood'));
+    this.loadFoods();
   }
-
-  updateProduct(){
-    this.product.idManufacturer = this.proSelected;
-    this.productService.updateProduct(this.product.idProduct, this.product).subscribe( next => {
+  getUpdatedFood(){
+    for(var i=0; i < this.foods.length; i++){
+        if(this.foods[i].id == this.idFood){
+          this.food = this.foods[i];
+        }
+    }
+  }
+  loadFoods(){
+    this.productService.getFoods()
+      .subscribe((res: Food[]) => {
+        this.foods = res;
+        this.getUpdatedFood();
+        this.mealSelected = this.food.meal == "breakfast"? 1 : this.food.meal == "lunch" ? 2 : this.food.meal == "dinner" ? 3 : 4;
+        this.stateBGSelected = this.food.stateBG == "high"? 1: 2;
+    }, error => {
+      this.toastrService.error(error);
+    });
+  }
+  updateFood(){
+    this.food.meal = this.mealSelected == 1? "breakfast" : this.mealSelected == 2? "lunch": this.mealSelected == 3? "dinner" : "snack";
+    this.food.stateBG = this.stateBGSelected == 1? "high" : "low";
+    this.productService.updateFood(this.food).subscribe( next => {
       this.toastrService.success('Cập nhật thông tin thành công');
-      this.form.reset(this.product);
+      this.navigateToPage();
     }, err => {
       this.toastrService.error(err);
     });

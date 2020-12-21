@@ -1,0 +1,57 @@
+<div class="container-fluid">
+  <!-- Breadcrumbs-->
+  <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+          <a (click)="navigateToHome()">Trang chủ</a>
+      </li>
+      <li class="breadcrumb-item active">Công thức món ăn</li>
+  </ol>
+  <!-- DataTables Example -->
+  <div class="card mb-3">
+    <div class="card-header row">
+      <div class="col-sm-6 mt-1">
+        <i class="fas fa-table"></i>
+          Công thức món ăn
+      </div>
+      <div class="col-sm-4">
+      </div>
+      <div class="col-sm-2">
+        <a *ngIf="!isAdd" class="btn btn-success btn-sm" style="float:right" [routerLink]="['update/', detail.id]" style="color: white; margin-right: 10px;">
+            Sửa
+        </a>
+        <a *ngIf="!isAdd" class="btn btn-warning btn-sm" style="float:right" (click)="deleteRecipe()" style="color: white;">
+          Xoá
+      </a>
+        <a *ngIf="isAdd" class="btn btn-success btn-sm" style="float:right" [routerLink]="['add/']" style="color: white;">
+          Thêm mới
+      </a>
+      </div>
+    </div>
+    <div *ngIf="detail != null" class="card-body">
+      <div class="md-12">
+        <h2 style="text-align: center;">{{detail.name}}</h2>
+        <hr>
+        <br>
+        <div *ngIf="detail.benefit !== ''">
+          <h3 style="text-align: left;">Công dụng: </h3>
+          <p>{{detail.benefit}}</p>
+          <hr>
+        </div>
+
+        <div *ngIf="detail.ingredient !== ''">
+          <h3 style="text-align: left;">Nguyên liệu: </h3>
+          <p>{{detail.ingredient}}</p>
+          <hr>
+        </div>
+        <div *ngIf="detail.recipe !== ''">
+          <h3 style="text-align: left;">Cách chế biến: </h3>
+          <p>{{detail.recipe}}</p>
+          <hr>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="detail == null" class="card-body">
+      <h3 style="text-align: center">Chưa có công thức</h3>
+    </div>
+  </div>
+</div>

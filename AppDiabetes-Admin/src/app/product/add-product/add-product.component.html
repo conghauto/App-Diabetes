@@ -1,4 +1,11 @@
 <div class="container mt-4">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item">
+        <a (click)="navigateToPage()">Trang chủ</a>
+    </li>
+    <li class="breadcrumb-item active">Món ăn</li>
+    <li class="breadcrumb-item active">Thêm mới</li>
+</ol>
   <div class="row">
     <div class="col-sm-10">
       <div class="tab-panel">
@@ -88,7 +95,7 @@
               <div class="form-group">
                 <h6>Hình ảnh</h6>
                 <div class="col-4">
-                  <input type="text" name="image" [(ngModel)]="food.image" class="form-control" required>
+                  <input type="text" name="image" [(ngModel)]="food.image" placeholder="Link hình ảnh món ăn" class="form-control" required>
                 </div>
               </div>
 
@@ -100,11 +107,6 @@
                   (click)="navigateToPage()" type="button">Quay lại</button>
               </div>
             </form>
-          </tab>
-          <tab heading="Công thức">
-            <div *ngIf="food.id>0">
-              <!-- <app-photo-edit [photos]="product.photos"></app-photo-edit> -->
-            </div>
           </tab>
         </tabset>
       </div>

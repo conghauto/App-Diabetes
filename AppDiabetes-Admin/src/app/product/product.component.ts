@@ -38,17 +38,17 @@ export class ProductComponent implements OnInit {
   }
 
 
-  // deleteProduct(id: number){
-  //   this.alertifyService.confirm('Bạn có muốn xóa Sản phẩm vừa chọn', () => {
-  //     this.productService.deleteProduct(id).subscribe(
-  //       () => {
-  //       this.products.splice(this.products.findIndex(m => m.idProduct === id), 1);
-  //       this.toastrService.info('Xóa thành công');
-  //       },
-  //       err => {
-  //         this.toastrService.error('Xóa thất bại');
-  //       }
-  //     );
-  //   });
-  // }
+  deleteFood(id: number){
+    this.alertifyService.confirm('Bạn có muốn xóa dòng vừa chọn', () => {
+      this.productService.deleteFood(id).subscribe(
+        () => {
+        this.foods.splice(this.foods.findIndex(m => m.id === id), 1);
+        this.toastrService.info('Xóa thành công');
+        },
+        err => {
+          this.toastrService.error('Xóa thất bại');
+        }
+      );
+    });
+  }
 }
