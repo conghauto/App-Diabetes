@@ -14,6 +14,7 @@ import { Food } from '../_models/Food';
 })
 export class ProductComponent implements OnInit {
   foods: Food[];
+  listFoodsClone: Food[];
   productParams: any = {};
   pagination: Pagination;
   constructor(private productService: ProductService, private toastrService: ToastrService,
@@ -32,9 +33,15 @@ export class ProductComponent implements OnInit {
     this.productService.getFoods()
       .subscribe((res: Food[]) => {
         this.foods = res;
+        this.listFoodsClone = res;
     }, error => {
       this.toastrService.error(error);
     });
+  }
+  filterFoods(){
+    this.foods = this.listFoodsClone;
+    console.log(this.productParams.name);
+    this.foods = this.foods.filter((element) => element.name.includes(this.productParams.name));
   }
 
 

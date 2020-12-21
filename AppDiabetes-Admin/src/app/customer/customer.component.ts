@@ -13,6 +13,7 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class CustomerComponent implements OnInit {
   users: User[];
+  listUserClone: User[];
   userParams: any = {};
   pagination: Pagination;
   constructor(private userService: UserService, private toastrService: ToastrService,
@@ -29,21 +30,20 @@ export class CustomerComponent implements OnInit {
     // this.userParams.name = '';
   }
 
-  // loadUsers(){
-  //   this.userService.getUsers().subscribe((users: User[]) => {
-  //     this.users = users;
-  //   }, err => {
-  //     this.toastrService.error(err);
-  //   });
-  // }
-
   loadUsers(){
     this.userService.getUsers()
       .subscribe((res: User[]) => {
         this.users = res;
+        this.listUserClone = res;
     }, error => {
       this.toastrService.error(error);
     });
+  }
+
+  filterUser(){
+    this.users = this.listUserClone;
+    console.log(this.userParams.name);
+    this.users = this.users.filter((element) => element.fullname.includes(this.userParams.name));
   }
 
   pageChanged(event: any){

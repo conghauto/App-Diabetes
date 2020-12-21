@@ -15,7 +15,7 @@
           Danh sách tài khoản
       </div>
       <div class="col-sm-4">
-        <form class="form-inline mt-0 mt-md-0" #form="ngForm" (ngSubmit)="loadUsers()">
+        <form class="form-inline mt-0 mt-md-0" #form="ngForm" (ngSubmit)="filterUser()">
           <input name="name" [(ngModel)]="userParams.name" class="form-control-sm mr-sm-2" type="text" placeholder="Nhập tên người dùng" aria-label="Search">
           <button class="btn btn-info btn-sm my-2 my-sm-0" type="submit">Tìm kiếm</button>
         </form>
