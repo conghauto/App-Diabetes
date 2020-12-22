@@ -1,0 +1,62 @@
+<div class="container mt-4">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item">
+        <a (click)="navigateToPage()">Trang chủ</a>
+    </li>
+    <li class="breadcrumb-item active">Thể thao</li>
+    <li class="breadcrumb-item active">Thêm mới</li>
+</ol>
+  <div class="row">
+    <div class="col-sm-10">
+      <div class="tab-panel">
+        <tabset class="product-tabset">
+          <tab heading="Thông tin">
+            <form #form="ngForm" (ngSubmit)="addSport()">
+              <div class="form-group">
+                <h6>Tên món ăn</h6>
+                <div class="col-6">
+                  <input type="text" name="name" [(ngModel)]="sport.name" class="form-control" required>
+                </div>
+              </div>
+              <div class="form-group">
+                <h6>Nguyên liệu</h6>
+                <div class="col-10">
+                  <textarea rows="5" name="introduction" [(ngModel)]="sport.technique" class="form-control"></textarea>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <h6>Lợi ích</h6>
+                <div class="col-10">
+                  <textarea rows="5" name="benefit" [(ngModel)]="sport.benefit" class="form-control" required></textarea>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <h6>Link hình ảnh</h6>
+                <div class="col-10">
+                  <textarea rows="5" name="image" [(ngModel)]="sport.image" class="form-control"></textarea>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <h6>Chú thích</h6>
+                <div class="col-10">
+                  <textarea rows="5" name="description" [(ngModel)]="sport.note" class="form-control"></textarea>
+                </div>
+              </div>
+
+
+              <div class="form-group mt-5 ml-3">
+                <button class="btn btn-primary btn-sm"
+                  [disabled]="!form.dirty" type="submit">Lưu</button>
+                <button class="btn btn btn-danger btn-sm" style="margin-left: 10px;"
+                  (click)="navigateToPage()" type="button">Quay lại</button>
+              </div>
+            </form>
+          </tab>
+        </tabset>
+      </div>
+    </div>
+  </div>
+</div>

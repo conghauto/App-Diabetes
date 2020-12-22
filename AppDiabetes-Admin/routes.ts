@@ -20,6 +20,10 @@ import { OrderListResolver } from 'src/app/_resolvers/order-list.resolver';
 import { DetailProductComponent } from 'src/app/product/detail-product/detail-product.component';
 import { UpdateRecipeComponent } from 'src/app/product/update-recipe/update-recipe.component';
 import { AddRecipeComponent } from 'src/app/product/add-recipe/add-recipe.component';
+import { SportComponent } from 'src/app/sport/sport.component';
+import { SportListResolver } from 'src/app/_resolvers/sport-list.resolver';
+import { AddSportComponent } from 'src/app/sport/add-sport/add-sport.component';
+import { UpdateSportComponent } from 'src/app/sport/update-sport/update-sport.component';
 const childRoutes: Routes = [
   {
     path: '',
@@ -37,11 +41,10 @@ const childRoutes: Routes = [
       { path: 'products/edit/:idFood', component: EditProductComponent},
       { path: 'customers', component: CustomerComponent,
           resolve: {customers: UserListResolver}},
-      { path: 'manufacturers', component: ManufacturerComponent,
-        resolve: {manufacturers: ManufacturerListResolver}},
-      { path: 'manufacturers/add', component: AddManufacturerComponent},
-      { path: 'manufacturers/:id', component: UpdateManufacturerComponent,
-         resolve: {manufacturer: ManufacturerEditResolver}},
+      { path: 'sports', component: SportComponent,
+        resolve: {sports: SportListResolver}},
+      { path: 'sports/add', component: AddSportComponent},
+      { path: 'sports/edit/:id', component: UpdateSportComponent},
       { path: '', component: HomeComponent}
     ]
   },

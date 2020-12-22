@@ -39,6 +39,11 @@ import { CommonModule } from '@angular/common';
 import { DetailProductComponent } from './product/detail-product/detail-product.component';
 import { UpdateRecipeComponent } from './product/update-recipe/update-recipe.component';
 import { AddRecipeComponent } from './product/add-recipe/add-recipe.component';
+import { SportComponent } from './sport/sport.component';
+import { UpdateSportComponent } from './sport/update-sport/update-sport.component';
+import { DetailSportComponent } from './sport/detail-sport/detail-sport.component';
+import { AddSportComponent } from './sport/add-sport/add-sport.component';
+import { SportListResolver } from './_resolvers/sport-list.resolver';
 export function tokenGetter(){
   return localStorage.getItem('token');
 }
@@ -58,8 +63,12 @@ export function tokenGetter(){
     AddProductComponent,
     DetailProductComponent,
     UpdateRecipeComponent,
-    AddRecipeComponent
-  ],
+    AddRecipeComponent,
+    SportComponent,
+    UpdateSportComponent,
+    DetailSportComponent,
+    AddSportComponent
+   ],
   imports: [
     CommonModule,
     BrowserModule,
@@ -93,7 +102,8 @@ export function tokenGetter(){
     ProductEditResolver,
     PreventUnsavedChanges,
     UserService,
-    OrdersService
+    OrdersService,
+    SportListResolver
   ],
   bootstrap: [AppComponent]
 })
