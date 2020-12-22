@@ -1,12 +1,17 @@
+import 'dart:convert';
+
+import 'package:diabetesapp/constants.dart';
 import 'package:diabetesapp/screens/advice/advice_screen.dart';
 import 'package:diabetesapp/screens/chart/chart_screen.dart';
 import 'package:diabetesapp/screens/glucose/glucose_screen.dart';
 import 'package:diabetesapp/screens/more/more_screen.dart';
 import 'package:diabetesapp/screens/plan/plan_screen.dart';
 import 'package:diabetesapp/user_current.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:shake/shake.dart';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 
-import '../../size_config.dart';
 class HomeScreen extends StatefulWidget {
   static String routeName = "/home";
 
@@ -16,6 +21,7 @@ class HomeScreen extends StatefulWidget {
   }
 }
 class _HomeScreenStateful extends State<HomeScreen> {
+  ShakeDetector detector;
   int _currentIndex = 0;
   PageController _pageController = PageController();
   List<Widget> _screens = [GlucoseScreen(), ChartScreen(), PlanScreen(), AdviceScreen(), MoreScreen()];
@@ -24,6 +30,36 @@ class _HomeScreenStateful extends State<HomeScreen> {
       _currentIndex = index;
     });
   }
+
+  void initState() {
+    super.initState();
+
+    detector = ShakeDetector.autoStart(
+      onPhoneShake: (){
+        if(UserCurrent.isEmergency == true){
+          UserCurrent.showNotificationEmergency();
+          sendEmail();
+        }
+      },
+    );
+  }
+
+  void sendEmail()async{
+    var url = ip + "/api/sendEmailEmergency.php";
+    var response = await http.post(url, body: {
+      'userID': UserCurrent.userID.toString(),
+      'fullname': UserCurrent.fullName.toString(),
+      'emailRelative': UserCurrent.emailRelative.toString(),
+    });
+  }
+
+  @override
+  void dispose() {
+    detector.stopListening();
+
+    super.dispose();
+  }
+
   void _onItemTape(int selectedIndex){
     _pageController.jumpToPage(selectedIndex);
   }

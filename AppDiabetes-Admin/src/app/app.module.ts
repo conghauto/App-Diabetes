@@ -17,15 +17,9 @@ import { AuthService } from './_services/auth.service';
 import { HomeComponent } from './home/home.component';
 import { ErrorInterceptorProvider } from './_services/error.inteceptor';
 import { ProductComponent } from './product/product.component';
-import { ManufacturerComponent } from './manufacturer/manufacturer.component';
 import { CustomerComponent } from './customer/customer.component';
 import { TemplateComponent } from './template/template.component';
-import { ManufacturerListResolver } from './_resolvers/manufacturer-list.resolver';
-import { ManufacturerService } from './_services/manufacturer.service';
-import { AddManufacturerComponent } from './manufacturer/add-manufacturer/add-manufacturer.component';
 import { AlertifyService } from './_services/alertify.service';
-import { UpdateManufacturerComponent } from './manufacturer/update-manufacturer/update-manufacturer.component';
-import { ManufacturerEditResolver } from './_resolvers/manufacturer-edit.resolver';
 import { ProductService } from './_services/product.service';
 import { ProductEditResolver } from './_resolvers/product-edit.resolver';
 import { PreventUnsavedChanges } from './_guards/prevent-unsaved-changes.guard';
@@ -54,11 +48,8 @@ export function tokenGetter(){
     LoginComponent,
     HomeComponent,
     ProductComponent,
-    ManufacturerComponent,
     CustomerComponent,
     TemplateComponent,
-    AddManufacturerComponent,
-    UpdateManufacturerComponent,
     EditProductComponent,
     AddProductComponent,
     DetailProductComponent,
@@ -91,12 +82,9 @@ export function tokenGetter(){
   providers: [
     AuthService,
     ErrorInterceptorProvider,
-    ManufacturerListResolver,
-    ManufacturerService,
     UserListResolver,
     ProductListResolver,
     AlertifyService,
-    ManufacturerEditResolver,
     OrderListResolver,
     ProductService,
     ProductEditResolver,

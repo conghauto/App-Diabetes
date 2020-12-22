@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:diabetesapp/constants.dart';
+import 'package:diabetesapp/screens/more/components/setting.dart';
 import 'package:diabetesapp/screens/more/components/update_infor_screen.dart';
 import 'package:diabetesapp/screens/more/components/update_password_screen.dart';
 import 'package:diabetesapp/screens/more/components/update_personal_infor.dart';
@@ -55,13 +56,13 @@ class _BodyState extends State<Body> {
     return SingleChildScrollView(
       child: Column(
         children: <Widget>[
-          SizedBox(height: 20),
+          SizedBox(height: 10),
           Info(
             image: _avatar,
             name: _username,
             email: _email,
           ),
-          SizedBox(height: SizeConfig.defaultSize * 2), //20
+          SizedBox(height: 10), //20
           MenuItem(
             iconSrc: "assets/icons/user.svg",
             title: "Tài khoản của bạn",
@@ -92,6 +93,13 @@ class _BodyState extends State<Body> {
             title: "Thay đổi mật khẩu",
             press: () async {
               await Navigator.pushNamed(context, UpdatePassword.routeName);
+            },
+          ),
+          MenuItem(
+            iconSrc: "assets/icons/settings.svg",
+            title: "Cài đặt",
+            press: () async {
+              await Navigator.pushNamed(context, SettingScreen.routeName);
             },
           ),
           MenuItem(
