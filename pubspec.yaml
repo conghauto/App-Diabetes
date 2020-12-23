@@ -64,7 +64,7 @@ dependencies:
   progress_dialog: ^1.2.4
   shake: ^0.1.0
   vibration: ^1.7.3
-
+  share_extend: ^1.1.9
 dev_dependencies:
   flutter_test:
     sdk: flutter
