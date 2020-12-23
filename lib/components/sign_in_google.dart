@@ -31,11 +31,11 @@ class _SignInGoogleState extends State<SignInGoogle> {
   Future<void> _handleSignIn() async {
     await Firebase.initializeApp();
 
-//    showDialog(
-//      barrierDismissible: false,
-//      context: context,
-//      builder: (BuildContext context) => ProgressDialog(status: 'Đang xử lý'),
-//    );
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) => ProgressDialog(status: 'Đang xử lý'),
+    );
 
     final GoogleSignInAccount googleSignInAccount = await SignInGoogle.googleSignIn.signIn();
     final GoogleSignInAuthentication googleSignInAuthentication = await googleSignInAccount.authentication;
@@ -58,16 +58,8 @@ class _SignInGoogleState extends State<SignInGoogle> {
 
       SignInGoogle.isLoggedIn=true;
 
-      // Lưu trạng thái đăng nhập
-      final String userID =await UserCurrent.getUserID(user.email);
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      prefs.setString('userID', userID);
-
-      await UserCurrent().init();
-
       var phone=user.phoneNumber==null?"":user.phoneNumber;
       saveInfoUser(user.displayName,user.email,phone);
-
 
     }
   }
@@ -78,7 +70,6 @@ class _SignInGoogleState extends State<SignInGoogle> {
 
     var response = await http.post(url, body: {
       "fullname": username,
-      "username": username,
       "email": email,
       "phone": phoneNumber,
       "password": password,
@@ -87,6 +78,16 @@ class _SignInGoogleState extends State<SignInGoogle> {
     var data = json.decode(response.body);
 
     if(data=="Success"){
+      // Lưu trạng thái đăng nhậpuserID
+      String userID = await UserCurrent.getUserID(email);
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      UserCurrent.userID = userID;
+      if(prefs.getString('userID')!=null){
+        prefs.remove('userID');
+        prefs.remove('query');
+      }
+
+      prefs.setString('userID', userID);
       Fluttertoast.showToast(
           msg: "Đăng nhập thành công",
           timeInSecForIosWeb: 1,
@@ -97,7 +98,8 @@ class _SignInGoogleState extends State<SignInGoogle> {
           fontSize: 16.0
       );
       Navigator.pushNamed(context, InfoPersonScreen.routeName);
-    }else if(data=="Exist"){
+    }
+    else if(data=="Exist"){
       Fluttertoast.showToast(
           msg: "Đăng nhập thành công",
           timeInSecForIosWeb: 1,
@@ -107,6 +109,16 @@ class _SignInGoogleState extends State<SignInGoogle> {
           textColor: Colors.white,
           fontSize: 16.0
       );
+      // Lưu trạng thái đăng nhập
+      final String userID = await UserCurrent.getUserID(email);
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      if(prefs.getString('userID')!=null){
+        prefs.remove('userID');
+        prefs.remove('query');
+      }
+      prefs.setString('userID', userID);
+
+      await UserCurrent().init();
       if(UserCurrent.emailRelative==null){
         Navigator.pushNamed(context, InfoPersonScreen.routeName);
       }else{

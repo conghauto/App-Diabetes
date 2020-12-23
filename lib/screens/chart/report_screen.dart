@@ -686,7 +686,7 @@ class _ReportScreenState extends State<ReportScreen>{
                       columns: <DataColumn>[
                         DataColumn(
                           label: Text(
-                            'Cân nặng (kg)',
+                            'Cân nặng',
                             style: TextStyle(fontStyle: FontStyle.italic),
                           ),
                         ),

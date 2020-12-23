@@ -19,7 +19,8 @@ class UserCurrent{
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
     userID = prefs.getString('userID');
-    if(prefs.getBool('emergency')){
+    bool check = prefs.getBool('emergency') ==true?true:false;
+    if(check){
       isEmergency = prefs.getBool('emergency');
     }
 

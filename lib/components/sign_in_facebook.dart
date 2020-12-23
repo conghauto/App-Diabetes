@@ -30,11 +30,11 @@ class _SignInFacebookState extends State<SignInFacebook>{
     SignInFacebook.facebookLogin.loginBehavior = FacebookLoginBehavior.webViewOnly;
     final result = await SignInFacebook.facebookLogin.logIn(['email']);
 
-    // showDialog(
-    //   barrierDismissible: false,
-    //   context: context,
-    //   builder: (BuildContext context) => ProgressDialog(status: 'Đang xử lý'),
-    // );
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) => ProgressDialog(status: 'Đang xử lý'),
+    );
 
     switch (result.status) {
       case FacebookLoginStatus.loggedIn:
@@ -68,25 +68,24 @@ class _SignInFacebookState extends State<SignInFacebook>{
 
     var response = await http.post(url, body: {
       "fullname": username,
-      "username": username,
       "email": email,
       "phone": phoneNumber,
       "password": password,
     });
 
     var data = json.decode(response.body);
-    // Lưu trạng thái đăng nhập
-    final String userID = await UserCurrent.getUserID(email);
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    if(prefs.getString('userID')!=null){
-      prefs.remove('userID');
-      prefs.remove('query');
-    }
-    prefs.setString('userID', userID);
 
-    await UserCurrent().init();
+    if(data=="Success"){
+      // Lưu trạng thái đăng nhậpuserID
+      String userID = await UserCurrent.getUserID(email);
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      UserCurrent.userID = userID;
+      if(prefs.getString('userID')!=null){
+        prefs.remove('userID');
+        prefs.remove('query');
+      }
 
-    if(data == "Success"){
+      prefs.setString('userID', userID);
       Fluttertoast.showToast(
           msg: "Đăng nhập thành công",
           timeInSecForIosWeb: 1,
@@ -96,11 +95,7 @@ class _SignInFacebookState extends State<SignInFacebook>{
           textColor: Colors.white,
           fontSize: 16.0
       );
-      if(UserCurrent.emailRelative==null){
-        Navigator.pushNamed(context, InfoPersonScreen.routeName);
-      }else{
-        Navigator.pushNamed(context, HomeScreen.routeName);
-      }
+      Navigator.pushNamed(context, InfoPersonScreen.routeName);
     }
     else if(data=="Exist"){
       Fluttertoast.showToast(
@@ -112,12 +107,23 @@ class _SignInFacebookState extends State<SignInFacebook>{
           textColor: Colors.white,
           fontSize: 16.0
       );
+      // Lưu trạng thái đăng nhập
+      final String userID = await UserCurrent.getUserID(email);
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      if(prefs.getString('userID')!=null){
+        prefs.remove('userID');
+        prefs.remove('query');
+      }
+      prefs.setString('userID', userID);
+
+      await UserCurrent().init();
       if(UserCurrent.emailRelative==null){
         Navigator.pushNamed(context, InfoPersonScreen.routeName);
       }else{
         Navigator.pushNamed(context, HomeScreen.routeName);
       }
-    } else {
+    }
+    else {
       Fluttertoast.showToast(
           msg: "Email đã tồn tại",
           timeInSecForIosWeb: 1,
