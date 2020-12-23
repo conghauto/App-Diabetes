@@ -51,7 +51,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(fontFamily: 'Roboto'),
 //      initialRoute: SplashScreen.routeName,
       initialRoute: (userID!=null&&UserCurrent.emailRelative!=null)? HomeScreen.routeName:SplashScreen.routeName,
-//      debugShowCheckedModeBanner: false,
+      debugShowCheckedModeBanner: false,
       routes: routes,
     );
   }

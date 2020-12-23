@@ -353,130 +353,109 @@ class _ReportScreenState extends State<ReportScreen>{
           ),
           pdfLib.Paragraph(text: "Từ ngày: ${dateFormat.format(startDate)} - Đến ngày: ${dateFormat.format(endDate)}", style: myStyle),
           (isWeight && listWeightsTable.length > 0) ?
-          pdfLib.Container(
-            child: pdfLib.Column(
-              children: [
                 pdfLib.Center(
                   child: pdfLib.Text(
                     "Cân nặng",
                     style: myTitleStyle
                   )
-                ),
+                ): pdfLib.SizedBox(height: 1,),
+          (isWeight && listWeightsTable.length > 0) ?
                 pdfLib.Table.fromTextArray(context: context, cellStyle: myStyle, headerStyle: myStyle, data: <List<String>>[
                   <String>['Cân nặng', 'Thời gian', 'Chú thích'],
                   ...listWeightsTable.map(
                           (item) => [item.weight + " kg", dateFormat.format(item.measureTime), item.note.toString()])
-                ]),
-                pdfLib.Divider(height: 1,),
+                ]): pdfLib.SizedBox(height: 1,),
+                pdfLib.SizedBox(height: 3,),
+          (isWeight && listWeightsTable.length > 0) ?
                 pdfLib.Center(
                     child: pdfLib.Text(
                         "Cân nặng trung bình: ${averageWeight.toStringAsFixed(2)} kg",
                         style: myStyle
                     )
-                ),
+                ): pdfLib.SizedBox(height: 1,),
                 pdfLib.SizedBox(height: 5,),
-              ]
-            )
-          ) : pdfLib.SizedBox(height: 1,),
           (isGlycemic && listGlycemicsTable.length > 0) ?
-          pdfLib.Container(
-              child: pdfLib.Column(
-                  children: [
                     pdfLib.Center(
                         child: pdfLib.Text(
                             "Đường huyết",
                             style: myTitleStyle
                         )
-                    ),
+                    ) : pdfLib.SizedBox(height: 1,),
+          (isGlycemic && listGlycemicsTable.length > 0) ?
                     pdfLib.Table.fromTextArray(context: context, cellStyle: myStyle, headerStyle: myStyle, data: <List<String>>[
                       <String>['Đường huyết', 'Thời gian', 'Chú thích'],
                       ...listGlycemicsTable.map(
                               (item) => [item.indexG + " mg/dL", dateFormat.format(item.measureTime), item.note.toString()])
-                    ]),
-                    pdfLib.Divider(height: 1,),
+                    ]): pdfLib.SizedBox(height: 1,),
+                    pdfLib.SizedBox(height: 5,),
+          (isGlycemic && listGlycemicsTable.length > 0) ?
                     pdfLib.Center(
                         child: pdfLib.Text(
                             "Đường huyết trung bình: ${averageGlycemic.toStringAsFixed(2)} mg/dL",
                             style: myStyle
                         )
-                    ),
+                    ): pdfLib.SizedBox(height: 1,),
                     pdfLib.SizedBox(height: 5,),
-                  ]
-              )
-          ) : pdfLib.SizedBox(height: 1,),
           (isActivity && listActivityTable.length > 0) ?
-          pdfLib.Container(
-              child: pdfLib.Column(
-                  children: [
                     pdfLib.Center(
                         child: pdfLib.Text(
                             "Thể thao",
                             style: myTitleStyle
                         )
-                    ),
+                    ): pdfLib.SizedBox(height: 1,),
+    (isActivity && listActivityTable.length > 0) ?
                     pdfLib.Table.fromTextArray(context: context, cellStyle: myStyle, headerStyle: myStyle, data: <List<String>>[
                       <String>['Hoạt động', 'Thời gian luyện tập', 'Năng lượng tiêu hao', 'Ngày', 'Chú thích'],
                       ...listActivityTable.map(
                               (item) => [item.nameActivity, item.timeActivity + " phút", item.calo + " kcal", dateFormat.format(item.measureTime), item.note.toString()])
-                    ]),
-                    pdfLib.Divider(height: 1,),
+                    ]): pdfLib.SizedBox(height: 1,),
+                    pdfLib.SizedBox(height: 3,),
+    (isActivity && listActivityTable.length > 0) ?
                     pdfLib.Center(
                         child: pdfLib.Text(
                             "Năng lượng tiêu hao trung bình: ${averageActivity.toStringAsFixed(2)} kcal",
                             style: myStyle
                         )
-                    ),
+                    ): pdfLib.SizedBox(height: 1,),
                     pdfLib.SizedBox(height: 5,),
-                  ]
-              )
-          ) : pdfLib.SizedBox(height: 1,),
-          (isCarbs && listCarbsTable.length > 0) ?
-          pdfLib.Container(
-              child: pdfLib.Column(
-                  children: [
+    (isCarbs && listCarbsTable.length > 0) ?
                     pdfLib.Center(
                         child: pdfLib.Text(
                             "Lượng Carbon Hidrat tiêu thụ",
                             style: myTitleStyle
                         )
-                    ),
+                    ): pdfLib.SizedBox(height: 1,),
+    (isCarbs && listCarbsTable.length > 0) ?
                     pdfLib.Table.fromTextArray(context: context, cellStyle: myStyle, headerStyle: myStyle, data: <List<String>>[
                       <String>['Carbon Hidrat', 'Thời gian', 'Chú thích'],
                       ...listCarbsTable.map(
                               (item) => [item.carb + " g", dateFormat.format(item.measureTime), item.note.toString()])
-                    ]),
-                    pdfLib.Divider(height: 1,),
+                    ]): pdfLib.SizedBox(height: 1,),
+                    pdfLib.SizedBox(height: 3,),
+    (isCarbs && listCarbsTable.length > 0) ?
                     pdfLib.Center(
                         child: pdfLib.Text(
                             "Carbon Hidrat trung bình: ${averageCarbs.toStringAsFixed(2)} g",
                             style: myStyle
                         )
-                    ),
+                    ): pdfLib.SizedBox(height: 1,),
                     pdfLib.SizedBox(height: 5,),
-                  ]
-              )
-          ) : pdfLib.SizedBox(height: 1,),
           (isMedicine && listMedicineTable.length > 0) ?
-          pdfLib.Container(
-              child: pdfLib.Column(
-                  children: [
                     pdfLib.Center(
                         child: pdfLib.Text(
                             "Thuốc",
                             style: myTitleStyle
                         )
-                    ),
+                    ): pdfLib.SizedBox(height: 1,),
+          (isMedicine && listMedicineTable.length > 0) ?
                     pdfLib.Table.fromTextArray(context: context, cellStyle: myStyle, headerStyle: myStyle, data: <List<String>>[
                       <String>['Tên thuốc', 'Liều lượng', 'Thời gian','Chú thích'],
                       ...listMedicineTable.map(
                               (item) => [item.name, item.amount + " " + item.unit, dateFormat.format(item.measureTime), item.note.toString()])
-                    ]),
+                    ]) : pdfLib.SizedBox(height: 1,),
                     pdfLib.SizedBox(height: 5,),
                   ]
               )
-          ) : pdfLib.SizedBox(height: 1,)
-        ],
-      ),
     );
     final String dir = (await getExternalStorageDirectory()).path;
     final String name = "report_${dateFormat.format(startDate)}.pdf";
@@ -686,7 +665,7 @@ class _ReportScreenState extends State<ReportScreen>{
                       columns: <DataColumn>[
                         DataColumn(
                           label: Text(
-                            'Cân nặng',
+                            'Cân nặng (kg)',
                             style: TextStyle(fontStyle: FontStyle.italic),
                           ),
                         ),
@@ -700,7 +679,7 @@ class _ReportScreenState extends State<ReportScreen>{
                       rows: listWeightsTable.map(
                               (e) => DataRow(
                               cells: <DataCell>[
-                                DataCell(Text(e.weight)),
+                                DataCell(Text(e.weight + " kg")),
                                 DataCell(Text(dateFormat.format(e.measureTime))),
                               ]
                           )
@@ -741,7 +720,7 @@ class _ReportScreenState extends State<ReportScreen>{
                         style: TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.bold,
-                            color: Colors.yellow
+                            color: Colors.blue
                         ),
                         textAlign: TextAlign.center,
                       ),
@@ -788,7 +767,7 @@ class _ReportScreenState extends State<ReportScreen>{
                                 cells: <DataCell>[
                                   DataCell(
                                       Text(e.indexG + " mg/dL", style: TextStyle(
-                                        color: (double.tryParse(e.indexG) < 70) ? Colors.yellow : (double.tryParse(e.indexG) > 180) ? Colors.red : Colors.green
+                                        color: (double.tryParse(e.indexG) < 70) ? Colors.blue : (double.tryParse(e.indexG) > 180) ? Colors.red : Colors.green
                                       ),
                                       )
                                   ),
