@@ -1,11 +1,8 @@
 import { Component, OnInit, ViewChild, HostListener } from '@angular/core';
 import { ProductService } from 'src/app/_services/product.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ManufacturerService } from 'src/app/_services/manufacturer.service';
 import { ToastrService } from 'ngx-toastr';
 import { NgForm } from '@angular/forms';
-import { Product } from 'src/app/_models/Product';
-import { Manufacturer } from 'src/app/_models/Manufacturer';
 import { Food } from 'src/app/_models/Food';
 
 @Component({
@@ -16,16 +13,10 @@ import { Food } from 'src/app/_models/Food';
 export class AddProductComponent implements OnInit {
 
   constructor(public productService: ProductService, private route: ActivatedRoute, private router: Router,
-              private toastrService: ToastrService, private manufacturerService: ManufacturerService) { }
+              private toastrService: ToastrService) { }
   @ViewChild('form') form: NgForm;
   food: Food;
 
-  // arrMeal: Array<Object> = [
-  //   {id: 1, nameVi: 'Bữa sáng', nameEng: 'breakfast'},
-  //   {id: 2, nameVi: 'Bữa trưa', nameEng: 'lunch'},
-  //   {id: 3, nameVi: 'Bữa tối', nameEng: 'dinner'},
-  //   {id: 4, nameVi: 'Bữa phụ', nameEng: 'snack'}
-  // ];
 
   arrMeal: Array<Object> = [
     {id: 1, nameVi: 'Bữa sáng'},

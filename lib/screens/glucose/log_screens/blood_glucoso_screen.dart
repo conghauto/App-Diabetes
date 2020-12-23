@@ -1,16 +1,11 @@
 import 'dart:convert';
 
 import 'package:diabetesapp/components/choice_chip_widget.dart';
-import 'package:diabetesapp/components/form_error.dart';
 import 'package:diabetesapp/components/multi_choice_chip.dart';
 import 'package:diabetesapp/constants.dart';
-import 'package:diabetesapp/models/account.dart';
 import 'package:diabetesapp/screens/glucose/add_log_screen.dart';
-import 'package:diabetesapp/screens/glucose/glucose_screen.dart';
 import 'package:diabetesapp/screens/glucose/log_screens/add_tab_screen.dart';
-import 'package:diabetesapp/size_config.dart';
 import 'package:diabetesapp/user_current.dart';
-import 'package:diabetesapp/widgets/ProgressDialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -81,7 +76,8 @@ class BloodGlucosoLogState extends State<BloodGlucosoLog> with AutomaticKeepAliv
           textColor: Colors.white,
           fontSize: 16.0
       );
-    }else{
+    }
+    else{
       double bloodG = double.parse(indexG.text);
       if(bloodG < 70){
         UserCurrent.showNotification(listNotification[0].title + bloodG.toString()+" mg/dl",listNotification[0].body);

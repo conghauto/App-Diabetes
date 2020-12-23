@@ -17,8 +17,6 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
 
-
-
   SharedPreferences prefs = await SharedPreferences.getInstance();
   var userID = prefs.getString('userID');
   if (userID!=null){

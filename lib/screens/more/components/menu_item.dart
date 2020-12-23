@@ -21,7 +21,7 @@ class MenuItem extends StatelessWidget {
       onTap: press,
       child: Padding(
         padding: EdgeInsets.symmetric(
-            horizontal: defaultSize * 2, vertical: defaultSize * 2),
+            horizontal: defaultSize, vertical: defaultSize),
         child: SafeArea(
           child: Row(
             children: <Widget>[

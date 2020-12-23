@@ -46,8 +46,4 @@ export class UpdateRecipeComponent implements OnInit {
     this.toastrService.error(err);
   });
   }
-
-
-
-
 }

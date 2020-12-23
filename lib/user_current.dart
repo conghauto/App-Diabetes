@@ -12,12 +12,16 @@ class UserCurrent{
   static String userID;
   static String fullName;
   static String emailRelative;
+  static bool isEmergency = false;
   static FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
   FlutterLocalNotificationsPlugin();
   Future init() async{
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
     userID = prefs.getString('userID');
+    if(prefs.getBool('emergency')){
+      isEmergency = prefs.getBool('emergency');
+    }
 
     if(userID!="") {
       await getName(userID);
@@ -132,6 +136,32 @@ class UserCurrent{
           payload: 'note'
       );
     }
+  }
+
+  static Future<void> showNotificationEmergency() async {
+    var androidPlatformChannelSpecifics = AndroidNotificationDetails(
+      'your other channel id',
+      'your other channel name',
+      'your other channel description',
+      icon: 'alarm',
+      importance: Importance.Max,
+      priority: Priority.High,
+      ticker: 'ticker',
+      playSound: true,
+      sound: RawResourceAndroidNotificationSound('warning'),
+      color: Colors.redAccent,
+      largeIcon: DrawableResourceAndroidBitmap('flutter_devs'),
+    );
+    var iOSPlatformChannelSpecifics = IOSNotificationDetails();
+    var platformChannelSpecifics = NotificationDetails(
+        androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
+    await flutterLocalNotificationsPlugin.show(
+      0,
+      "Khẩn cấp",
+      "Thông tin đã được báo cho người thân.",
+      platformChannelSpecifics,
+      payload: 'blood_glucose',
+    );
   }
 
   static Future<void> cancelNotification(int id) async {
