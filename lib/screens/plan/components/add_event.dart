@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
+import 'package:speech_to_text/speech_to_text.dart';
 
 class ReceivedNotification {
   ReceivedNotification({
@@ -43,7 +44,84 @@ class _AddEventScreenState extends State<AddEventScreen> {
   final _key = GlobalKey<ScaffoldState>();
   bool processing;
   int id = 0;
-
+  bool _isListening = false;
+  bool _isListening2 = false;
+  SpeechToText _speech = SpeechToText();
+  SpeechToText _speech2 = SpeechToText();
+  void _listen() async {
+    if (!_isListening) {
+      bool available = await _speech.initialize(
+        onStatus: (val) {
+          print('onStatus: $val');
+          if (val == "notListening") {
+            setState(() => _isListening = false);
+            _speech.stop();
+          }
+        },
+        onError: (val) {
+            Fluttertoast.showToast(
+              msg: "Đã xáy ra lỗi. Thử lại",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.CENTER,
+              timeInSecForIosWeb: 1,
+              backgroundColor: Colors.red,
+              textColor: Colors.white,
+              fontSize: 16.0
+            );
+            setState(() => _isListening = false);
+            _speech.stop();
+        },
+      );
+      if (available) {
+        setState(() => _isListening = true);
+        _speech.listen(
+          onResult: (val) => setState(() {
+            _description.text = val.recognizedWords;
+          }),
+        );
+      }
+    } else {
+      setState(() => _isListening = false);
+      _speech.stop();
+    }
+  }
+  void _listen2() async {
+    if (!_isListening2) {
+      bool available = await _speech2.initialize(
+        onStatus: (val) {
+          print('onStatus: $val');
+          if (val == "notListening") {
+            setState(() => _isListening2 = false);
+            _speech2.stop();
+          }
+        },
+        onError: (val) {
+          Fluttertoast.showToast(
+              msg: "Đã xáy ra lỗi",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.CENTER,
+              timeInSecForIosWeb: 1,
+              backgroundColor: Colors.red,
+              textColor: Colors.white,
+              fontSize: 16.0
+          );
+          setState(() => _isListening2 = false);
+          _speech2.stop();
+        },
+      );
+      if (available) {
+        setState(() => _isListening2 = true);
+        _speech2.listen(
+          onResult: (val) => setState(() {
+            _title.text = val.recognizedWords;
+          }),
+        );
+      }
+    } else {
+      setState(() => _isListening2 = false);
+      _speech2.stop();
+    }
+  }
   @override
   void initState() {
     super.initState();
@@ -64,6 +142,8 @@ class _AddEventScreenState extends State<AddEventScreen> {
   void dispose() {
     _title.dispose();
     _description.dispose();
+    _speech.cancel();
+    _speech2.cancel();
     super.dispose();
   }
 
@@ -125,34 +205,50 @@ class _AddEventScreenState extends State<AddEventScreen> {
           child: ListView(
             children: <Widget>[
               const SizedBox(height: 20.0),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                child: TextFormField(
-                  controller: _title,
-                  validator: (value) =>
-                  (value.isEmpty) ? "Nhập tên tiêu đề" : null,
-                  style: TextStyle(fontFamily: 'Roboto', fontSize: 18),
-                  decoration: InputDecoration(
-                    labelText: "Tiêu đề",
-                    filled: true,
-                    fillColor: Colors.white,
+              ListTile(
+                title: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                  child: TextFormField(
+                    controller: _title,
+                    validator: (value) =>
+                    (value.isEmpty) ? "Nhập tên tiêu đề" : null,
+                    style: TextStyle(fontFamily: 'Roboto', fontSize: 18),
+                    decoration: InputDecoration(
+                      labelText: "Tiêu đề",
+                      filled: true,
+                      fillColor: Colors.white,
 //                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(10))
+                    ),
                   ),
+                ),
+                trailing: IconButton(
+                  icon: (_isListening2) ? Icon(Icons.mic, color: Colors.red) : Icon(Icons.mic_none, color: Colors.black),
+                  onPressed: () {
+                    _listen2();
+                  },
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                child: TextFormField(
-                  controller: _description,
-                  minLines: 3,
-                  maxLines: 5,
-                  validator: (value) =>
-                  (value.isEmpty) ? "Nhập nội dung ghi chú" : null,
-                  style: TextStyle(fontFamily: 'Roboto', fontSize: 18),
-                  decoration: InputDecoration(
-                      labelText: "Nội dung",
-                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(10))),
-                ),
+                child: ListTile(
+                  title: TextFormField(
+                    controller: _description,
+                    minLines: 3,
+                    maxLines: 5,
+                    validator: (value) =>
+                    (value.isEmpty) ? "Nhập nội dung ghi chú" : null,
+                    style: TextStyle(fontFamily: 'Roboto', fontSize: 18),
+                    decoration: InputDecoration(
+                        labelText: "Nội dung",
+                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10))),
+                  ),
+                  trailing: IconButton(
+                    icon: (_isListening) ? Icon(Icons.mic, color: Colors.red) : Icon(Icons.mic_none, color: Colors.black),
+                    onPressed: () {
+                      _listen();
+                    },
+                  ),
+                )
               ),
               const SizedBox(height: 10.0),
               ListTile(
