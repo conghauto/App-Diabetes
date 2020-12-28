@@ -5,6 +5,7 @@ import 'package:diabetesapp/models/food.dart';
 import 'package:diabetesapp/screens/advice/recommend_screens/shared.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import '../../../constants.dart';
@@ -25,10 +26,57 @@ class _RecipeFoodState extends State<RecipeFood> {
   _RecipeFoodState({this.recipeFood});
   FoodRecipeModel foodRecipeModel = new FoodRecipeModel(id: "", name: "", ingredient: "", recipe: "", benefit: "", groupID: "");
   FoodModel recipeFood;
+  FlutterTts voice = FlutterTts();
+  bool isPlaying = false;
   @override
   void initState() {
     fetchRecipe();
+    configureVoice();
   }
+  Future configureVoice() async {
+    voice.setLanguage("vi-VN");
+    voice.setPitch(1);
+    voice.setStartHandler(() {
+      setState(() {
+        isPlaying = true;
+      });
+    });
+
+    voice.setCompletionHandler(() {
+      setState(() {
+        isPlaying = false;
+      });
+    });
+
+    voice.setErrorHandler((err) {
+      setState(() {
+        isPlaying = false;
+      });
+    });
+  }
+  Future _speak(String text) async {
+    if (text != null && text.isNotEmpty) {
+      var result = await voice.speak(text);
+      if (result == 1)
+        setState(() {
+          isPlaying = true;
+        });
+    }
+  }
+
+  Future _stop() async {
+    var result = await voice.stop();
+    if (result == 1)
+      setState(() {
+        isPlaying = false;
+      });
+  }
+  @override
+  void dispose() {
+    super.dispose();
+    voice.stop();
+  }
+
   void addCarb() async {
     var url = ip + "/api/addCarb.php";
     var response = await http.post(url, body: {
@@ -116,7 +164,35 @@ class _RecipeFoodState extends State<RecipeFood> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   buildTextTitleVariation1(widget.foodModel.name),
-                  buildTextTitleVariation2("Công dụng", false),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      buildTextTitleVariation2("Công dụng", false),
+                    IconButton(
+                      iconSize: 30,
+                      autofocus: true,
+                      tooltip: "Nhấn để nghe",
+                      icon: (!isPlaying) ? Icon(Icons.play_arrow, color: Colors.green,) : Icon(Icons.stop, color: Colors.red,),
+                      onPressed: () async{
+                        String content = "Tên món ăn " + widget.foodModel.name;
+                        content += "Công dụng " + foodRecipeModel.benefit;
+                        content += "Thành phần dinh dưỡng ";
+                        content += "Chất béo " + recipeFood.lipid + " g";
+                        content += "Chất xơ " + recipeFood.cellulose  + " g";
+                        content += "Chất đạm " + recipeFood.protein  + " g";
+                        content += "Carbon hydrat " + recipeFood.carb  + " g";
+                        if (foodRecipeModel.ingredient.length > 0) {
+                          content += "Nguyên liệu " + foodRecipeModel.ingredient;
+                        }
+                        if (foodRecipeModel.recipe.length > 0) {
+                          content += "Công thức " + foodRecipeModel.recipe;
+                        }
+                        setState(() {
+                          (isPlaying) ? _stop() : _speak(content);
+                        });
+                      },
+                    )
+                  ],),
                   buildTextSubTitleVariation1(foodRecipeModel.benefit),
                 ],
               ),

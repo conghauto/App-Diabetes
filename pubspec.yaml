@@ -65,6 +65,8 @@ dependencies:
   shake: ^0.1.0
   vibration: ^1.7.3
   share_extend: ^1.1.9
+  flutter_tts: ^2.0.0
+  speech_to_text: ^3.1.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
