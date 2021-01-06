@@ -23,6 +23,14 @@
           }
         },
         {
+          "client_id": "861017730277-jae1vu0d69grdsu05slbsljq86fvr07d.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.diabetesapp",
+            "certificate_hash": "735b319195ce3bd9131db457cdcaf73d00a841c5"
+          }
+        },
+        {
           "client_id": "861017730277-sei0i69om18e4tudvsmhtcqeie26ld59.apps.googleusercontent.com",
           "client_type": 3
         }
