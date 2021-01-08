@@ -104,7 +104,7 @@ class _UpdateCarbsState extends State<UpdateCarbs> {
       'measureTime': time.toString(),
       'id': id,
     });
-    carbModelBack = new CarbModel(id: id, carb: carb.text, protein: protein.text, calo: calo.text, tags: selectedReportList.length==0?"":selectedReportList.toString(), note: note.text, userID: widget.carbModel.userID, measureTime: time, idModel: widget.carbModel.idModel);
+    carbModelBack = new CarbModel(id: id, carb: carb.text, fat: fat.text, protein: protein.text, calo: calo.text, tags: selectedReportList.length==0?"":selectedReportList.toString(), note: note.text, userID: widget.carbModel.userID, measureTime: time, idModel: widget.carbModel.idModel);
     var data = json.decode(response.body);
     if(data=="Error"){
       Fluttertoast.showToast(
@@ -177,7 +177,8 @@ class _UpdateCarbsState extends State<UpdateCarbs> {
               leading: Text(
                 "Carbs",
                 style: TextStyle(
-                  fontWeight: FontWeight.bold,
+                    fontFamily: 'Roboto',
+                    fontSize: 16, fontWeight: FontWeight.bold
                 ),
               ),
               title: TextField(
@@ -191,7 +192,11 @@ class _UpdateCarbsState extends State<UpdateCarbs> {
                     hintText: "Nhập chỉ số Carbs"
                 ),
               ),
-              trailing: Text("g"),
+              trailing: Text("g",
+                  style: TextStyle(fontWeight: FontWeight.bold,
+                      fontFamily: 'Roboto',
+                      color: Colors.black)
+              ),
             ),
             Divider(
               height: 5,
@@ -201,7 +206,8 @@ class _UpdateCarbsState extends State<UpdateCarbs> {
               leading: Text(
                 "Chất béo",
                 style: TextStyle(
-                  fontWeight: FontWeight.bold,
+                    fontFamily: 'Roboto',
+                    fontSize: 16, fontWeight: FontWeight.bold
                 ),
               ),
               title: TextField(
@@ -215,7 +221,11 @@ class _UpdateCarbsState extends State<UpdateCarbs> {
                     hintText: "Nhập chỉ số chất béo"
                 ),
               ),
-              trailing: Text("g"),
+              trailing: Text("g",
+                  style: TextStyle(fontWeight: FontWeight.bold,
+                      fontFamily: 'Roboto',
+                      color: Colors.black)
+              ),
             ),
             Divider(
               height: 5,
@@ -225,7 +235,8 @@ class _UpdateCarbsState extends State<UpdateCarbs> {
               leading: Text(
                 "Protein",
                 style: TextStyle(
-                  fontWeight: FontWeight.bold,
+                    fontFamily: 'Roboto',
+                    fontSize: 16, fontWeight: FontWeight.bold
                 ),
               ),
               title: TextField(
@@ -239,7 +250,11 @@ class _UpdateCarbsState extends State<UpdateCarbs> {
                     hintText: "Nhập chỉ số protein"
                 ),
               ),
-              trailing: Text("g"),
+              trailing: Text("g",
+                  style: TextStyle(fontWeight: FontWeight.bold,
+                      fontFamily: 'Roboto',
+                      color: Colors.black)
+              ),
             ),
             Divider(
               height: 5,
@@ -249,7 +264,8 @@ class _UpdateCarbsState extends State<UpdateCarbs> {
               leading: Text(
                 "Calories",
                 style: TextStyle(
-                  fontWeight: FontWeight.bold,
+                    fontFamily: 'Roboto',
+                    fontSize: 16, fontWeight: FontWeight.bold
                 ),
               ),
               title: TextField(
@@ -263,7 +279,11 @@ class _UpdateCarbsState extends State<UpdateCarbs> {
                     hintText: "Nhập chỉ số calo"
                 ),
               ),
-              trailing: Text("kcal"),
+              trailing: Text("kCal",
+                  style: TextStyle(fontWeight: FontWeight.bold,
+                      fontFamily: 'Roboto',
+                      color: Colors.black)
+              ),
             ),
             Divider(
               height: 5,
@@ -318,15 +338,19 @@ class _UpdateCarbsState extends State<UpdateCarbs> {
               leading: Text(
                 "Ghi chú",
                 style: TextStyle(
-                  fontWeight: FontWeight.bold,
+                    fontFamily: 'Roboto',
+                    fontSize: 16, fontWeight: FontWeight.bold
                 ),
               ),
-              title: TextField(
-                controller: note,
-                textAlign: TextAlign.left,
-                maxLines: 3,
-                decoration: InputDecoration.collapsed(
-                  hintText: "Nhập ghi chú",
+              title: Padding(
+                padding: const EdgeInsets.only(top:10),
+                child: TextField(
+                  controller: note,
+                  textAlign: TextAlign.left,
+                  maxLines: 3,
+                  decoration: InputDecoration.collapsed(
+                    hintText: "Nhập ghi chú",
+                  ),
                 ),
               ),
               trailing: Icon(Icons.note),
@@ -336,7 +360,7 @@ class _UpdateCarbsState extends State<UpdateCarbs> {
               height: getProportionateScreenHeight(56),
               child: FlatButton(
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                color: Colors.lightBlue,
+                color: Colors.blueAccent,
                 onPressed: () async {
                   try {
                     valueCarb = double.tryParse(carb.text);
@@ -419,15 +443,15 @@ class _UpdateCarbsState extends State<UpdateCarbs> {
                         ),
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                        child: Text(
-                          'Thêm tags để tạo log',
-                          style: TextStyle(color: Colors.black, fontSize: 18.0),
-                        ),
-                      ),
-                    ),
+//                    Padding(
+//                      padding: const EdgeInsets.all(8.0),
+//                      child: Container(
+//                        child: Text(
+//                          'Thêm tags để tạo log',
+//                          style: TextStyle(color: Colors.black, fontSize: 18.0),
+//                        ),
+//                      ),
+//                    ),
                     Container(
                         child: Wrap(
                           spacing: 5.0,

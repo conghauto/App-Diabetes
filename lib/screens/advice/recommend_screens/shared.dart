@@ -15,7 +15,7 @@ buildTextTitleVariation1(String text){
     child: Text(
       text,
       style: TextStyle(
-        fontSize: 36,
+        fontSize: 30,
         fontWeight: FontWeight.w900,
         color: Colors.black,
       ),

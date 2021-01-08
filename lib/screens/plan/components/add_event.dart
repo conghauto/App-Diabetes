@@ -207,7 +207,7 @@ class _AddEventScreenState extends State<AddEventScreen> {
               const SizedBox(height: 20.0),
               ListTile(
                 title: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 5.0, vertical: 8.0),
                   child: TextFormField(
                     controller: _title,
                     validator: (value) =>
@@ -229,7 +229,7 @@ class _AddEventScreenState extends State<AddEventScreen> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                padding: const EdgeInsets.symmetric(horizontal: 2.0, vertical: 8.0),
                 child: ListTile(
                   title: TextFormField(
                     controller: _description,

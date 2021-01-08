@@ -13,13 +13,13 @@
           <tab heading="Thông tin">
             <form #form="ngForm" (ngSubmit)="addSport()">
               <div class="form-group">
-                <h6>Tên món ăn</h6>
+                <h6>Tên môn thể thao</h6>
                 <div class="col-6">
                   <input type="text" name="name" [(ngModel)]="sport.name" class="form-control" required>
                 </div>
               </div>
               <div class="form-group">
-                <h6>Nguyên liệu</h6>
+                <h6>Kỹ thuật</h6>
                 <div class="col-10">
                   <textarea rows="5" name="introduction" [(ngModel)]="sport.technique" class="form-control"></textarea>
                 </div>

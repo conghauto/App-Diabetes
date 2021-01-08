@@ -151,7 +151,7 @@ class _UpdateMedicineState extends State<UpdateMedicine> {
               Navigator.pop(context);
             },
           ),
-          title: Text("Update Thuốc")
+          title: Text("Cập nhật Thuốc")
       ),
       body: Container(
         child: ListView(
@@ -437,12 +437,15 @@ class _UpdateMedicineState extends State<UpdateMedicine> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              title: TextField(
-                controller: note,
-                textAlign: TextAlign.left,
-                maxLines: 3,
-                decoration: InputDecoration.collapsed(
-                  hintText: "Nhập ghi chú",
+              title: Padding(
+                padding: const EdgeInsets.only(top:10),
+                child: TextField(
+                  controller: note,
+                  textAlign: TextAlign.left,
+                  maxLines: 3,
+                  decoration: InputDecoration.collapsed(
+                    hintText: "Nhập ghi chú",
+                  ),
                 ),
               ),
               trailing: Icon(Icons.note),
@@ -452,7 +455,7 @@ class _UpdateMedicineState extends State<UpdateMedicine> {
               height: getProportionateScreenHeight(56),
               child: FlatButton(
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                color: Colors.lightBlue,
+                color: Colors.blueAccent,
                 onPressed: () async {
                   try {
                     String text = name.text;
