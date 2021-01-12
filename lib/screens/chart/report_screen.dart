@@ -325,7 +325,7 @@ class _ReportScreenState extends State<ReportScreen>{
     var myFont = pdfLib.Font.ttf(data);
     var myHeaderStyle = pdfLib.TextStyle(font: myFont, fontSize: 40, );
     var myTitleStyle = pdfLib.TextStyle(font: myFont, fontSize: 30, );
-    var myStyle = pdfLib.TextStyle(font: myFont,);
+    var myStyle = pdfLib.TextStyle(font: myFont, fontSize: 20);
     pdf.addPage(
       pdfLib.MultiPage(
         pageFormat: PdfPageFormat.a4,
@@ -343,14 +343,7 @@ class _ReportScreenState extends State<ReportScreen>{
               )
             )
           ),
-          pdfLib.Row(
-            children: [
-              pdfLib.Text(
-                "Bệnh nhân: ${_name} - Email: ${_email}",
-                style: myStyle
-              ),
-            ]
-          ),
+          pdfLib.Paragraph(text: "Bệnh nhân: ${_name} - Email: ${_email}", style: myStyle),
           pdfLib.Paragraph(text: "Từ ngày: ${dateFormat.format(startDate)} - Đến ngày: ${dateFormat.format(endDate)}", style: myStyle),
           (isWeight && listWeightsTable.length > 0) ?
                 pdfLib.Center(
