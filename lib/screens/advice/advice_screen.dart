@@ -1,6 +1,5 @@
 import 'package:diabetesapp/screens/advice/recommend_screens/activity_screen.dart';
 import 'package:diabetesapp/screens/advice/recommend_screens/food_screen.dart';
-import 'package:diabetesapp/size_config.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 

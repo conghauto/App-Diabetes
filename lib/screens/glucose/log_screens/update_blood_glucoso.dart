@@ -152,7 +152,7 @@ class _UpdateBloodGlucosoState extends State<UpdateBloodGlucoso> {
               Navigator.pop(context);
             },
           ),
-          title: Text("Cập nhật đường huyết")
+          title: Text("Đường huyết")
       ),
       body: Container(
         child: ListView(

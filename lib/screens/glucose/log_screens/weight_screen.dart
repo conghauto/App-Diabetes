@@ -93,6 +93,9 @@ class WeightLogState extends State<WeightLog> with AutomaticKeepAliveClientMixin
               "Cân nặng",
               style: TextStyle(
                 fontWeight: FontWeight.bold,
+                fontFamily: 'Roboto',
+                fontSize: 16,
+                color: Colors.blue[900],
               ),
             ),
             title: TextField(
@@ -121,31 +124,16 @@ class WeightLogState extends State<WeightLog> with AutomaticKeepAliveClientMixin
                   hintText: "Nhập cân nặng"
               ),
             ),
-            trailing: Text("kg"),
+            trailing: Text("kg",
+                style: TextStyle(fontWeight: FontWeight.bold,
+                    fontFamily: 'Roboto',
+                    color: Colors.black)
+            ),
           ),
           Divider(
             height: 5,
             color: Colors.black,
           ),
-          // ListTile(
-          //   leading: Text(
-          //     "Mỡ cơ thể",
-          //     style: TextStyle(
-          //       fontWeight: FontWeight.bold,
-          //     ),
-          //   ),
-          //   title: TextField(
-          //     textAlign: TextAlign.right,
-          //     decoration: InputDecoration.collapsed(
-          //         hintText: "Nhập chỉ số mỡ"
-          //     ),
-          //   ),
-          //   trailing: Text("%"),
-          // ),
-          // Divider(
-          //   height: 5,
-          //   color: Colors.black,
-          // ),
           (selectedReportList.length > 0) ?
           Container(
               child: Wrap(
@@ -170,6 +158,9 @@ class WeightLogState extends State<WeightLog> with AutomaticKeepAliveClientMixin
               "Tags",
               style: TextStyle(
                 fontWeight: FontWeight.bold,
+                fontFamily: 'Roboto',
+                fontSize: 16,
+                color: Colors.blue[900],
               ),
             ),
             title: TextField(
@@ -196,14 +187,20 @@ class WeightLogState extends State<WeightLog> with AutomaticKeepAliveClientMixin
               "Ghi chú",
               style: TextStyle(
                 fontWeight: FontWeight.bold,
+                fontFamily: 'Roboto',
+                fontSize: 16,
+                color: Colors.blue[900],
               ),
             ),
-            title: TextField(
-              controller: note,
-              textAlign: TextAlign.left,
-              maxLines: 3,
-              decoration: InputDecoration.collapsed(
-                hintText: "Nhập ghi chú",
+            title: Padding(
+              padding: const EdgeInsets.only(top:12),
+              child: TextField(
+                controller: note,
+                textAlign: TextAlign.left,
+                maxLines: 3,
+                decoration: InputDecoration.collapsed(
+                  hintText: "Nhập ghi chú",
+                ),
               ),
             ),
             trailing: Icon(Icons.note),

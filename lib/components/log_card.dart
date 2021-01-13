@@ -69,7 +69,7 @@ class LogCard extends StatelessWidget {
                                     ],
                                   ),
                                   Padding(
-                                    padding: const EdgeInsets.only(left:25.0, top:3.0),
+                                    padding: const EdgeInsets.only(left:26.0, top:3.0),
                                     child: Text(nameMedicine,
                                         textAlign: TextAlign.left,
                                         style: TextStyle(

@@ -118,7 +118,7 @@ class _UpdateWeightState extends State<UpdateWeight>{
               Navigator.pop(context);
             },
           ),
-          title: Text("Update cân nặng")
+          title: Text("Cân nặng")
       ),
       body: Container(
         child: ListView(
@@ -153,6 +153,9 @@ class _UpdateWeightState extends State<UpdateWeight>{
                 "Cân nặng",
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
+                  fontFamily: 'Roboto',
+                  fontSize: 16,
+                  color: Colors.blue[900],
                 ),
               ),
               title: TextField(
@@ -172,7 +175,11 @@ class _UpdateWeightState extends State<UpdateWeight>{
                     hintText: "Nhập cân nặng"
                 ),
               ),
-              trailing: Text("kg"),
+              trailing: Text("kg",
+                  style: TextStyle(fontWeight: FontWeight.bold,
+                      fontFamily: 'Roboto',
+                      color: Colors.black)
+              ),
             ),
             Divider(
               height: 5,
@@ -203,6 +210,9 @@ class _UpdateWeightState extends State<UpdateWeight>{
                 "Tags",
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
+                  fontFamily: 'Roboto',
+                  fontSize: 16,
+                  color: Colors.blue[900],
                 ),
               ),
               title: TextField(
@@ -229,14 +239,20 @@ class _UpdateWeightState extends State<UpdateWeight>{
                 "Ghi chú",
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
+                  fontFamily: 'Roboto',
+                  fontSize: 16,
+                  color: Colors.blue[900],
                 ),
               ),
-              title: TextField(
-                controller: note,
-                textAlign: TextAlign.left,
-                maxLines: 3,
-                decoration: InputDecoration.collapsed(
-                  hintText: "Nhập ghi chú",
+              title: Padding(
+                padding: const EdgeInsets.only(top:12),
+                child: TextField(
+                  controller: note,
+                  textAlign: TextAlign.left,
+                  maxLines: 3,
+                  decoration: InputDecoration.collapsed(
+                    hintText: "Nhập ghi chú",
+                  ),
                 ),
               ),
               trailing: Icon(Icons.note),

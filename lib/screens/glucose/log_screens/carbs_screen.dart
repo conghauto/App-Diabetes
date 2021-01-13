@@ -124,6 +124,9 @@ class CarbsLogState extends State<CarbsLog> with AutomaticKeepAliveClientMixin{
               "Carbs",
               style: TextStyle(
                 fontWeight: FontWeight.bold,
+                fontFamily: 'Roboto',
+                fontSize: 16,
+                color: Colors.blue[900],
               ),
             ),
             title: TextField(
@@ -137,7 +140,11 @@ class CarbsLogState extends State<CarbsLog> with AutomaticKeepAliveClientMixin{
                   hintText: "Nhập chỉ số Carbs"
               ),
             ),
-            trailing: Text("g"),
+            trailing: Text("g",
+                style: TextStyle(fontWeight: FontWeight.bold,
+                    fontFamily: 'Roboto',
+                    color: Colors.black)
+            ),
           ),
           Divider(
             height: 5,
@@ -147,7 +154,10 @@ class CarbsLogState extends State<CarbsLog> with AutomaticKeepAliveClientMixin{
             leading: Text(
               "Chất béo",
               style: TextStyle(
-                fontWeight: FontWeight.bold,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'Roboto',
+              fontSize: 16,
+              color: Colors.blue[900],
               ),
             ),
             title: TextField(
@@ -161,7 +171,11 @@ class CarbsLogState extends State<CarbsLog> with AutomaticKeepAliveClientMixin{
                   hintText: "Nhập chỉ số chất béo"
               ),
             ),
-            trailing: Text("g"),
+            trailing: Text("g",
+                style: TextStyle(fontWeight: FontWeight.bold,
+                    fontFamily: 'Roboto',
+                    color: Colors.black)
+            ),
           ),
           Divider(
             height: 5,
@@ -172,6 +186,9 @@ class CarbsLogState extends State<CarbsLog> with AutomaticKeepAliveClientMixin{
               "Protein",
               style: TextStyle(
                 fontWeight: FontWeight.bold,
+                fontFamily: 'Roboto',
+                fontSize: 16,
+                color: Colors.blue[900],
               ),
             ),
             title: TextField(
@@ -185,7 +202,11 @@ class CarbsLogState extends State<CarbsLog> with AutomaticKeepAliveClientMixin{
                   hintText: "Nhập chỉ số protein"
               ),
             ),
-            trailing: Text("g"),
+            trailing: Text("g",
+                style: TextStyle(fontWeight: FontWeight.bold,
+                    fontFamily: 'Roboto',
+                    color: Colors.black)
+            ),
           ),
           Divider(
             height: 5,
@@ -196,6 +217,9 @@ class CarbsLogState extends State<CarbsLog> with AutomaticKeepAliveClientMixin{
               "Calories",
               style: TextStyle(
                 fontWeight: FontWeight.bold,
+                fontFamily: 'Roboto',
+                fontSize: 16,
+                color: Colors.blue[900],
               ),
             ),
             title: TextField(
@@ -209,7 +233,11 @@ class CarbsLogState extends State<CarbsLog> with AutomaticKeepAliveClientMixin{
                   hintText: "Nhập chỉ số calo"
               ),
             ),
-            trailing: Text("kcal"),
+            trailing: Text("kCal",
+                style: TextStyle(fontWeight: FontWeight.bold,
+                    fontFamily: 'Roboto',
+                    color: Colors.black)
+            ),
           ),
           Divider(
             height: 5,
@@ -239,6 +267,9 @@ class CarbsLogState extends State<CarbsLog> with AutomaticKeepAliveClientMixin{
               "Tags",
               style: TextStyle(
                 fontWeight: FontWeight.bold,
+                fontFamily: 'Roboto',
+                fontSize: 16,
+                color: Colors.blue[900],
               ),
             ),
             title: TextField(
@@ -265,14 +296,20 @@ class CarbsLogState extends State<CarbsLog> with AutomaticKeepAliveClientMixin{
               "Ghi chú",
               style: TextStyle(
                 fontWeight: FontWeight.bold,
+                fontFamily: 'Roboto',
+                fontSize: 16,
+                color: Colors.blue[900],
               ),
             ),
-            title: TextField(
-              controller: note,
-              textAlign: TextAlign.left,
-              maxLines: 3,
-              decoration: InputDecoration.collapsed(
-                hintText: "Nhập ghi chú",
+            title: Padding(
+              padding: const EdgeInsets.only(top:12),
+              child: TextField(
+                controller: note,
+                textAlign: TextAlign.left,
+                maxLines: 3,
+                decoration: InputDecoration.collapsed(
+                  hintText: "Nhập ghi chú",
+                ),
               ),
             ),
             trailing: Icon(Icons.note),

@@ -151,7 +151,7 @@ class _UpdateMedicineState extends State<UpdateMedicine> {
               Navigator.pop(context);
             },
           ),
-          title: Text("Cập nhật Thuốc")
+          title: Text("Thuốc")
       ),
       body: Container(
         child: ListView(
@@ -186,6 +186,9 @@ class _UpdateMedicineState extends State<UpdateMedicine> {
                 "Tên thuốc",
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
+                  fontFamily: 'Roboto',
+                  fontSize: 16,
+                  color: Colors.blue[900],
                 ),
               ),
               title: TextField(
@@ -208,6 +211,9 @@ class _UpdateMedicineState extends State<UpdateMedicine> {
                 "Thuốc có chứa Insulin?",
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
+                  fontFamily: 'Roboto',
+                  fontSize: 16,
+                  color: Colors.blue[900],
                 ),
               ),
               title: SizedBox(),
@@ -240,6 +246,9 @@ class _UpdateMedicineState extends State<UpdateMedicine> {
                     "Loại Insulin?",
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
+                      fontFamily: 'Roboto',
+                      fontSize: 16,
+                      color: Colors.blue[900],
                     ),
                   ),
                   title: Container(
@@ -321,6 +330,9 @@ class _UpdateMedicineState extends State<UpdateMedicine> {
                 "Dạng thuốc",
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
+                  fontFamily: 'Roboto',
+                  fontSize: 16,
+                  color: Colors.blue[900],
                 ),
               ),
               title: Container(
@@ -412,6 +424,9 @@ class _UpdateMedicineState extends State<UpdateMedicine> {
                 "Liều lượng",
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
+                  fontFamily: 'Roboto',
+                  fontSize: 16,
+                  color: Colors.blue[900],
                 ),
               ),
               title: TextField(
@@ -435,10 +450,13 @@ class _UpdateMedicineState extends State<UpdateMedicine> {
                 "Ghi chú",
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
+                  fontFamily: 'Roboto',
+                  fontSize: 16,
+                  color: Colors.blue[900],
                 ),
               ),
               title: Padding(
-                padding: const EdgeInsets.only(top:10),
+                padding: const EdgeInsets.only(top:12),
                 child: TextField(
                   controller: note,
                   textAlign: TextAlign.left,

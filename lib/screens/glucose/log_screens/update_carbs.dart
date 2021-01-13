@@ -143,7 +143,7 @@ class _UpdateCarbsState extends State<UpdateCarbs> {
               Navigator.pop(context);
             },
           ),
-          title: Text("Cập nhật")
+          title: Text("Thức ăn")
       ),
       body: Container(
         child: ListView(
@@ -178,6 +178,7 @@ class _UpdateCarbsState extends State<UpdateCarbs> {
                 "Carbs",
                 style: TextStyle(
                     fontFamily: 'Roboto',
+                    color: Colors.blue[900],
                     fontSize: 16, fontWeight: FontWeight.bold
                 ),
               ),
@@ -207,6 +208,7 @@ class _UpdateCarbsState extends State<UpdateCarbs> {
                 "Chất béo",
                 style: TextStyle(
                     fontFamily: 'Roboto',
+                    color: Colors.blue[900],
                     fontSize: 16, fontWeight: FontWeight.bold
                 ),
               ),
@@ -236,6 +238,7 @@ class _UpdateCarbsState extends State<UpdateCarbs> {
                 "Protein",
                 style: TextStyle(
                     fontFamily: 'Roboto',
+                    color: Colors.blue[900],
                     fontSize: 16, fontWeight: FontWeight.bold
                 ),
               ),
@@ -265,6 +268,7 @@ class _UpdateCarbsState extends State<UpdateCarbs> {
                 "Calories",
                 style: TextStyle(
                     fontFamily: 'Roboto',
+                    color: Colors.blue[900],
                     fontSize: 16, fontWeight: FontWeight.bold
                 ),
               ),
@@ -339,11 +343,12 @@ class _UpdateCarbsState extends State<UpdateCarbs> {
                 "Ghi chú",
                 style: TextStyle(
                     fontFamily: 'Roboto',
+                    color: Colors.blue[900],
                     fontSize: 16, fontWeight: FontWeight.bold
                 ),
               ),
               title: Padding(
-                padding: const EdgeInsets.only(top:10),
+                padding: const EdgeInsets.only(top:12),
                 child: TextField(
                   controller: note,
                   textAlign: TextAlign.left,

@@ -1,18 +1,25 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg width="16px" height="22px" viewBox="0 0 16 22" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!-- Generator: Sketch 52.5 (67469) - http://www.bohemiancoding.com/sketch -->
-    <title>directions_run</title>
-    <desc>Created with Sketch.</desc>
-    <g id="Icons" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="Rounded" transform="translate(-308.000000, -3123.000000)">
-            <g id="Maps" transform="translate(100.000000, 3068.000000)">
-                <g id="-Round-/-Maps-/-directions_run" transform="translate(205.000000, 54.000000)">
-                    <g>
-                        <polygon id="Path" points="0 0 24 0 24 24 0 24"></polygon>
-                        <path d="M13.49,5.48 C14.59,5.48 15.49,4.58 15.49,3.48 C15.49,2.38 14.59,1.48 13.49,1.48 C12.39,1.48 11.49,2.38 11.49,3.48 C11.49,4.58 12.39,5.48 13.49,5.48 Z M10.32,17.48 L10.89,14.98 L12.99,16.98 L12.99,21.98 C12.99,22.53 13.44,22.98 13.99,22.98 C14.54,22.98 14.99,22.53 14.99,21.98 L14.99,16.34 C14.99,15.79 14.77,15.27 14.37,14.89 L12.89,13.48 L13.49,10.48 C14.56,11.72 16.11,12.61 17.85,12.89 C18.45,12.98 18.99,12.5 18.99,11.89 C18.99,11.4 18.63,10.99 18.14,10.91 C16.62,10.66 15.36,9.76 14.69,8.58 L13.69,6.98 C13.29,6.38 12.69,5.98 11.99,5.98 C11.69,5.98 11.49,6.08 11.19,6.08 L7.21,7.76 C6.47,8.08 5.99,8.8 5.99,9.61 L5.99,11.98 C5.99,12.53 6.44,12.98 6.99,12.98 C7.54,12.98 7.99,12.53 7.99,11.98 L7.99,9.58 L9.79,8.88 L8.19,16.98 L4.27,16.18 C3.73,16.07 3.2,16.42 3.09,16.96 L3.09,17 C2.98,17.54 3.33,18.07 3.87,18.18 L7.98,19 C9.04,19.21 10.08,18.54 10.32,17.48 Z" id="🔹-Icon-Color" fill="#1D1D1D"></path>
-                    </g>
-                </g>
-            </g>
-        </g>
-    </g>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="32px" height="32px" viewBox="0 0 32 32" enable-background="new 0 0 32 32" xml:space="preserve">  <image id="image0" width="32" height="32" x="0" y="0"
+    xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAABGdBTUEAALGPC/xhBQAAACBjSFJN
+AAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAABj1BMVEUAAAA327Y50bc607c6
+0rc60rc60rc60rg60bc72LE80LU60rg60rc50bc3z7o5xqo60bY60rc507dA37860rY60rc91rg5
+0LY60rc307c11bU60rc60rc50rg60rc607g50rc707Y60rc607c60rc60rc60rc70rc50rdA1b88
+0rQ70rc60rdJ27Y60rc60rc50LM50rU9zrY60rg50bc50rg50bY707g60rdK1r080rhE1LvS9e//
+///m+fZX2cGP5da27uSO5da17uRD1LrR9e7l+fVJ1r070rde2sTK8+x84c+07uTY9vGz7uN44M5B
+1Lo+07ib6Nv6/v37/v5z38yX59n2/fy98OeG49PZ9vHz/Ppu3spj28b9//6U59ha2cPi+PWM5dVp
+3cig6dzM8+xL1r2Z6Nqc6Nu37+Wk6t6D49JH1bz4/fzV9e+L5dU807jc9/Ls+/im699R179l3Me5
+7+b8/v7i+PTA8eh+4tBF1Ltt3so/07mK5NSJ5NS/8Ojp+vdI1bx/4tBG1bxniVQgAAAAOHRSTlMA
+Dlmbyur6mlgNJp31nCUJjPuKCNPHGTHjLhjQzIHzlvRXmevp+fiYVQwih8YH4uUbLRXBhsiXVsnI
+qF0AAAABYktHRD3QbVFZAAAAB3RJTUUH5QENEikpXAGhZQAAAaRJREFUOMttU+dfwjAQjbIFBcGJ
+gzIqguBG44i4EBBBcSsORNzi3nv94TZdNC3vQ/Lu3suvl/QOABFl5Sq1RqvVqHV6A1CiwmiCIkyV
+VTLZbKmGBLRWm1SvqoEK1NYV9XoNLIGGRvE8oQ8Niw47p9uaJPLIKBoLC0GzmTVYpOfHEUITYtTC
+3o+of5IxTIlRK/6IkahsOoJmwsXQwbyfCZKIxvAan03gjTKAcj4/PJfEiKTmFyBMLy4tr7BpJ1Dx
+hlUkYG19YxNltri0C6g5sr28s5tIZATTWFZ4T+DmattDOQj3sbaTyycPDoWKPIBm9yN0zKwn2HBK
+lNzGG7JnzHJeYPSLtMzgJh8JXV4RBo9QJMY1W9/N7Z30pwOdyO+FKzxIDF6gF3mK0R6fnvMvUYmh
+Hfgonr6uocLbu+zdKR8AlTz/QOgTyqHD/aTleBJ9KXTajxvCyvI4+v5RGDq4lqvF/HfpXqEHglxT
+2juZIPan0Lu6hbZubIAl0NlTHIzePqUesEtHK9hCkTLdH5RNp90hsVAuf4n59jm9IQ9Ne0IDg75i
+9h+dp7vi9EqIpAAAACV0RVh0ZGF0ZTpjcmVhdGUAMjAyMS0wMS0xM1QxODo0MTo0MSswMzowMMqn
+fdwAAAAldEVYdGRhdGU6bW9kaWZ5ADIwMjEtMDEtMTNUMTg6NDE6NDErMDM6MDC7+sVgAAAAAElF
+TkSuQmCC" />
 </svg>

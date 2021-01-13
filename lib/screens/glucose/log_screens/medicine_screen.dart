@@ -111,10 +111,16 @@ class MedicineLogState extends State<MedicineLog> with AutomaticKeepAliveClientM
             height: 20,
           ),
           ListTile(
-            leading: Text(
-              "Tên thuốc",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
+            leading: Padding(
+              padding: const EdgeInsets.only(top:2.0),
+              child: Text(
+                "Tên thuốc",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'Roboto',
+                  fontSize: 16,
+                  color: Colors.blue[900],
+                ),
               ),
             ),
             title: TextField(
@@ -137,6 +143,9 @@ class MedicineLogState extends State<MedicineLog> with AutomaticKeepAliveClientM
               "Thuốc có chứa Insulin?",
               style: TextStyle(
                 fontWeight: FontWeight.bold,
+                fontFamily: 'Roboto',
+                fontSize: 16,
+                color: Colors.blue[900],
               ),
             ),
             title: SizedBox(),
@@ -169,6 +178,9 @@ class MedicineLogState extends State<MedicineLog> with AutomaticKeepAliveClientM
                   "Loại Insulin?",
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
+                    fontFamily: 'Roboto',
+                    fontSize: 16,
+                    color: Colors.blue[900],
                   ),
                 ),
                 title: Container(
@@ -250,6 +262,9 @@ class MedicineLogState extends State<MedicineLog> with AutomaticKeepAliveClientM
               "Dạng thuốc",
               style: TextStyle(
                 fontWeight: FontWeight.bold,
+                fontFamily: 'Roboto',
+                fontSize: 16,
+                color: Colors.blue[900],
               ),
             ),
             title: Container(
@@ -341,6 +356,9 @@ class MedicineLogState extends State<MedicineLog> with AutomaticKeepAliveClientM
               "Liều lượng",
               style: TextStyle(
                 fontWeight: FontWeight.bold,
+                fontFamily: 'Roboto',
+                fontSize: 16,
+                color: Colors.blue[900],
               ),
             ),
             title: TextField(
@@ -364,14 +382,20 @@ class MedicineLogState extends State<MedicineLog> with AutomaticKeepAliveClientM
               "Ghi chú",
               style: TextStyle(
                 fontWeight: FontWeight.bold,
+                fontFamily: 'Roboto',
+                fontSize: 16,
+                color: Colors.blue[900],
               ),
             ),
-            title: TextField(
-              controller: note,
-              textAlign: TextAlign.left,
-              maxLines: 3,
-              decoration: InputDecoration.collapsed(
-                hintText: "Nhập ghi chú",
+            title: Padding(
+              padding: const EdgeInsets.only(top:12),
+              child: TextField(
+                controller: note,
+                textAlign: TextAlign.left,
+                maxLines: 3,
+                decoration: InputDecoration.collapsed(
+                  hintText: "Nhập ghi chú",
+                ),
               ),
             ),
             trailing: Icon(Icons.note),

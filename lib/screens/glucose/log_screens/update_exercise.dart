@@ -115,7 +115,7 @@ class _UpdateExerciseState extends State<UpdateExercise> {
               Navigator.pop(context);
             },
           ),
-          title: Text("Update hoạt động")
+          title: Text("Hoạt động")
       ),
       body: Container(
         child: ListView(
@@ -156,6 +156,7 @@ class _UpdateExerciseState extends State<UpdateExercise> {
                 ),
               ),
               title: TextField(
+                style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
                 textAlign: TextAlign.right,
                 decoration: InputDecoration.collapsed(
                     hintText: selectedTypeExercise!=null? selectedTypeExercise.typeExercise: "Add",

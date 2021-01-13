@@ -1088,7 +1088,7 @@ class GlucoseScreenState extends State<GlucoseScreen>{
                     itemBuilder: (context, index) {
                       if ((listItems[index].idModel=="1")) {
                         return LogCard(
-                          iconSrc: "assets/icons/bloods.svg",
+                          iconSrc: "assets/icons/glucose.svg",
                           title: "Đường huyết",
                           nameMedicine: "",
                           unit: "mg/dl",
@@ -1119,7 +1119,7 @@ class GlucoseScreenState extends State<GlucoseScreen>{
                       }
                       else if(listItems[index].idModel=="2"){
                         return LogCard(
-                          iconSrc: "assets/icons/pillicon.svg",
+                          iconSrc: "assets/icons/pill-2.svg",
                           title: "Thuốc",
                           nameMedicine: listItems[index].name,
                           unit: listItems[index].unit,
@@ -1168,7 +1168,7 @@ class GlucoseScreenState extends State<GlucoseScreen>{
                       }
                       else if(listItems[index].idModel=="4"){
                         return LogCard(
-                          iconSrc: "assets/icons/ricebowl.svg",
+                          iconSrc: "assets/icons/food.svg",
                           title: "Thức ăn",
                           nameMedicine: "Carbs "+listItems[index].carb+" gam",
                           unit: "",
@@ -1193,7 +1193,7 @@ class GlucoseScreenState extends State<GlucoseScreen>{
                       }
                       else{
                         return LogCard(
-                          iconSrc: "assets/icons/run.svg",
+                          iconSrc: "assets/icons/runner.svg",
                           title: "Hoạt động",
                           nameMedicine: listItems[index].nameActivity,
                           unit: "phút",
