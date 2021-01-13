@@ -111,6 +111,15 @@ class _AddLogSceenState extends State<AddLogSceen> with TickerProviderStateMixin
                       }
                       if (countValid == countAdded){
                         if (countValid > 0) {
+                          Fluttertoast.showToast(
+                              msg: "Thêm thông tin thành công",
+                              toastLength: Toast.LENGTH_SHORT,
+                              gravity: ToastGravity.CENTER,
+                              timeInSecForIosWeb: 1,
+                              backgroundColor: Colors.green,
+                              textColor: Colors.white,
+                              fontSize: 16.0
+                          );
                           Navigator.pushReplacementNamed(
                               context, HomeScreen.routeName);
                         } else {
