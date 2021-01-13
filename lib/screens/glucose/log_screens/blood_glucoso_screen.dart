@@ -89,15 +89,15 @@ class BloodGlucosoLogState extends State<BloodGlucosoLog> with AutomaticKeepAliv
         UserCurrent.showNotification(listNotification[3].title + bloodG.toString()+" mg/dl. Tình trạng TĂNG ĐƯỜNG HUYẾT ",listNotification[3].body);
       }
 
-      Fluttertoast.showToast(
-          msg: "Thêm chỉ số đường huyết thành công",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.CENTER,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.green,
-          textColor: Colors.white,
-          fontSize: 16.0
-      );
+      // Fluttertoast.showToast(
+      //     msg: "Thêm chỉ số đường huyết thành công",
+      //     toastLength: Toast.LENGTH_SHORT,
+      //     gravity: ToastGravity.CENTER,
+      //     timeInSecForIosWeb: 1,
+      //     backgroundColor: Colors.green,
+      //     textColor: Colors.white,
+      //     fontSize: 16.0
+      // );
     }
   }
 

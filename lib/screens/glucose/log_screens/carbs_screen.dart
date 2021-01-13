@@ -87,15 +87,15 @@ class CarbsLogState extends State<CarbsLog> with AutomaticKeepAliveClientMixin{
           fontSize: 16.0
       );
     }else{
-      Fluttertoast.showToast(
-          msg: "Thêm Carbs thành công",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.CENTER,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.green,
-          textColor: Colors.white,
-          fontSize: 16.0
-      );
+      // Fluttertoast.showToast(
+      //     msg: "Thêm Carbs thành công",
+      //     toastLength: Toast.LENGTH_SHORT,
+      //     gravity: ToastGravity.CENTER,
+      //     timeInSecForIosWeb: 1,
+      //     backgroundColor: Colors.green,
+      //     textColor: Colors.white,
+      //     fontSize: 16.0
+      // );
     }
   }
 
