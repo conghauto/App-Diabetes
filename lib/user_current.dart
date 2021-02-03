@@ -87,8 +87,8 @@ class UserCurrent{
       'your other channel name',
       'your other channel description',
       icon: 'info',
-      importance: Importance.Max,
-      priority: Priority.High,
+      importance: Importance.max,
+      priority: Priority.high,
       ticker: 'ticker',
       playSound: true,
       sound: RawResourceAndroidNotificationSound('warning'),
@@ -96,8 +96,11 @@ class UserCurrent{
       largeIcon: DrawableResourceAndroidBitmap('flutter_devs'),
     );
     var iOSPlatformChannelSpecifics = IOSNotificationDetails();
+//    var platformChannelSpecifics = NotificationDetails(
+//        androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
     var platformChannelSpecifics = NotificationDetails(
-        androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
+        android: androidPlatformChannelSpecifics,
+        iOS: iOSPlatformChannelSpecifics);
     await flutterLocalNotificationsPlugin.show(
       0,
       title,
@@ -111,14 +114,14 @@ class UserCurrent{
       int id, String title, String body) async {
     int difference = startDate.isAfter(DateTime.now())?endDate.difference(startDate).inDays+1:endDate.difference(startDate).inDays;
     for(int i=0;i<difference;i++){
-      var time = Time(startDate.hour,startDate.minute,0);
+      var time = Time(startDate.hour,startDate.minute,1);
       var androidPlatformChannelSpecifics = AndroidNotificationDetails(
         'your other channel id',
         'your other channel name',
         'your other channel description',
         icon: 'info',
-        importance: Importance.Max,
-        priority: Priority.High,
+        importance: Importance.max,
+        priority: Priority.high,
         ticker: 'ticker',
         playSound: true,
         sound: RawResourceAndroidNotificationSound('warning'),
@@ -127,7 +130,8 @@ class UserCurrent{
       );
       var iOSPlatformChannelSpecifics = IOSNotificationDetails();
       var platformChannelSpecifics = NotificationDetails(
-          androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
+          android: androidPlatformChannelSpecifics,
+          iOS: iOSPlatformChannelSpecifics);
       await flutterLocalNotificationsPlugin.showDailyAtTime(
           id,
           title,
@@ -145,8 +149,8 @@ class UserCurrent{
       'your other channel name',
       'your other channel description',
       icon: 'alarm',
-      importance: Importance.Max,
-      priority: Priority.High,
+      importance: Importance.max,
+      priority: Priority.high,
       ticker: 'ticker',
       playSound: true,
       sound: RawResourceAndroidNotificationSound('warning'),
@@ -155,7 +159,8 @@ class UserCurrent{
     );
     var iOSPlatformChannelSpecifics = IOSNotificationDetails();
     var platformChannelSpecifics = NotificationDetails(
-        androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
+        android: androidPlatformChannelSpecifics,
+        iOS: iOSPlatformChannelSpecifics);
     await flutterLocalNotificationsPlugin.show(
       0,
       "Khẩn cấp",

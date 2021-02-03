@@ -4,7 +4,6 @@ import 'dart:convert';
 import 'package:connectivity/connectivity.dart';
 import 'package:diabetesapp/constants.dart';
 import 'package:diabetesapp/screens/plan/components/add_event.dart';
-import 'package:diabetesapp/screens/plan/components/view_event.dart';
 import 'package:diabetesapp/user_current.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -16,10 +15,14 @@ import 'package:table_calendar/table_calendar.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:diabetesapp/models/event.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:diabetesapp/extensions/format_datetime.dart';
 
 import '../../models/event.dart';
 import '../../user_current.dart';
+
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+FlutterLocalNotificationsPlugin();
 
 class PlanScreen extends StatefulWidget {
   static String routeName = "/plan_screen";
@@ -284,16 +287,15 @@ class _PlanScreenState extends State<PlanScreen> {
                                     .hour)}:${FormatDateTime.formatMinute(
                                     event.eventEndDate.minute)}"),
                               ]),
-//                                trailing: IconButton(
-//                                  icon: const Icon(Icons.more_vert_outlined),
-//                                  tooltip: 'Xóa',
-//                                  onPressed: () {
-//                                    setState(() {
-//                                      _cancelNotification();
-//                                      _showMyDialog(event.id);
-//                                    });
-//                                  },
-//                                ),
+                                trailing: IconButton(
+                                  icon: const Icon(Icons.more_vert_outlined),
+                                  tooltip: 'Xóa',
+                                  onPressed: () {
+                                    setState(() {
+                                      _showMyDialog(event.id);
+                                    });
+                                  },
+                                ),
                               onTap: () async {
                                 await Navigator.push(
                                     context,
@@ -383,7 +385,7 @@ class _PlanScreenState extends State<PlanScreen> {
     print(data);
     if (data != "Success") {
       Fluttertoast.showToast(
-          msg: "Đã xáy ra lỗi",
+          msg: "Đã xảy ra lỗi",
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.CENTER,
           timeInSecForIosWeb: 1,
@@ -414,9 +416,11 @@ class _PlanScreenState extends State<PlanScreen> {
           child: Text("Tiếp tục"),
           onPressed: () {
             int difference =  model.eventEndDate.difference(model.eventStartDate).inDays;
-            for(int i=0;i<difference;i++){
-              UserCurrent.cancelNotification1(model.id);
-            }
+//            for(int i=0;i<difference;i++){
+////              UserCurrent.cancelNotification1(model.id);
+//              _cancelNotification(model.id);
+//            }
+            _cancelNotification(model.id);
             deleteItem(model.id);
           },
         );
@@ -439,6 +443,11 @@ class _PlanScreenState extends State<PlanScreen> {
         d1.year, d1.month, d1.day, 12);
 
     return d2;
+  }
+
+  Future<void> _cancelNotification(String idNote) async {
+    int id = (idNote==""||idNote=="0")?0:int.parse(idNote);
+    await flutterLocalNotificationsPlugin.cancel(id);
   }
 
 }

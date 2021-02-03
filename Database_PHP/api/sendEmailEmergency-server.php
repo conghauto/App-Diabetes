@@ -10,7 +10,6 @@
     date_default_timezone_set('Etc/UTC');
 
 
-
     //Create a new PHPMailer instance
     $mail = new PHPMailer;
     
